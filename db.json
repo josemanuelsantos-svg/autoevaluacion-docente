@@ -1,0 +1,919 @@
+{
+  "teachers": [
+    {
+      "name": "Daniel Asenjo García",
+      "etapa": "Infantil",
+      "tutor": "3 Años-A",
+      "password": "Daniel#101"
+    },
+    {
+      "name": "Elena Díaz Martín",
+      "etapa": "Infantil",
+      "tutor": "3 Años-B",
+      "password": "Elena#102"
+    },
+    {
+      "name": "María de las Nieves Jiménez Jiménez",
+      "etapa": "Infantil",
+      "tutor": "4 Años-A",
+      "password": "María#103"
+    },
+    {
+      "name": "Susana López Gómez",
+      "etapa": "Infantil",
+      "tutor": "4 Años-B",
+      "password": "Susana#104"
+    },
+    {
+      "name": "María Jesús Parras Maeso",
+      "etapa": "Infantil",
+      "tutor": "5 Años-A",
+      "password": "María#105"
+    },
+    {
+      "name": "Alejandra Pérez Villalba",
+      "etapa": "Infantil",
+      "tutor": "5 Años-B",
+      "password": "Alejandra#106"
+    },
+    {
+      "name": "Gema del Pozo Villegas",
+      "etapa": "Infantil",
+      "tutor": "No",
+      "password": "Gema#107"
+    },
+    {
+      "name": "Marta Pilar Rodríguez Centeno",
+      "etapa": "Infantil",
+      "tutor": "No",
+      "password": "Marta#108"
+    },
+    {
+      "name": "Nuria Romero Sanz",
+      "etapa": "Infantil",
+      "tutor": "No",
+      "password": "Nuria#109"
+    },
+    {
+      "name": "Alejandra Calvo",
+      "etapa": "Infantil",
+      "tutor": "No (Nuevo)",
+      "password": "Alejandra#110"
+    },
+    {
+      "name": "Charo (Sustituta)",
+      "etapa": "Infantil",
+      "tutor": "No (Sust.)",
+      "password": "Charo#111"
+    },
+    {
+      "name": "Teresa (Prejubilación)",
+      "etapa": "Infantil",
+      "tutor": "No",
+      "password": "Teresa#112"
+    },
+    {
+      "name": "Juan Antonio Alfonso Pizarro",
+      "etapa": "Primaria",
+      "tutor": "5º EP-A",
+      "password": "Juan#113"
+    },
+    {
+      "name": "Pilar Fuentes Saavedra",
+      "etapa": "Primaria",
+      "tutor": "1º EP-A",
+      "password": "Pilar#114"
+    },
+    {
+      "name": "María Belén Hernando Martín",
+      "etapa": "Primaria",
+      "tutor": "1º EP-B",
+      "password": "María#115"
+    },
+    {
+      "name": "María del Carmen Ibañez Abad",
+      "etapa": "Primaria",
+      "tutor": "2º EP-A",
+      "password": "María#116"
+    },
+    {
+      "name": "Nuria Jarillo García",
+      "etapa": "Primaria",
+      "tutor": "2º EP-B",
+      "password": "Nuria#117"
+    },
+    {
+      "name": "Beatriz de León Ruiz",
+      "etapa": "Primaria",
+      "tutor": "3º EP-B",
+      "password": "Beatriz#118"
+    },
+    {
+      "name": "Óscar Manuel Molina Márquez",
+      "etapa": "Primaria",
+      "tutor": "4º EP-A",
+      "password": "Óscar#119"
+    },
+    {
+      "name": "Lorena Moreno Barrigas",
+      "etapa": "Primaria",
+      "tutor": "6º EP-C",
+      "password": "Lorena#120"
+    },
+    {
+      "name": "Álvaro Ortega Bonilla",
+      "etapa": "Primaria",
+      "tutor": "4º EP-B",
+      "password": "Álvaro#121"
+    },
+    {
+      "name": "Isabel Peña Escudero",
+      "etapa": "Primaria",
+      "tutor": "5º EP-B",
+      "password": "Isabel#122"
+    },
+    {
+      "name": "María Pilar Pérez Fernández",
+      "etapa": "Primaria",
+      "tutor": "6º EP-B",
+      "password": "María#123"
+    },
+    {
+      "name": "Feli Priego Perete",
+      "etapa": "Primaria",
+      "tutor": "3º EP-A",
+      "password": "Feli#124"
+    },
+    {
+      "name": "Rubén Recio Molina",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "Rubén#125"
+    },
+    {
+      "name": "Julia Rodríguez Gutiérrez",
+      "etapa": "Primaria",
+      "tutor": "6º EP-A",
+      "password": "Julia#126"
+    },
+    {
+      "name": "David Sagaseta Jiménez",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "David#127"
+    },
+    {
+      "name": "José Manuel Santos",
+      "etapa": "Primaria",
+      "tutor": "Director EI y EP",
+      "role": "director_ei_ep",
+      "password": "Santos#2026"
+    },
+    {
+      "name": "José Antonio Utrillas Sánchez",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "José#129"
+    },
+    {
+      "name": "Pedro Vega Verdeja",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "Pedro#130"
+    },
+    {
+      "name": "Pedro Zapata Paredes",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "Pedro#131"
+    },
+    {
+      "name": "Jorge Cabana",
+      "etapa": "Primaria",
+      "tutor": "No (Nuevo)",
+      "password": "Jorge#132"
+    },
+    {
+      "name": "Paula Gómez",
+      "etapa": "Primaria",
+      "tutor": "No (Nuevo)",
+      "password": "Paula#133"
+    },
+    {
+      "name": "María Sánchez",
+      "etapa": "Primaria",
+      "tutor": "No (Nuevo)",
+      "password": "María#134"
+    },
+    {
+      "name": "Álvaro Fernández (Prejubilación)",
+      "etapa": "Primaria",
+      "tutor": "No",
+      "password": "Álvaro#135"
+    },
+    {
+      "name": "Sergio Acevedo Trapote",
+      "etapa": "Secundaria",
+      "tutor": "1º ESO-A",
+      "password": "Sergio#136"
+    },
+    {
+      "name": "Fidel Jorge Aguilar López",
+      "etapa": "Secundaria",
+      "tutor": "1º ESO-B",
+      "password": "Fidel#137"
+    },
+    {
+      "name": "Olga Almazán Pardo",
+      "etapa": "Secundaria",
+      "tutor": "2º ESO-A",
+      "password": "Olga#138"
+    },
+    {
+      "name": "Ana Isabel Álvarez Gómez",
+      "etapa": "Secundaria",
+      "tutor": "2º ESO-B",
+      "password": "Ana#139"
+    },
+    {
+      "name": "María Laura Blanco Pérez",
+      "etapa": "Secundaria",
+      "tutor": "3º ESO-A",
+      "password": "María#140"
+    },
+    {
+      "name": "Ángel Castellanos Cuenca",
+      "etapa": "Secundaria",
+      "tutor": "3º ESO-B",
+      "password": "Ángel#141"
+    },
+    {
+      "name": "Francisco Cezón Gil",
+      "etapa": "Secundaria",
+      "tutor": "4º ESO-A",
+      "password": "Francisco#142"
+    },
+    {
+      "name": "Juan Luis Cormenzana Carpio",
+      "etapa": "Secundaria",
+      "tutor": "4º ESO-B",
+      "password": "Juan#143"
+    },
+    {
+      "name": "Amalia del Carmen Paris Cuéllar",
+      "etapa": "Secundaria",
+      "tutor": "1º BACH-A",
+      "password": "Amalia#144"
+    },
+    {
+      "name": "Maria Lourdes Diez Pérez",
+      "etapa": "Secundaria",
+      "tutor": "1º BACH-B",
+      "password": "Maria#145"
+    },
+    {
+      "name": "Florencio Díez Sanz",
+      "etapa": "Secundaria",
+      "tutor": "2º BACH-A",
+      "password": "Florencio#146"
+    },
+    {
+      "name": "Javier Félix",
+      "etapa": "Secundaria",
+      "tutor": "Director General",
+      "role": "director_general",
+      "password": "Javier#2026"
+    },
+    {
+      "name": "María Esperanza García Moreda",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "María#148"
+    },
+    {
+      "name": "Jesús Abel García-Cezón Roldán",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Jesús#149"
+    },
+    {
+      "name": "Soledad Garrido García-Calvo",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Soledad#150"
+    },
+    {
+      "name": "José Antonio Gaspar Laborie",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "José#151"
+    },
+    {
+      "name": "Carolina González García",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Carolina#152"
+    },
+    {
+      "name": "Luis González Ludeña",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Luis#153"
+    },
+    {
+      "name": "Vicente Hernández Gordo",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Vicente#154"
+    },
+    {
+      "name": "Francisco José Lozano Maya",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Francisco#155"
+    },
+    {
+      "name": "Tania Martín Almendra",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Tania#156"
+    },
+    {
+      "name": "Almudena Martínez Fernández",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Almudena#157"
+    },
+    {
+      "name": "José Manuel Pulido Palomo",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "José#158"
+    },
+    {
+      "name": "Luis Redruello",
+      "etapa": "Secundaria",
+      "tutor": "Director ESO y BTO",
+      "role": "director_eso_bto",
+      "password": "Redruello#2026"
+    },
+    {
+      "name": "Antonio Jesús Royo Tomás",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Antonio#160"
+    },
+    {
+      "name": "Philippe Georges Saint-Mard",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Philippe#161"
+    },
+    {
+      "name": "María del Carmen Valera Soriano",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "María#162"
+    },
+    {
+      "name": "Isabel Ezquerra",
+      "etapa": "Secundaria",
+      "tutor": "No (Nuevo)",
+      "password": "Isabel#163"
+    },
+    {
+      "name": "Daniel Lozano (Prejubilación)",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Daniel#164"
+    },
+    {
+      "name": "Alejandro Gaspar (Prejubilación)",
+      "etapa": "Secundaria",
+      "tutor": "No",
+      "password": "Alejandro#165"
+    }
+  ],
+  "evaluations": {
+    "Daniel Asenjo García": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Elena Díaz Martín": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María de las Nieves Jiménez Jiménez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Susana López Gómez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Jesús Parras Maeso": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Alejandra Pérez Villalba": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Gema del Pozo Villegas": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Marta Pilar Rodríguez Centeno": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Nuria Romero Sanz": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Alejandra Calvo": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Charo (Sustituta)": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Teresa (Prejubilación)": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Juan Antonio Alfonso Pizarro": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Pilar Fuentes Saavedra": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Belén Hernando Martín": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María del Carmen Ibañez Abad": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Nuria Jarillo García": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Beatriz de León Ruiz": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Óscar Manuel Molina Márquez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Lorena Moreno Barrigas": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Álvaro Ortega Bonilla": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Isabel Peña Escudero": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Pilar Pérez Fernández": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Feli Priego Perete": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Rubén Recio Molina": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Julia Rodríguez Gutiérrez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "David Sagaseta Jiménez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "José Manuel Santos": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "José Antonio Utrillas Sánchez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Pedro Vega Verdeja": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Pedro Zapata Paredes": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Jorge Cabana": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Paula Gómez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Sánchez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Álvaro Fernández (Prejubilación)": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Sergio Acevedo Trapote": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Fidel Jorge Aguilar López": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Olga Almazán Pardo": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Ana Isabel Álvarez Gómez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Laura Blanco Pérez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Ángel Castellanos Cuenca": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Francisco Cezón Gil": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Juan Luis Cormenzana Carpio": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Amalia del Carmen Paris Cuéllar": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Maria Lourdes Diez Pérez": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Florencio Díez Sanz": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Javier Félix": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María Esperanza García Moreda": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Jesús Abel García-Cezón Roldán": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Soledad Garrido García-Calvo": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "José Antonio Gaspar Laborie": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Carolina González García": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Luis González Ludeña": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Vicente Hernández Gordo": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Francisco José Lozano Maya": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Tania Martín Almendra": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Almudena Martínez Fernández": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "José Manuel Pulido Palomo": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Luis Redruello": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Antonio Jesús Royo Tomás": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Philippe Georges Saint-Mard": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "María del Carmen Valera Soriano": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Isabel Ezquerra": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Daniel Lozano (Prejubilación)": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    },
+    "Alejandro Gaspar (Prejubilación)": {
+      "status": "not_started",
+      "updatedAt": null,
+      "answers": {},
+      "directorAnswers": {},
+      "reflections": {},
+      "directorNotes": ""
+    }
+  }
+}
