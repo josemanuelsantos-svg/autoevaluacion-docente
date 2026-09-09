@@ -1251,11 +1251,48 @@ class HybridDatabase {
 
     getUserData(username) {
         const data = this.get();
-        return data ? (data.evaluations[username] || null) : null;
+        if (!data) return null;
+        if (!data.evaluations) data.evaluations = {};
+        
+        // Inicializar automáticamente si no existe la ficha (ej. cuentas demo o nuevos profesores)
+        if (!data.evaluations[username]) {
+            data.evaluations[username] = {
+                status: 'not_started',
+                updatedAt: null,
+                answers: {},
+                directorAnswers: {},
+                reflections: {},
+                directorPrivateNotes: '',
+                directorAgreements: '',
+                smart_plan: {
+                    goal: '',
+                    actions: '',
+                    indicator: '',
+                    support: '',
+                    targetDate: '',
+                    reviewer: ''
+                }
+            };
+            this.save(data);
+        }
+        return data.evaluations[username];
     }
 
     saveUserData(username, data) {
-        const currentDb = this.get();
+        const currentDb = this.get() || { evaluations: {} };
+        if (!currentDb.evaluations) currentDb.evaluations = {};
+        if (!currentDb.evaluations[username]) {
+            currentDb.evaluations[username] = {
+                status: 'not_started',
+                updatedAt: null,
+                answers: {},
+                directorAnswers: {},
+                reflections: {},
+                directorPrivateNotes: '',
+                directorAgreements: '',
+                smart_plan: { goal: '', actions: '', indicator: '', support: '', targetDate: '', reviewer: '' }
+            };
+        }
         currentDb.evaluations[username] = {
             ...currentDb.evaluations[username],
             ...data,
@@ -1378,7 +1415,8 @@ async function handleLogin(username, password) {
 
     if (matchedTeacher) {
         // Aceptar 1234 o demo123 para perfiles demo
-        const isDemoMatch = matchedTeacher.id.startsWith('demo-') && (password.trim() === '1234' || password.trim() === 'demo123');
+        const pwdClean = password.trim();
+        const isDemoMatch = matchedTeacher.id.startsWith('demo-') && (pwdClean === '1234' || pwdClean === 'demo123' || pwdClean === 'demo' || pwdClean.toLowerCase() === 'demo');
         if (hashedInputPwd === matchedTeacher.authHash || isDemoMatch) {
             state.currentUser = {
                 id: matchedTeacher.id,
