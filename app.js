@@ -147,6 +147,50 @@ function cleanBlockTitle(title, blockId) {
 // 1. LISTADO OFICIAL DE PROFESORES CON METADATOS Y ETAPAS
 let TEACHERS = [
     {
+        "id": "demo-infantil",
+        "name": "Demo Infantil",
+        "etapa": "Infantil",
+        "tutor": "Infantil (Pruebas)",
+        "especialidad": "Docencia Infantil",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente de Prueba",
+        "authHash": "043082944676ee1ad2de83bc629318eb7956080e5aff3083a27c92429845f35e"
+    },
+    {
+        "id": "demo-primaria",
+        "name": "Demo Primaria",
+        "etapa": "Primaria",
+        "tutor": "Primaria (Pruebas)",
+        "especialidad": "Docencia Primaria",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente de Prueba",
+        "authHash": "043082944676ee1ad2de83bc629318eb7956080e5aff3083a27c92429845f35e"
+    },
+    {
+        "id": "demo-secundaria",
+        "name": "Demo Secundaria",
+        "etapa": "Secundaria",
+        "tutor": "Secundaria / BTO (Pruebas)",
+        "especialidad": "Docencia Secundaria",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente de Prueba",
+        "authHash": "043082944676ee1ad2de83bc629318eb7956080e5aff3083a27c92429845f35e"
+    },
+    {
+        "id": "demo-direccion",
+        "name": "Demo Dirección",
+        "etapa": "Secundaria",
+        "tutor": "Dirección General (Pruebas)",
+        "especialidad": "Gestión Directiva",
+        "role": "director",
+        "subrole": "general",
+        "cargo": "Director de Prueba (Acceso Total)",
+        "authHash": "043082944676ee1ad2de83bc629318eb7956080e5aff3083a27c92429845f35e"
+    },
+    {
         "id": "doc-01",
         "name": "Daniel Asenjo García",
         "etapa": "Infantil",
@@ -1333,7 +1377,9 @@ async function handleLogin(username, password) {
     });
 
     if (matchedTeacher) {
-        if (hashedInputPwd === matchedTeacher.authHash) {
+        // Aceptar 1234 o demo123 para perfiles demo
+        const isDemoMatch = matchedTeacher.id.startsWith('demo-') && (password.trim() === '1234' || password.trim() === 'demo123');
+        if (hashedInputPwd === matchedTeacher.authHash || isDemoMatch) {
             state.currentUser = {
                 id: matchedTeacher.id,
                 name: matchedTeacher.name,
