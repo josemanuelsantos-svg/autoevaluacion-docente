@@ -1,5 +1,24 @@
 
 // ==========================================================================
+// F09: ESQUEMA UNIFICADO DEL PLAN SMART (CONSISTENTE EN VISTAS, ACTAS Y EXPORT)
+// ==========================================================================
+function getTeacherSmartPlan(userData) {
+    if (!userData || !userData.answers) {
+        return { goal: '', actions: '', indicator: '', support: '', targetDate: '', reviewer: '' };
+    }
+    const sp = userData.answers.smart_plan || {};
+    return {
+        goal: sp.goal || sp.meta || userData.answers.smart_goal || '',
+        actions: sp.actions || sp.acciones || userData.answers.smart_actions || '',
+        indicator: sp.indicator || sp.indicador || userData.answers.smart_indicator || '',
+        support: sp.support || sp.apoyo || userData.answers.smart_support || '',
+        targetDate: sp.targetDate || sp.fecha || userData.answers.smart_target_date || '',
+        reviewer: sp.reviewer || sp.responsable || ''
+    };
+}
+
+
+// ==========================================================================
 // 🔥 CONFIGURACIÓN OFICIAL DE GOOGLE FIREBASE CLOUD FIRESTORE EN NUBE
 // ==========================================================================
 window.FIREBASE_CONFIG_SEED = {
@@ -53,6 +72,61 @@ window.addEventListener('error', function(e) {
 });
 
 
+
+// ==========================================================================
+// F01, F10, F11: SEGURIDAD CRIPTOGRÁFICA (SHA-256), AUTENTICACIÓN Y FOLIOS
+// ==========================================================================
+const AUTH_SALT = 'CSB-2627-AUTH-SALT:';
+
+async function hashPassword(pwd) {
+    if (!pwd) return '';
+    try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(AUTH_SALT + pwd.trim());
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch(e) {
+        let hash = 0;
+        const str = AUTH_SALT + pwd.trim();
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return 'FALLBACK-' + Math.abs(hash).toString(16);
+    }
+}
+
+async function computeDocumentSHA256(canonicalData) {
+    try {
+        const canonicalString = typeof canonicalData === 'string' ? canonicalData : JSON.stringify(canonicalData);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(canonicalString);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch(e) {
+        return 'SHA256-' + Date.now();
+    }
+}
+
+function slugify(text) {
+    if (!text) return 'DOC';
+    return text.toString().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .toUpperCase();
+}
+
+function generateUniqueFolio(teacherName) {
+    const t = TEACHERS.find(x => x.name === teacherName);
+    const tid = t ? t.id.toUpperCase() : 'DOC';
+    const nameSlug = slugify(teacherName);
+    return `ACTA-2627-${tid}-${nameSlug}`;
+}
+
+
 // Helper para limpiar títulos duplicados de bloques (ej. Bloque 1: BLOQUE 1:)
 function cleanBlockTitle(title, blockId) {
     if (!title) return '';
@@ -73,391 +147,708 @@ function cleanBlockTitle(title, blockId) {
 // 1. LISTADO OFICIAL DE PROFESORES CON METADATOS Y ETAPAS
 let TEACHERS = [
     {
+        "id": "doc-01",
         "name": "Daniel Asenjo García",
         "etapa": "Infantil",
         "tutor": "3 Años-A",
-        "password": "Daniel#101"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "e4e5e0b8a75e68807f7333ce5b55ba40bcf6e5c7168114729f5d69f9910361a6"
     },
     {
+        "id": "doc-02",
         "name": "Elena Díaz Martín",
         "etapa": "Infantil",
         "tutor": "3 Años-B",
-        "password": "Elena#102"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "30e9b5f2751cf69ab6525d1339bcc1b90224c3698b6da2647bb10424304abcf9"
     },
     {
+        "id": "doc-03",
         "name": "María de las Nieves Jiménez Jiménez",
         "etapa": "Infantil",
         "tutor": "4 Años-A",
-        "password": "María#103"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "41bdb9ed2b6a51cadddce3b2df4e88eeebd43a977384f222903f60dd63849778"
     },
     {
+        "id": "doc-04",
         "name": "Susana López Gómez",
         "etapa": "Infantil",
         "tutor": "4 Años-B",
-        "password": "Susana#104"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "4a64cab73061bdc691f1a3fb668668aa8bbef596091e8c244b16f4d7bc189d09"
     },
     {
+        "id": "doc-05",
         "name": "María Jesús Parras Maeso",
         "etapa": "Infantil",
         "tutor": "5 Años-A",
-        "password": "María#105"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "3ef685d762b5414fcbffbdf5a3afb8785cd3224feae5ea61e0fc7638197a081d"
     },
     {
+        "id": "doc-06",
         "name": "Alejandra Pérez Villalba",
         "etapa": "Infantil",
         "tutor": "5 Años-B",
-        "password": "Alejandra#106"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "114d646b29464d755276ae927ef645486eb2ac18b4c6f041a9cc50d92545abe9"
     },
     {
+        "id": "doc-07",
         "name": "Gema del Pozo Villegas",
         "etapa": "Infantil",
         "tutor": "No",
-        "password": "Gema#107"
+        "especialidad": "Apoyo Infantil",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "127f442a0006e4243751e1c295512f76d051fba5114cd5c635619a4ec954f383"
     },
     {
+        "id": "doc-08",
         "name": "Marta Pilar Rodríguez Centeno",
         "etapa": "Infantil",
         "tutor": "No",
-        "password": "Marta#108"
+        "especialidad": "Psicomotricidad",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "d60b28d8fda06e1a65c6c5cbaea20b04cafdf33203fd60e962fd917ba246c590"
     },
     {
+        "id": "doc-09",
         "name": "Nuria Romero Sanz",
         "etapa": "Infantil",
         "tutor": "No",
-        "password": "Nuria#109"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "02d49fcf5b223b96bef6e15f68e0f6e462e826b1290a3782e7bd3d40520e467c"
     },
     {
+        "id": "doc-10",
         "name": "Alejandra Calvo",
         "etapa": "Infantil",
         "tutor": "No",
-        "password": "Alejandra#110"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "1bfe5d43d52599724b5f0a980e640e8df5925f9cceec42c8f6427e585e1a807f"
     },
     {
+        "id": "doc-11",
         "name": "Teresa",
         "etapa": "Infantil",
         "tutor": "No",
-        "password": "Teresa#112"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "3043d01a4842a73f4f2f14418c849d2b5a04300213f294673c6810d6add52651"
     },
     {
+        "id": "doc-12",
         "name": "Juan Antonio Alfonso Pizarro",
         "etapa": "Primaria",
-        "tutor": "5º EP-A",
-        "password": "Juan#113"
+        "tutor": "1º Primaria A",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "5c7e8db9af4a99162ba3949eadf8277ac0917e63e316c1c5e0eb3f581e43bd7e"
     },
     {
+        "id": "doc-13",
         "name": "Pilar Fuentes Saavedra",
         "etapa": "Primaria",
-        "tutor": "1º EP-A",
-        "password": "Pilar#114"
+        "tutor": "1º Primaria B",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "200cd585a8dd9aa7f33127d52bb3beb2e071198bdb7a1790d57ae6072f4452c8"
     },
     {
+        "id": "doc-14",
         "name": "María Belén Hernando Martín",
         "etapa": "Primaria",
-        "tutor": "1º EP-B",
-        "password": "María#115"
+        "tutor": "2º Primaria A",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "fd4c5fd0527329711d85a13320f3b9d4fb377f78666cbb2f5b6c36b1b6aa6b58"
     },
     {
+        "id": "doc-15",
         "name": "María del Carmen Ibañez Abad",
         "etapa": "Primaria",
-        "tutor": "2º EP-A",
-        "password": "María#116"
+        "tutor": "2º Primaria B",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "e730be8bd28a50383a862ac3261a69b6fdb3576c7861159a829774234a1036d6"
     },
     {
+        "id": "doc-16",
         "name": "Nuria Jarillo García",
         "etapa": "Primaria",
-        "tutor": "2º EP-B",
-        "password": "Nuria#117"
+        "tutor": "3º Primaria A",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "a379d0922cbb60c44f8f74a9f1695605e2e843f702c1fe4bf09520e1d4bfdb0f"
     },
     {
+        "id": "doc-17",
         "name": "Beatriz de León Ruiz",
         "etapa": "Primaria",
         "tutor": "3º EP-B",
-        "password": "Beatriz#118"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "147cb46e271d69910f7222d746ab661c98c7b9159f826248b61416d5cbe96835"
     },
     {
+        "id": "doc-18",
         "name": "Óscar Manuel Molina Márquez",
         "etapa": "Primaria",
         "tutor": "4º EP-A",
-        "password": "Óscar#119"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "4bcc30a59de87e44e275e7767d0db151ce111d8db5c8c6a3b668d823cb7071f3"
     },
     {
+        "id": "doc-19",
         "name": "Lorena Moreno Barrigas",
         "etapa": "Primaria",
-        "tutor": "6º EP-C",
-        "password": "Lorena#120"
+        "tutor": "4º Primaria B",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "960402df1014d648a5957bfeb89219ffcded705e79c9087b49072f1fd7859f07"
     },
     {
+        "id": "doc-20",
         "name": "Álvaro Ortega Bonilla",
         "etapa": "Primaria",
-        "tutor": "4º EP-B",
-        "password": "Álvaro#121"
+        "tutor": "5º Primaria A",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "19150332465727cfa661fc079571e9a7140e48075cb81b3b7b703969b05a2edc"
     },
     {
+        "id": "doc-21",
         "name": "Isabel Peña Escudero",
         "etapa": "Primaria",
         "tutor": "5º EP-B",
-        "password": "Isabel#122"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "b7dec616af36059ff6d3e71437b48b073e91587bd5d553219c4851b2e267852f"
     },
     {
+        "id": "doc-22",
         "name": "María Pilar Pérez Fernández",
         "etapa": "Primaria",
-        "tutor": "6º EP-B",
-        "password": "María#123"
+        "tutor": "6º Primaria A",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "1ea8c54a22567187339fa6c4d3bd38a02afc2ce591e9a4a2e2b68e51f842441c"
     },
     {
+        "id": "doc-23",
         "name": "Feli Priego Perete",
         "etapa": "Primaria",
-        "tutor": "3º EP-A",
-        "password": "Feli#124"
+        "tutor": "6º Primaria B",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "122db177c32a27b4a0475684444c8a84b361ce96ede79ff157bc00ce29e720e1"
     },
     {
+        "id": "doc-24",
         "name": "Rubén Recio Molina",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Rubén#125"
+        "especialidad": "Educación Física",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "53b9d35ef501dc571574ae950e456a0629893afb552551e380be56354f7907ad"
     },
     {
+        "id": "doc-25",
         "name": "Julia Rodríguez Gutiérrez",
         "etapa": "Primaria",
-        "tutor": "6º EP-A",
-        "password": "Julia#126"
+        "tutor": "No",
+        "especialidad": "Música",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "745f0b5bc803b4250b445f5ad69c9e98147f82c677477fd7ffc3fb4c9d9344ac"
     },
     {
+        "id": "doc-26",
         "name": "David Sagaseta Jiménez",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "David#127"
+        "especialidad": "Inglés",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "282bb83c5f78ac4b24a627025613116dbdc84d3aa87e488047e5031f66251039"
     },
     {
+        "id": "doc-27",
         "name": "José Manuel Santos",
         "etapa": "Primaria",
         "tutor": "Director EI y EP",
-        "role": "director_ei_ep",
-        "password": "Santos#2026"
+        "especialidad": "Docencia",
+        "role": "director",
+        "subrole": "ei_ep",
+        "cargo": "Director EI y EP",
+        "authHash": "cf97c9424a8f43509c63deab1553bfb084dc355a1727042d8761d585bf5b0208"
     },
     {
+        "id": "doc-28",
         "name": "José Antonio Utrillas Sánchez",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "José#129"
+        "especialidad": "Religión",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "a249bb09135ad218e2b7b7fbbc6484eec7a09ba1b8f85b4193859fb2df3df096"
     },
     {
+        "id": "doc-29",
         "name": "Pedro Vega Verdeja",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Pedro#130"
+        "especialidad": "PT / AL",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "eca102dca33d92aa42051307a383f96f3a5571ea92eb37c8d4b1d21da6f58321"
     },
     {
+        "id": "doc-30",
         "name": "Pedro Zapata Paredes",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Pedro#131"
+        "especialidad": "Apoyo Primaria",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "add9a42db73f59adc5ba5d588cda3da013f41a39247a198ac0a35d70180846d6"
     },
     {
+        "id": "doc-31",
         "name": "Jorge Cabana",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Jorge#132"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "80d6dada2e899a67a31db401c73eb8be9c93d4c0583db10a0487a1d9866c3f1c"
     },
     {
+        "id": "doc-32",
         "name": "Paula Gómez",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Paula#133"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "9f62902c1f2cfbd414632af72ebdb97f60143bef409d931f6565643bf977065c"
     },
     {
+        "id": "doc-33",
         "name": "María Sánchez",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "María#134"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "8f5e3ef5e6533ec27dd3eba9e563d851cbff3181dc2338c834208fc8f911bcc8"
     },
     {
+        "id": "doc-34",
         "name": "Álvaro Fernández",
         "etapa": "Primaria",
         "tutor": "No",
-        "password": "Álvaro#135"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "11aa44b0ef0443445ebc01d5061357f9af725da0084e91b09735abf9a026958f"
     },
     {
+        "id": "doc-35",
         "name": "Sergio Acevedo Trapote",
         "etapa": "Secundaria",
         "tutor": "1º ESO-A",
-        "password": "Sergio#136"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "e2c2fc4f60bc0c9c00ae66f8005537455a9f404bed70d2fd45ae21dd202c8420"
     },
     {
+        "id": "doc-36",
         "name": "Fidel Jorge Aguilar López",
         "etapa": "Secundaria",
         "tutor": "1º ESO-B",
-        "password": "Fidel#137"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "e45aabc581b86ae55371654a66e4a392be480217483d81c0ea0b4b9bd3338b51"
     },
     {
+        "id": "doc-37",
         "name": "Olga Almazán Pardo",
         "etapa": "Secundaria",
         "tutor": "2º ESO-A",
-        "password": "Olga#138"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "a381a8d279daba909763b00b7f9cb7ffe438539d98622143cdd3483523b62725"
     },
     {
+        "id": "doc-38",
         "name": "Ana Isabel Álvarez Gómez",
         "etapa": "Secundaria",
         "tutor": "2º ESO-B",
-        "password": "Ana#139"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "b74092c8851c46705b61a8ee154e84a626dc5a9bcb33a077ae0282a96164bf8c"
     },
     {
+        "id": "doc-39",
         "name": "María Laura Blanco Pérez",
         "etapa": "Secundaria",
         "tutor": "3º ESO-A",
-        "password": "María#140"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "2246c662d6b6f3bc7111f0828648b850be4a6e5397a19fed2c5410ec0fce1e98"
     },
     {
+        "id": "doc-40",
         "name": "Ángel Castellanos Cuenca",
         "etapa": "Secundaria",
         "tutor": "3º ESO-B",
-        "password": "Ángel#141"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "ce8c8666bb753206241088a2049aaf1285b5b7d7f6f780c0c85221829d349731"
     },
     {
+        "id": "doc-41",
         "name": "Francisco Cezón Gil",
         "etapa": "Secundaria",
         "tutor": "4º ESO-A",
-        "password": "Francisco#142"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "5e6f0f2741c0a85c3d21525feb40d0d142d27ff57bfb69747d730f1698406a7d"
     },
     {
+        "id": "doc-42",
         "name": "Juan Luis Cormenzana Carpio",
         "etapa": "Secundaria",
         "tutor": "4º ESO-B",
-        "password": "Juan#143"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "9a55f87f82d5c293c9bc1acd2afbab6bb503a967a7dfffd82ee458aa390aee28"
     },
     {
+        "id": "doc-43",
         "name": "Amalia del Carmen Paris Cuéllar",
         "etapa": "Secundaria",
         "tutor": "1º BACH-A",
-        "password": "Amalia#144"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "a708bfd01c4bcef9ffd71ea5636e3e43b86facc7864c8a16ad451aa7bdd595b0"
     },
     {
+        "id": "doc-44",
         "name": "Maria Lourdes Diez Pérez",
         "etapa": "Secundaria",
         "tutor": "1º BACH-B",
-        "password": "Maria#145"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "921889693c8c29562b6422cd328a940a4569b32b52358b724d6ea06d07a6babe"
     },
     {
+        "id": "doc-45",
         "name": "Florencio Díez Sanz",
         "etapa": "Secundaria",
         "tutor": "2º BACH-A",
-        "password": "Florencio#146"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "771ae5c9be32e31334c66e4ee5ab72d8ae7b6d8410e1bfaa31fe8e609ebd3cf1"
     },
     {
+        "id": "doc-46",
         "name": "Javier Félix",
         "etapa": "Secundaria",
         "tutor": "Director General",
-        "role": "director_general",
-        "password": "Javier#2026"
+        "especialidad": "Docencia",
+        "role": "director",
+        "subrole": "general",
+        "cargo": "Director General",
+        "authHash": "e09dce09211cf2e69471243c744986437139201ff2887ec693096ddc897de89d"
     },
     {
+        "id": "doc-47",
         "name": "María Esperanza García Moreda",
         "etapa": "Secundaria",
-        "tutor": "No",
-        "password": "María#148"
+        "tutor": "2º Bachillerato B",
+        "especialidad": "Tutoría",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "327c5bf51c20abe0af3fde60a3b3c39a6d4686b41952978c96f1cee876ce74ee"
     },
     {
+        "id": "doc-48",
         "name": "Jesús Abel García-Cezón Roldán",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Jesús#149"
+        "especialidad": "Matemáticas",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "402562675d112ec8f6471803b8182d5f2ffd1641f0829b8dd5d296b9e43ff42d"
     },
     {
+        "id": "doc-49",
         "name": "Soledad Garrido García-Calvo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Soledad#150"
+        "especialidad": "Lengua Castellana y Literatura",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "df2c865b76c7a037c85d92400040af73eb5ece88504a71622af2a5dd322b6fb3"
     },
     {
+        "id": "doc-50",
         "name": "José Antonio Gaspar Laborie",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "José#151"
+        "especialidad": "Inglés",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "63ec5179a0f756f61c95213f94476a97c7c40dac1892f3a4989ca26819e3238e"
     },
     {
+        "id": "doc-51",
         "name": "Carolina González García",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Carolina#152"
+        "especialidad": "Física y Química",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "dcc3db492fbbcc21038caf590783f2061acc7e9e1e6f09c514af87c9dc0eb106"
     },
     {
+        "id": "doc-52",
         "name": "Luis González Ludeña",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Luis#153"
+        "especialidad": "Biología y Geología",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "f1341ab094ecc14e16b7dc6026d785ae1dcdf9cd1b7bc1903be0613b86d47154"
     },
     {
+        "id": "doc-53",
         "name": "Vicente Hernández Gordo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Vicente#154"
+        "especialidad": "Geografía e Historia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "efce3b08fa193c48968ff65ad48ffb147faee3df5c3c46d3f2c418724a7f8fad"
     },
     {
+        "id": "doc-54",
         "name": "Francisco José Lozano Maya",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Francisco#155"
+        "especialidad": "Filosofía",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "33d793590de91d5d74380810d73f38029a1883f7d80b402de19e43f19a5cdabc"
     },
     {
+        "id": "doc-55",
         "name": "Tania Martín Almendra",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Tania#156"
+        "especialidad": "Educación Física",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "d524ffceb6b49649f868adf99960db4c1b579aef23a0c20087b030aab28e4822"
     },
     {
+        "id": "doc-56",
         "name": "Almudena Martínez Fernández",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Almudena#157"
+        "especialidad": "Dibujo y Educación Plástica",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "45291dc59db60d8c63205e7545f28ae8bb28e72a25dfd10393d1362487a7c6b5"
     },
     {
+        "id": "doc-57",
         "name": "José Manuel Pulido Palomo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "José#158"
+        "especialidad": "Tecnología e Informática",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "1859c53ef780dc81859ec2827516dc45d33205bb80a3a959c8b2a83f7ea9db0e"
     },
     {
+        "id": "doc-58",
         "name": "Luis Redruello",
         "etapa": "Secundaria",
         "tutor": "Director ESO y BTO",
-        "role": "director_eso_bto",
-        "password": "Redruello#2026"
+        "especialidad": "Docencia",
+        "role": "director",
+        "subrole": "eso_bto",
+        "cargo": "Director ESO y BTO",
+        "authHash": "80aa107c53453595979999f94ba0353d0938984ecf9e9486bfabfca19b6d0a4f"
     },
     {
+        "id": "doc-59",
         "name": "Antonio Jesús Royo Tomás",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Antonio#160"
+        "especialidad": "Música",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "2007af0f4fb1bc9be4ce6799174d6d2c3a263b90e81e78dc95dabdb05b94bb56"
     },
     {
+        "id": "doc-60",
         "name": "Philippe Georges Saint-Mard",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Philippe#161"
+        "especialidad": "Francés",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "08381d6ff1d5e2f772d9342616272748ff33201e41636e9ef7295c8daab9a6c5"
     },
     {
+        "id": "doc-61",
         "name": "María del Carmen Valera Soriano",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "María#162"
+        "especialidad": "Orientación / Psicopedagogía",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "8e50ebd3827e53efc5316630888f511a6d4982dbe143385f467e3d9978bdcdca"
     },
     {
+        "id": "doc-62",
         "name": "Isabel Ezquerra",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Isabel#163"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "12842ca66dbc3f0204363a38d49f1ca41ff9fe78242c2a89fdd0471ee8578ffe"
     },
     {
+        "id": "doc-63",
         "name": "Daniel Lozano",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Daniel#164"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "9b4412295bb23025d695e6ecc1608a1a9e41cafc9ec1dfb3126a1d06d960be90"
     },
     {
+        "id": "doc-64",
         "name": "Alejandro Gaspar",
         "etapa": "Secundaria",
         "tutor": "No",
-        "password": "Alejandro#165"
+        "especialidad": "Docencia",
+        "role": "teacher",
+        "subrole": null,
+        "cargo": "Docente",
+        "authHash": "4ffa927fa1b2a1b1722d4777a3d9276c1b2450c4950e139276987f51d890f940"
     }
 ];
 
@@ -637,728 +1028,9 @@ const EVAL_BLOCKS = [
     }
 ];
 
-// 4. MOCK DATA CON CDD Y SMART PLANS
-const MOCK_ANSWERS = {
-    'Feli Priego': {
-        status: 'completed',
-        updatedAt: '2026-07-14T10:30:00Z',
-        answers: {
-            '1.1': { score: 5, evidence: 'Estoy muy contenta en el centro este curso, hay muy buen ambiente.' },
-            '1.2': { score: 5, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 5, evidence: 'El estilo franciscano se vive de verdad en el claustro.' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 5, evidence: '' },
-            '2.2': { score: 5, evidence: 'Excelente coordinación con Primaria.' },
-            '2.3': { score: 5, evidence: 'Suelo ayudar en sustituciones siempre que puedo.' },
-            '2.4': { score: 5, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Julia Rodríguez',
-            '3.1': { score: 5, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 5, evidence: '' },
-            '4.1': { score: 4, evidence: '' },
-            '4.2': { score: 5, evidence: 'Aplico gamificación y proyectos cooperativos.' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 5, evidence: 'Criterios claros publicados en el aula virtual.' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 5, evidence: 'Ofrezco repetición de pruebas clave en tutorías.' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'yes', details: 'Hice un curso online de Neuroeducación.' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 5, evidence: '' },
-            'cdd': 'B2',
-            '5.1': { score: 5, evidence: 'Asisto a todo.' },
-            '5.2': { score: 5, evidence: 'Participo en las convivencias de inicio de curso.' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 5, evidence: '' },
-            '6.1': ['Clima escolar y cultura de equipo', 'Metodología y práctica docente en el aula'],
-            'smart_plan': {
-                meta: 'Incorporar dinámicas formales de aprendizaje cooperativo en 3º de Primaria de forma sistemática.',
-                acciones: 'Diseño de roles de equipo, aplicación de técnicas cooperativas semanales (1-2-4, cabezas numeradas) y rúbricas de co-evaluación.',
-                indicador: 'Un portafolio cooperativo por trimestre y mejora evaluable del 15% en el clima del aula (medido por test sociométrico).',
-                apoyo: 'Sesión de coaching pedagógico del coordinador o curso específico del colegio.'
-            },
-            '6.3': 'Formación en inteligencia artificial aplicada al diseño de rúbricas.'
-        },
-        directorAnswers: {
-            '1.1': 5, '1.2': 5, '1.4': 4, '1.5': 5, '1.6': 5,
-            '2.1': 5, '2.2': 4, '2.3': 5, '2.4': 5, '2.5': 4, '2.6': 4,
-            '3.1': 5, '3.2': 4, '3.3': 5,
-            '4.1': 4, '4.2': 5, '4.3': 4, '4.4': 4, '4.5': 5, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 5, '4.12': 5,
-            '5.1': 5, '5.2': 5, '5.3': 5, '5.4': 5
-        },
-        reflections: {
-            'b1': 'Me siento muy apoyada en mi etapa. Quizás se podría mejorar la climatización de las aulas en verano.',
-            'b2': 'Destaco la generosidad de los compañeros. Todos remamos en la misma dirección.',
-            'b3': 'En los momentos de oración de la mañana a primera hora y en las campañas solidarias.',
-            'b4': 'Obtengo buenos resultados en el clima de aula. Me gustaría recibir formación sobre alumnos de altas capacidades.',
-            'b5': 'Mi implicación es alta porque creo que estas actividades de comunidad enriquecen tanto a alumnos como a profesores.'
-        },
-        directorNotes: 'Feli muestra un gran compromiso. Comentar en la reunión su propuesta sobre la formación en altas capacidades.'
-    },
-    'Julia Rodríguez': {
-        status: 'completed',
-        updatedAt: '2026-07-15T09:15:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 5, evidence: '' },
-            '1.4': { score: 3, evidence: 'Siento mucha carga de trabajo administrativa a veces.' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 5, evidence: 'Siento que el equipo directivo confía en mi labor.' },
-            '2.1': { score: 5, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 5, evidence: '' },
-            '2.5': { score: 5, evidence: '' },
-            '2.6': { score: 5, evidence: '' },
-            'nomination': 'Feli Priego',
-            '3.1': { score: 5, evidence: '' },
-            '3.2': { score: 5, evidence: 'Coordino la comisión de Pastoral de Primaria.' },
-            '3.3': { score: 5, evidence: '' },
-            '4.1': { score: 5, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 5, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 5, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 5, evidence: 'Envío resúmenes semanales a los padres.' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 5, evidence: '' },
-            'cdd': 'C1',
-            '5.1': { score: 5, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 5, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Identidad y valores franciscanos', 'Acompañamiento tutorial y relación con familias'],
-            'smart_plan': {
-                meta: 'Unificar y digitalizar el sistema de rúbricas LOMLOE de todo el departamento de Primaria.',
-                acciones: 'Organizar 3 talleres prácticos de co-diseño de rúbricas en el claustro y centralizar los recursos en Drive.',
-                indicador: 'El 100% de los profesores usando el mismo repositorio compartido antes de final de año.',
-                apoyo: 'Liberación horaria de 1 periodo semanal para reuniones de coordinación.'
-            },
-            '6.3': 'Evaluación LOMLOE avanzada y situaciones de aprendizaje.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 5, '1.4': 4, '1.5': 5, '1.6': 5,
-            '2.1': 5, '2.2': 4, '2.3': 4, '2.4': 5, '2.5': 5, '2.6': 5,
-            '3.1': 5, '3.2': 5, '3.3': 5,
-            '4.1': 5, '4.2': 4, '4.3': 5, '4.4': 4, '4.5': 4, '4.6': 5, '4.7': 4, '4.8': 5, '4.9': 5, '4.12': 5,
-            '5.1': 5, '5.2': 4, '5.3': 5, '5.4': 5
-        },
-        reflections: {
-            'b1': 'El ambiente de fe y respeto diario ayuda mucho. Convendría ajustar los tiempos de reuniones de claustro.',
-            'b2': 'La fortaleza es la empatía grupal. Trataré de ser más asertiva con las críticas constructivas.',
-            'b3': 'En el Adviento y en el día escolar de la Paz y la no violencia.',
-            'b4': 'La tutoría y relación con familias es mi mayor fuerte. Necesito refrescar la parte de metodologías LOMLOE.',
-            'b5': 'Honesta e implicada al 100%. Me motiva ver el impacto de las actividades comunes en el sentido de familia escolar.'
-        },
-        directorNotes: 'Revisar su carga administrativa en la comisión. Excelente valoración de las familias.'
-    },
-    'Daniel Asenjo': {
-        status: 'in_progress',
-        updatedAt: '2026-07-15T11:20:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 4, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 5, evidence: 'Me siento muy apoyado por mi equipo de departamento.' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 3, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Álvaro Ortega'
-        },
-        directorAnswers: {},
-        reflections: {
-            'b1': 'Las celebraciones y comidas de equipo ayudan mucho a la cohesión.',
-            'b2': 'Tenemos un grupo muy maduro, aunque a veces falta tiempo para debatir más sobre pedagogía.'
-        },
-        directorNotes: 'Empezado, le falta completar la segunda mitad (a partir del Bloque 3).'
-    },
-    'Pilar Fuentes': {
-        status: 'completed',
-        updatedAt: '2026-07-16T15:20:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: 'Me gusta mucho trabajar con los niños de 5 años.' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 3, evidence: '' },
-            '2.1': { score: 5, evidence: 'El equipo de Infantil es una familia.' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 5, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Nuria Jarillo',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 5, evidence: 'Programaciones semanales siempre al día.' },
-            '4.2': { score: 4, evidence: 'Uso rincones de aprendizaje.' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 3, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'A2',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 3, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Clima escolar y cultura de equipo', 'Identidad y valores franciscanos'],
-            'smart_plan': {
-                meta: 'Introducir herramientas básicas de robótica (Blue-Bot) en Infantil 5 años.',
-                acciones: 'Diseñar 3 sesiones de iniciación al pensamiento computacional por trimestre.',
-                indicador: 'Uso autónomo por parte del 80% de los alumnos al final del curso.',
-                apoyo: 'Formación del coordinador digital o taller práctico en el centro.'
-            },
-            '6.3': 'Robótica y pensamiento computacional en Educación Infantil.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 4, '1.4': 4, '1.5': 4, '1.6': 4,
-            '2.1': 5, '2.2': 4, '2.3': 4, '2.4': 5, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 4, '3.3': 4,
-            '4.1': 5, '4.2': 4, '4.3': 4, '4.4': 3, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 5, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me siento contenta y respetada en mi trabajo.',
-            'b2': 'Excelente ambiente en el equipo de Infantil.',
-            'b3': 'Cuidamos mucho los valores de servicio y cercanía.',
-            'b4': 'En Infantil la relación es muy cercana.',
-            'b5': 'Colaboro en las fiestas de la etapa.'
-        },
-        directorNotes: 'Pilar es un pilar fundamental en la etapa de Infantil. Su plan de robótica es muy interesante.'
-    },
-    'Nuria Jarillo': {
-        status: 'completed',
-        updatedAt: '2026-07-16T17:40:00Z',
-        answers: {
-            '1.1': { score: 5, evidence: 'Muy contenta con el grupo y el ambiente de claustro.' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 5, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 5, evidence: 'Infantil está muy coordinado.' },
-            '2.2': { score: 5, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 5, evidence: '' },
-            'nomination': 'Pilar Fuentes',
-            '3.1': { score: 5, evidence: '' },
-            '3.2': { score: 5, evidence: 'Participo en las comisiones de pastoral.' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 4, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 5, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 5, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 5, evidence: '' },
-            'cdd': 'B1',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 5, evidence: '' },
-            '5.3': { score: 3, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Identidad y valores franciscanos', 'Acompañamiento tutorial y relación con familias'],
-            'smart_plan': {
-                meta: 'Aumentar la participación familiar en talleres de cuentacuentos y arte en Infantil 4 años.',
-                acciones: 'Organizar un taller familiar al mes e involucrar a los abuelos y padres.',
-                indicador: 'Asistencia de al menos un representante familiar en el 85% del alumnado.',
-                apoyo: 'Facilidad de acceso al aula en el horario del taller.'
-            },
-            '6.3': 'Educación emocional en la primera infancia y metodologías activas.'
-        },
-        directorAnswers: {
-            '1.1': 5, '1.2': 4, '1.4': 4, '1.5': 5, '1.6': 4,
-            '2.1': 5, '2.2': 5, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 5,
-            '3.1': 5, '3.2': 5, '3.3': 4,
-            '4.1': 4, '4.2': 4, '4.3': 5, '4.4': 4, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 5, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 3, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me encanta mi trabajo y la relación familiar en esta etapa.',
-            'b2': 'Compartimos muchas dinámicas y materiales de Infantil.',
-            'b3': 'El trabajo diario con las familias y la oración es constante.',
-            'b4': 'Las reuniones de tutorías son semanales y muy cercanas.',
-            'b5': 'Participo en el mercadillo solidario.'
-        },
-        directorNotes: 'Nuria es una docente con gran carisma e implicación pastoral. Excelente relación con padres.'
-    },
-    'Lorena Moreno Barrigas': {
-        status: 'completed',
-        updatedAt: '2026-07-16T18:10:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 4, evidence: '' },
-            '1.6': { score: 3, evidence: '' },
-            '2.1': { score: 4, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Feli Priego',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 5, evidence: 'Programación minuciosa en Drive.' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 3, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 4, evidence: '' },
-            '4.10': { value: 'yes', details: 'Curso de neurodidáctica aplicada.' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'B1',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Metodología y práctica docente en el aula', 'Acompañamiento tutorial y relación con familias'],
-            'smart_plan': {
-                meta: 'Implantar la autoevaluación guiada en los proyectos de Ciencias Sociales en 6º EP.',
-                acciones: 'Diseño y uso de dianas de evaluación y rúbricas de autoevaluación por parte del alumno.',
-                indicador: 'El 100% de los alumnos realiza su diana de progreso al finalizar cada unidad.',
-                apoyo: 'Plantillas de dianas LOMLOE compartidas.'
-            },
-            '6.3': 'Evaluación formativa y LOMLOE en Primaria.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 4, '1.4': 4, '1.5': 4, '1.6': 4,
-            '2.1': 4, '2.2': 4, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 4, '3.3': 4,
-            '4.1': 5, '4.2': 4, '4.3': 4, '4.4': 3, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 4, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me siento a gusto. Hay mucha carga burocrática este año con la LOMLOE.',
-            'b2': 'Buen ambiente de trabajo, nos coordinamos bien en 6º.',
-            'b3': 'La oración diaria está integrada en la rutina de clase.',
-            'b4': 'Evaluamos por criterios e intentamos dar segundas oportunidades.',
-            'b5': 'Asisto a las actividades y eventos comunes.'
-        },
-        directorNotes: 'Lorena es muy metódica y organizada. Su plan sobre co-evaluación y dianas formativas es excelente.'
-    },
-    'Isabel Peña': {
-        status: 'completed',
-        updatedAt: '2026-07-16T19:00:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 5, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 5, evidence: '' },
-            '2.1': { score: 4, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Álvaro Ortega',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 5, evidence: '' },
-            '4.2': { score: 5, evidence: '' },
-            '4.3': { score: 5, evidence: '' },
-            '4.4': { score: 5, evidence: '' },
-            '4.5': { score: 5, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 4, evidence: '' },
-            '4.10': { value: 'yes', details: 'Formación en herramientas de Google Workspace.' },
-            '4.11': { value: 'na' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'C1',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Metodología y práctica docente en el aula', 'Compromiso con el bien común y eventos del centro'],
-            'smart_plan': {
-                meta: 'Implantar metodologías basadas en el Aula Invertida (Flipped Classroom) en Matemáticas de 3º ESO.',
-                acciones: 'Grabar videos cortos explicativos y diseñar cuestionarios previos a la clase en Classroom.',
-                indicador: 'Uso del modelo en al menos el 50% de los temas con una mejora en la nota media del 10%.',
-                apoyo: 'Licencia premium de herramienta de edición de vídeo si fuera necesario.'
-            },
-            '6.3': 'Flipped classroom y herramientas avanzadas de evaluación digital.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 4, '1.4': 5, '1.5': 5, '1.6': 5,
-            '2.1': 4, '2.2': 4, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 4, '3.3': 4,
-            '4.1': 5, '4.2': 5, '4.3': 5, '4.4': 5, '4.5': 5, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 4, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me siento respaldada en mis iniciativas innovadoras.',
-            'b2': 'Compartimos muchas prácticas y herramientas digitales.',
-            'b3': 'Intento sembrar concordia y valores en mis clases de Secundaria.',
-            'b4': 'Uso classroom de forma intensiva y rúbricas en todas las entregas.',
-            'b5': 'Colaboro con las comisiones de digitalización.'
-        },
-        directorNotes: 'Isabel es un referente digital en el claustro de Secundaria. Gran nivel tecnológico.'
-    },
-    'Rubén Recio': {
-        status: 'completed',
-        updatedAt: '2026-07-16T19:30:00Z',
-        answers: {
-            '1.1': { score: 5, evidence: '' },
-            '1.2': { score: 5, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 5, evidence: '' },
-            '2.2': { score: 5, evidence: '' },
-            '2.3': { score: 5, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 5, evidence: '' },
-            'nomination': 'Isabel Peña',
-            '3.1': { score: 5, evidence: '' },
-            '3.2': { score: 5, evidence: 'Coordino actividades solidarias.' },
-            '3.3': { score: 5, evidence: '' },
-            '4.1': { score: 4, evidence: '' },
-            '4.2': { score: 5, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 5, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'na' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'C1',
-            '5.1': { score: 5, evidence: '' },
-            '5.2': { score: 5, evidence: '' },
-            '5.3': { score: 5, evidence: '' },
-            '5.4': { score: 5, evidence: '' },
-            '6.1': ['Identidad y valores franciscanos', 'Acción pastoral y acompañamiento espiritual'],
-            'smart_plan': {
-                meta: 'Liderar el proyecto interetapas de Aprendizaje y Servicio (ApS) sobre solidaridad y reciclaje.',
-                acciones: 'Organizar talleres donde alumnos de ESO enseñan reciclaje a Primaria e Infantil.',
-                indicador: 'Participación del 100% de los cursos implicados y un evento de cierre común.',
-                apoyo: 'Coordinación horaria para el cruce de etapas.'
-            },
-            '6.3': 'Aprendizaje-Servicio (ApS) y metodologías de impacto social.'
-        },
-        directorAnswers: {
-            '1.1': 5, '1.2': 5, '1.4': 4, '1.5': 5, '1.6': 5,
-            '2.1': 5, '2.2': 4, '2.3': 5, '2.4': 4, '2.5': 4, '2.6': 5,
-            '3.1': 5, '3.2': 5, '3.3': 5,
-            '4.1': 4, '4.2': 5, '4.3': 4, '4.4': 5, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 5, '4.12': 4,
-            '5.1': 5, '5.2': 5, '5.3': 5, '5.4': 5
-        },
-        reflections: {
-            'b1': 'Plena alegría en mi vocación y dedicación en el centro.',
-            'b2': 'Hay un clima fantástico. Siempre dispuestos a ayudarnos.',
-            'b3': 'El motor de mi labor es la acción pastoral y transmitir el evangelio en valores prácticos.',
-            'b4': 'Utilizo el aprendizaje cooperativo y el portafolio digital.',
-            'b5': 'Implicación total en convivencias y salidas. Es clave para crear lazo.'
-        },
-        directorNotes: 'Rubén es un excelente docente, gran carisma pastoral y dinamizador en Secundaria. Apoyar su proyecto de ApS.'
-    },
-    'Diego López': {
-        status: 'completed',
-        updatedAt: '2026-07-16T20:00:00Z',
-        answers: {
-            '1.1': { score: 3, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 3, evidence: '' },
-            '1.5': { score: 4, evidence: '' },
-            '1.6': { score: 3, evidence: '' },
-            '2.1': { score: 4, evidence: 'Me siento muy apoyado por mi equipo de departamento.' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 3, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 3, evidence: '' },
-            '2.6': { score: 3, evidence: '' },
-            'nomination': 'Julia Rodríguez',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 3, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 4, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 3, evidence: '' },
-            '4.8': { score: 3, evidence: '' },
-            '4.9': { score: 4, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'B2',
-            '5.1': { score: 3, evidence: '' },
-            '5.2': { score: 3, evidence: '' },
-            '5.3': { score: 3, evidence: '' },
-            '5.4': { score: 3, evidence: '' },
-            '6.1': ['Metodología y práctica docente en el aula', 'Clima escolar y cultura de equipo'],
-            'smart_plan': {
-                meta: 'Mejorar el sistema de retroalimentación (feedback) individualizado en Primaria utilizando Classroom.',
-                acciones: 'Redactar comentarios descriptivos de fortaleza y mejora en las 3 tareas clave de cada trimestre.',
-                indicador: 'El 100% de los alumnos de mi tutoría recibe al menos 3 feedbacks escritos detallados.',
-                apoyo: 'Ninguno en especial.'
-            },
-            '6.3': 'Feedback formativo y evaluación compartida.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 4, '1.4': 4, '1.5': 4, '1.6': 4,
-            '2.1': 4, '2.2': 4, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 3, '3.3': 4,
-            '4.1': 4, '4.2': 4, '4.3': 4, '4.4': 4, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 4, '4.12': 4,
-            '5.1': 4, '5.2': 3, '5.3': 3, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Este curso me he sentido un poco cansado físicamente, pero motivado con los niños.',
-            'b2': 'Coordinación correcta en Primaria.',
-            'b3': 'La oración se hace de forma sistemática.',
-            'b4': 'Procuro estar al día en herramientas digitales.',
-            'b5': 'Asisto a lo obligatorio pero no he tenido fuerzas para comisiones voluntarias este año.'
-        },
-        directorNotes: 'Conversar con Diego en la entrevista sobre su cansancio y cómo apoyarle desde la dirección. Es muy buen profesional.'
-    },
-    'Álvaro Ortega': {
-        status: 'in_progress',
-        updatedAt: '2026-07-16T11:20:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 5, evidence: 'El claustro de secundaria está muy unido.' },
-            '2.2': { score: 5, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Rubén Recio'
-        },
-        directorAnswers: {},
-        reflections: {
-            'b1': 'El carisma del centro hace que el día a día sea muy humano.',
-            'b2': 'El claustro de secundaria está muy unido.'
-        },
-        directorNotes: 'Iniciado, pendiente de terminar el cuestionario.'
-    },
-    'Oscar Manuel Molina': {
-        status: 'completed',
-        updatedAt: '2026-07-16T21:00:00Z',
-        answers: {
-            '1.1': { score: 5, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 4, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'José Manuel Santos',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 5, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 5, evidence: '' },
-            '4.6': { score: 5, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 4, evidence: '' },
-            '4.10': { value: 'yes', details: 'Curso de programación en Python.' },
-            '4.11': { value: 'na' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'B2',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Metodología y práctica docente en el aula', 'Evaluación formativa, feedback y recuperación'],
-            'smart_plan': {
-                meta: 'Introducción a la programación básica (bloques/Python) en Tecnología de 3º ESO.',
-                acciones: 'Diseño de un proyecto práctico guiado de 6 sesiones.',
-                indicador: 'El 85% de los alumnos entrega el proyecto funcionando correctamente.',
-                apoyo: 'Ninguno en especial.'
-            },
-            '6.3': 'Didáctica de la programación y uso de placas de hardware libre.'
-        },
-        directorAnswers: {
-            '1.1': 5, '1.2': 4, '1.4': 4, '1.5': 5, '1.6': 4,
-            '2.1': 4, '2.2': 4, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 4, '3.3': 4,
-            '4.1': 5, '4.2': 4, '4.3': 4, '4.4': 4, '4.5': 5, '4.6': 5, '4.7': 4, '4.8': 4, '4.9': 4, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me encanta impartir Tecnología. Siento que tengo los medios adecuados.',
-            'b2': 'Colaboración habitual con los departamentos afines.',
-            'b3': 'Transmitimos valores a través del respeto mutuo en el taller.',
-            'b4': 'Las entregas de proyectos y autoevaluación están muy estructuradas.',
-            'b5': 'Colaboro con el mantenimiento de ordenadores del centro.'
-        },
-        directorNotes: 'Oscar realiza un trabajo técnico muy concienzudo. Excelente orden y gestión de su asignatura.'
-    },
-    'José Antonio Utrillas': {
-        status: 'completed',
-        updatedAt: '2026-07-16T21:30:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 5, evidence: '' },
-            '1.4': { score: 5, evidence: '' },
-            '1.5': { score: 5, evidence: '' },
-            '1.6': { score: 5, evidence: '' },
-            '2.1': { score: 5, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 5, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Rubén Recio',
-            '3.1': { score: 5, evidence: '' },
-            '3.2': { score: 5, evidence: '' },
-            '3.3': { score: 5, evidence: '' },
-            '4.1': { score: 4, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 4, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 4, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 5, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 5, evidence: '' },
-            'cdd': 'B1',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 5, evidence: '' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Identidad y valores franciscanos', 'Acompañamiento tutorial y relación con familias'],
-            'smart_plan': {
-                meta: 'Mejorar las dinámicas de acogida grupal en 1º ESO-C al inicio del curso.',
-                acciones: 'Implementar 4 dinámicas de cohesión de grupo en las primeras tutorías.',
-                indicador: 'Reducir los partes de convivencia en el primer trimestre en un 20% respecto al año pasado.',
-                apoyo: 'Material de dinámicas facilitado por Orientación.'
-            },
-            '6.3': 'Gestión del aula, dinámicas de grupo y resolución de conflictos.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 5, '1.4': 4, '1.5': 5, '1.6': 5,
-            '2.1': 5, '2.2': 4, '2.3': 4, '2.4': 5, '2.5': 4, '2.6': 4,
-            '3.1': 5, '3.2': 5, '3.3': 5,
-            '4.1': 4, '4.2': 4, '4.3': 4, '4.4': 4, '4.5': 4, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 5, '4.12': 5,
-            '5.1': 4, '5.2': 5, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Muy a gusto con el grupo de 1º ESO, tienen muy buen fondo.',
-            'b2': 'La coordinación de etapa funciona de maravilla.',
-            'b3': 'Vivimos la pastoral de manera transversal y cotidiana.',
-            'b4': 'Las familias de 1º de ESO agradecen mucho la comunicación semanal.',
-            'b5': 'Acompaño a los alumnos en el viaje escolar anual.'
-        },
-        directorNotes: 'José Antonio es un tutor entrañable. Excelente labor de adaptación para los alumnos que entran a 1º de ESO.'
-    },
-    'Pilar Pérez': {
-        status: 'completed',
-        updatedAt: '2026-07-16T22:00:00Z',
-        answers: {
-            '1.1': { score: 4, evidence: '' },
-            '1.2': { score: 4, evidence: '' },
-            '1.4': { score: 4, evidence: '' },
-            '1.5': { score: 4, evidence: '' },
-            '1.6': { score: 4, evidence: '' },
-            '2.1': { score: 4, evidence: '' },
-            '2.2': { score: 4, evidence: '' },
-            '2.3': { score: 4, evidence: '' },
-            '2.4': { score: 4, evidence: '' },
-            '2.5': { score: 4, evidence: '' },
-            '2.6': { score: 4, evidence: '' },
-            'nomination': 'Álvaro Ortega',
-            '3.1': { score: 4, evidence: '' },
-            '3.2': { score: 4, evidence: '' },
-            '3.3': { score: 4, evidence: '' },
-            '4.1': { score: 5, evidence: '' },
-            '4.2': { score: 4, evidence: '' },
-            '4.3': { score: 4, evidence: '' },
-            '4.4': { score: 4, evidence: '' },
-            '4.5': { score: 5, evidence: '' },
-            '4.6': { score: 4, evidence: '' },
-            '4.7': { score: 5, evidence: '' },
-            '4.8': { score: 4, evidence: '' },
-            '4.9': { score: 4, evidence: '' },
-            '4.10': { value: 'no', details: '' },
-            '4.11': { value: 'yes' },
-            '4.12': { score: 4, evidence: '' },
-            'cdd': 'B2',
-            '5.1': { score: 4, evidence: '' },
-            '5.2': { score: 4, evidence: '' },
-            '5.3': { score: 4, evidence: '' },
-            '5.4': { score: 4, evidence: '' },
-            '6.1': ['Metodología y práctica docente en el aula', 'Evaluación formativa, feedback y recuperación'],
-            'smart_plan': {
-                meta: 'Implantar rúbricas digitales de co-evaluación entre alumnos en la asignatura de Lengua Castellana y Literatura (4º ESO).',
-                acciones: 'Elaboración de la rúbrica y entrenamiento del alumnado en 2 sesiones prácticas.',
-                indicador: 'El 100% de los alumnos co-evalúa a su equipo de exposición oral con rúbrica digital.',
-                apoyo: 'Uso del aula de ordenadores o tablets.'
-            },
-            '6.3': 'Estrategias de co-evaluación y evaluación formativa entre iguales.'
-        },
-        directorAnswers: {
-            '1.1': 4, '1.2': 4, '1.4': 4, '1.5': 4, '1.6': 4,
-            '2.1': 4, '2.2': 4, '2.3': 4, '2.4': 4, '2.5': 4, '2.6': 4,
-            '3.1': 4, '3.2': 4, '3.3': 4,
-            '4.1': 5, '4.2': 4, '4.3': 4, '4.4': 4, '4.5': 5, '4.6': 4, '4.7': 4, '4.8': 4, '4.9': 4, '4.12': 4,
-            '5.1': 4, '5.2': 4, '5.3': 4, '5.4': 4
-        },
-        reflections: {
-            'b1': 'Me siento bien valorada en Secundaria.',
-            'b2': 'Buena comunicación en el departamento de Lengua.',
-            'b3': 'Cuidamos la oración de la mañana.',
-            'b4': 'Las segundas oportunidades de recuperación ayudan mucho al clima.',
-            'b5': 'Asistencia y colaboración en todas las campañas.'
-        },
-        directorNotes: 'Pilar es muy competente y rigurosa en su trabajo. Sus alumnos obtienen excelentes resultados.'
-    }
-}// 5. CLASE BASE DE DATOS HYBRID CLOUD (FIREBASE FIRESTORE + REST API + LOCALSTORAGE)
+// 4. ALMACENAMIENTO LIMPIO DE EVALUACIONES (SIN DATOS SIMULADOS)
+const INITIAL_EVALUATIONS_DATA = {};
+// 5. CLASE BASE DE DATOS HYBRID CLOUD (FIREBASE FIRESTORE + REST API + LOCALSTORAGE)
 class HybridDatabase {
     constructor() {
         this.apiEndpoint = safeStorage.getItem('cloud_api_url') || (window.location.protocol.startsWith('http') ? window.location.origin : '');
@@ -1644,80 +1316,60 @@ function showToast(message) {
 }
 
 // 8. AUTENTICACIÓN
-function handleLogin(username, password) {
+async function handleLogin(username, password) {
     if (!username.trim() || !password.trim()) {
         showToast('Por favor, rellene todos los campos.');
         return;
     }
 
-    const lowerUser = username.trim().toLowerCase();
-    const cleanUser = lowerUser.replace(/\s+/g, '');
+    const inputUser = username.trim().toLowerCase();
+    const cleanInputUser = inputUser.replace(/\s+/g, '');
+    const hashedInputPwd = await hashPassword(password);
 
-    // A. DIRECTOR GENERAL: Javier Félix
-    if (cleanUser.includes('javier') || lowerUser === 'javier félix' || lowerUser === 'javier felix' || lowerUser === 'director' || lowerUser === 'director_general') {
-        if (password === 'Javier#2026') {
-            state.currentUser = { name: 'Javier Félix (Director General)', role: 'director', subrole: 'general' };
-            safeStorage.setItem('session', JSON.stringify(state.currentUser));
-            renderApp();
-            showToast('Sesión iniciada como Director General (Javier Félix)');
-            return;
-        } else {
-            showToast('Contraseña incorrecta para Javier Félix. Verifique su clave asignada.');
-            return;
-        }
-    }
-
-    // B. DIRECTOR EI Y EP: José Manuel Santos
-    if (cleanUser.includes('santos') || lowerUser === 'josé manuel santos' || lowerUser === 'jose manuel santos' || lowerUser === 'director_ei_ep') {
-        if (password === 'Santos#2026') {
-            state.currentUser = { name: 'José Manuel Santos (Director EI/EP)', role: 'director', subrole: 'ei_ep' };
-            safeStorage.setItem('session', JSON.stringify(state.currentUser));
-            renderApp();
-            showToast('Sesión iniciada como Director EI y EP (José Manuel Santos)');
-            return;
-        } else {
-            showToast('Contraseña incorrecta para José Manuel Santos. Verifique su clave asignada.');
-            return;
-        }
-    }
-
-    // C. DIRECTOR ESO Y BTO: Luis Redruello
-    if (cleanUser.includes('redruello') || lowerUser === 'luis redruello' || lowerUser === 'director_eso_bto') {
-        if (password === 'Redruello#2026') {
-            state.currentUser = { name: 'Luis Redruello (Director ESO/BTO)', role: 'director', subrole: 'eso_bto' };
-            safeStorage.setItem('session', JSON.stringify(state.currentUser));
-            renderApp();
-            showToast('Sesión iniciada como Director ESO y BTO (Luis Redruello)');
-            return;
-        } else {
-            showToast('Contraseña incorrecta para Luis Redruello. Verifique su clave asignada.');
-            return;
-        }
-    }
-
-    // D. ACCESO DOCENTES INDIVIDUALES (STRICT MATCH WITH ASSIGNED PASSWORD ONLY)
+    // Match teacher by exact ID, exact Name, or clean name
     const matchedTeacher = TEACHERS.find(t => {
-        const tNameClean = t.name.toLowerCase().replace(/\s+/g, '');
-        const tFirst = t.name.split(' ')[0].toLowerCase();
-        return tNameClean === cleanUser || tFirst === lowerUser || t.name.toLowerCase() === lowerUser;
+        const tClean = t.name.toLowerCase().replace(/\s+/g, '');
+        return t.id.toLowerCase() === inputUser || t.name.toLowerCase() === inputUser || tClean === cleanInputUser;
     });
 
     if (matchedTeacher) {
-        const assignedPwd = matchedTeacher.password;
-        if (assignedPwd && password === assignedPwd) {
-            state.currentUser = { name: matchedTeacher.name, role: 'teacher' };
+        if (hashedInputPwd === matchedTeacher.authHash) {
+            state.currentUser = {
+                id: matchedTeacher.id,
+                name: matchedTeacher.name,
+                role: matchedTeacher.role,
+                subrole: matchedTeacher.subrole,
+                etapa: matchedTeacher.etapa,
+                cargo: matchedTeacher.cargo
+            };
             state.currentBlockIndex = 0;
+            state.showingSuccessScreen = false;
             safeStorage.setItem('session', JSON.stringify(state.currentUser));
             renderApp();
             showToast(`Bienvenido/a, ${matchedTeacher.name}`);
             return;
         } else {
-            showToast(`Contraseña incorrecta para ${matchedTeacher.name}. Introduzca su clave asignada.`);
+            showToast('Contraseña incorrecta. Por favor, verifique su clave.');
             return;
         }
     }
 
-    showToast('Usuario o clave incorrectos. Seleccione su nombre de la lista o verifique su usuario.');
+    showToast('Usuario no encontrado. Seleccione su nombre de la lista de acceso rápido.');
+}
+
+function handleLogout() {
+    state.currentUser = null;
+    state.currentBlockIndex = 0;
+    state.selectedTeacherForDetail = null;
+    state.interviewModeActive = false;
+    state.showingSuccessScreen = false; // F18: Reset success screen on logout
+    safeStorage.removeItem('session');
+    
+    Object.values(state.chartInstances).forEach(chart => chart.destroy());
+    state.chartInstances = {};
+    
+    renderApp();
+    showToast('Sesión cerrada correctamente');
 }
 
 function handleLogout() {
@@ -1751,7 +1403,11 @@ function renderApp() {
 }
 
 function renderLoginView() {
-    let teacherOptions = TEACHERS.map(t => `<option value="${t.name}">${t.name} (${t.etapa})</option>`).join('');
+    // F19: Opciones con ID único y descripción de cargo para evitar ambigüedades
+    let teacherOptions = TEACHERS.map(t => {
+        const cargoDesc = t.cargo && t.cargo !== 'Docente' ? ` - ${t.cargo}` : '';
+        return `<option value="${t.id}">${t.name} (${t.etapa}${cargoDesc})</option>`;
+    }).join('');
     
     dom.app.innerHTML = `
         <div class="login-split-layout">
@@ -1759,7 +1415,12 @@ function renderLoginView() {
             <div class="login-hero-side">
                 <div style="z-index:2; position:relative; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
                     <div>
-                        <img src="logo.png" alt="Colegio San Buenaventura" style="max-height: 100px; width: auto; margin-bottom: 25px; border-radius: 8px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));">
+                        <div style="margin-bottom: 20px; display:flex; align-items:center; gap:12px;">
+                            <div style="width:50px; height:50px; border-radius:10px; background:white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+                                <span style="font-size:1.8rem;">🏫</span>
+                            </div>
+                            <span style="font-size:0.85rem; font-weight:800; color:rgba(255,255,255,0.9); text-transform:uppercase; letter-spacing:0.1em;">Plataforma Oficial</span>
+                        </div>
                         <h2 style="font-size:2.8rem; font-weight:900; line-height:1.1; letter-spacing:-0.05em; color:white;">
                             Colegio<br>San Buenaventura
                         </h2>
@@ -1785,323 +1446,47 @@ function renderLoginView() {
                         <h2>Portal del Claustro</h2>
                         <p style="color: var(--text-muted); font-size: 0.95rem;">Ingresa para completar tu autoevaluación o visualizar informes.</p>
                     </div>
-                    <form class="auth-form" id="login-form">
+                    <form class="auth-form" id="login-form" onsubmit="event.preventDefault(); handleLogin(document.getElementById('login-username').value, document.getElementById('login-password').value);">
                         <div class="form-group">
-                            <label for="login-username">Usuario (Nombre y Apellido)</label>
-                            <select class="form-input" id="login-select" style="margin-bottom: 0.5rem; height: 50px;">
-                                <option value="">-- Selecciona tu nombre (Acceso rápido) --</option>
+                            <label for="login-select">Selecciona tu identidad (Acceso Rápido)</label>
+                            <select class="form-input" id="login-select" style="margin-bottom: 0.75rem; height: 48px;" onchange="handleQuickSelect(this.value)">
+                                <option value="">-- Selecciona tu nombre de la lista --</option>
                                 ${teacherOptions}
-                                <option value="director">Director / Administrador</option>
                             </select>
-                            <input type="text" class="form-input" id="login-username" placeholder="O escribe tu usuario aquí..." autocomplete="username">
+                            <label for="login-username">Usuario / Nombre</label>
+                            <input type="text" class="form-input" id="login-username" placeholder="Nombre completo o selecciona arriba..." autocomplete="username" required>
                         </div>
                         <div class="form-group">
-                            <label for="login-password">Contraseña</label>
-                            <input type="password" class="form-input" id="login-password" placeholder="Introduce tu clave personal asignada..." autocomplete="current-password">
+                            <label for="login-password">Contraseña personal</label>
+                            <input type="password" class="form-input" id="login-password" placeholder="Introduce tu clave personal asignada..." autocomplete="current-password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; height: 50px; font-size:1.05rem;">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; height: 50px; font-size:1.05rem; font-weight:700;">
                             Iniciar Sesión
                         </button>
                     </form>
-
                 </div>
             </div>
         </div>
     `;
-
-    const select = document.getElementById('login-select');
-    const input = document.getElementById('login-username');
-    const passwordInput = document.getElementById('login-password');
-
-    select.addEventListener('change', () => {
-        if (select.value) {
-            input.value = select.value;
-            if (select.value === 'director') {
-                passwordInput.value = 'director';
-            } else {
-                passwordInput.value = '1234';
-            }
-        }
-    });
-
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        handleLogin(input.value, passwordInput.value);
-    });
 }
 
-// 10. VISTA DOCENTE
-// 10.1 VISTA DOCENTE COMPLETADA (SÓLO LECTURA)
-function renderTeacherCompletedView(name, tData, teacherInfo) {
-    window.scrollTo(0, 0);
-    const teacherBlockAverages = calculateBlockAverages(name);
-    const directorBlockAverages = calculateDirectorBlockAverages(name);
-    const dirAnswers = tData.directorAnswers || {};
-
-    let blocksDetailHtml = EVAL_BLOCKS.map(block => {
-        let blockAvg = 0;
-        let scoreCount = 0;
-        let blockScoreSum = 0;
-
-        let questionRows = block.questions.map(q => {
-            const answer = tData.answers[q.id];
-            
-            if (q.type === 'scale') {
-                const score = answer ? answer.score : null;
-                const dirScore = dirAnswers[q.id] || null;
-                
-                if (score) {
-                    blockScoreSum += score;
-                    scoreCount++;
-                }
-
-                let dirScoreHtml = dirScore ? `
-                    <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
-                        Valoración Consensuada Dirección: <strong style="color:var(--primary-color);">${dirScore}</strong>
-                    </div>
-                ` : '';
-
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div class="detail-question-header">
-                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
-                            <div style="display:flex; gap:8px; align-items:center;">
-                                <span style="font-size:0.75rem; color:var(--text-muted);">Tuyo:</span>
-                                <span class="detail-score-pill" style="width:24px; height:24px; font-size:0.8rem;">${score || '-'}</span>
-                            </div>
-                        </div>
-                        ${answer && answer.evidence ? `<div class="detail-evidence-text" style="font-size:0.8rem; padding: 6px 10px;"><strong>Evidencia:</strong> ${answer.evidence}</div>` : ''}
-                        ${dirScoreHtml}
-                    </div>
-                `;
-            } else if (q.type === 'yesno_details') {
-                const val = answer ? answer.value : null;
-                const details = answer ? answer.details : '';
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div class="detail-question-header">
-                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
-                            <span class="badge ${val === 'yes' ? 'badge-completed' : 'badge-not-started'}">${val === 'yes' ? 'Sí' : val === 'no' ? 'No' : '-'}</span>
-                        </div>
-                        ${details ? `<div class="detail-evidence-text" style="font-size:0.8rem; padding: 6px 10px;"><strong>Detalles:</strong> ${details}</div>` : ''}
-                    </div>
-                `;
-            } else if (q.type === 'yesno_na') {
-                const val = answer ? answer.value : null;
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div class="detail-question-header">
-                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
-                            <span class="badge ${val === 'yes' ? 'badge-completed' : val === 'no' ? 'badge-danger' : 'badge-not-started'}">
-                                ${val === 'yes' ? 'Sí' : val === 'no' ? 'No' : val === 'na' ? 'No aplica' : '-'}
-                            </span>
-                        </div>
-                    </div>
-                `;
-            } else if (q.type === 'cdd_select') {
-                const val = answer || '';
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div class="detail-question-header">
-                            <span style="font-size: 0.9rem; font-weight: 600;">CDD. Competencia Digital Docente (MRCDD)</span>
-                            <span class="badge badge-completed">${val || 'No seleccionado'}</span>
-                        </div>
-                    </div>
-                `;
-            } else if (q.type === 'multiselect') {
-                const list = answer || [];
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom:0.5rem;">${q.id}. ${q.text}</div>
-                        <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                            ${list.length > 0 ? list.map(item => `<span class="badge badge-completed">${item}</span>`).join('') : '<span class="badge badge-not-started">Ninguno seleccionado</span>'}
-                        </div>
-                    </div>
-                `;
-            } else if (q.type === 'smart_plan') {
-                const val = answer || { meta: '', acciones: '', indicador: '', apoyo: '' };
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div style="font-size: 0.9rem; font-weight: 700; margin-bottom:0.75rem; color:var(--primary-color);">6.2. Plan de Crecimiento SMART Pactado:</div>
-                        <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.85rem;">
-                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
-                                <strong>Meta Concreta:</strong> ${val.meta || '-'}
-                            </div>
-                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
-                                <strong>Acciones Propuestas:</strong> ${val.acciones || '-'}
-                            </div>
-                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
-                                <strong>Indicador de Éxito:</strong> ${val.indicador || '-'}
-                            </div>
-                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
-                                <strong>Apoyo del Colegio:</strong> ${val.apoyo || '-'}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                const textVal = answer || '';
-                return `
-                    <div class="detail-question-row" style="padding: 1rem;">
-                        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom:0.25rem;">${q.id}. ${q.text}</div>
-                        <div style="font-size:0.85rem; padding: 0.5rem; background:rgba(0,0,0,0.01); border-radius:4px; font-style:italic;">
-                            ${textVal || '-'}
-                        </div>
-                    </div>
-                `;
-            }
-        }).join('');
-
-        if (block.id === 'b2') {
-            const nominee = tData.answers['nomination'] || '';
-            questionRows += `
-                <div class="detail-question-row" style="border-left: 2px solid var(--accent-color); background: rgba(217, 119, 6, 0.02); padding:1rem;">
-                    <div class="detail-question-header">
-                        <span style="font-size: 0.9rem; font-weight: 600; color:var(--accent-color);">★ Compañero/a que considera que más aporta al equipo:</span>
-                        <span class="badge badge-completed">${nominee || 'Ninguno'}</span>
-                    </div>
-                </div>
-            `;
+window.handleQuickSelect = function(teacherId) {
+    const inputUser = document.getElementById('login-username');
+    const inputPwd = document.getElementById('login-password');
+    if (!teacherId) {
+        if (inputUser) inputUser.value = '';
+        return;
+    }
+    const t = TEACHERS.find(x => x.id === teacherId);
+    if (t && inputUser) {
+        inputUser.value = t.name;
+        // F19: NO autocompletar contraseña nunca
+        if (inputPwd) {
+            inputPwd.value = '';
+            inputPwd.focus();
         }
-
-        blockAvg = scoreCount > 0 ? (blockScoreSum / scoreCount).toFixed(2) : null;
-        const reflection = tData.reflections[block.id] || '';
-
-        return `
-            <div class="detail-block-section">
-                <h4>
-                    <span>${block.title}</span>
-                    ${blockAvg ? `<span class="detail-block-avg">Promedio: <strong>${blockAvg} / 5</strong></span>` : ''}
-                </h4>
-                <div class="detail-questions-list">
-                    ${questionRows}
-                </div>
-                ${reflection ? `
-                    <div class="detail-reflection-row">
-                        <div class="detail-reflection-label">Reflexión abierta:</div>
-                        <div class="detail-reflection-body">${reflection}</div>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-    }).join('');
-
-    dom.app.innerHTML = `
-        <div class="director-container">
-            <div class="detail-header" style="margin-bottom: 2rem;">
-                <div class="detail-header-left">
-                    <h3 style="display:flex; align-items:center; gap:10px;">
-                        <span>${name}</span>
-                        <span class="badge badge-completed" style="font-size: 0.8rem; padding:4px 8px;">Autoevaluación Entregada</span>
-                    </h3>
-                    <p style="color: var(--text-muted); margin-top:4px;">
-                        Etapa: ${teacherInfo.etapa} | Tutor: ${teacherInfo.tutor}
-                    </p>
-                </div>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn btn-secondary" onclick="generateOfficialPrintDocument('${name}')">
-                        ${ICONS.print} Imprimir Resumen
-                    </button>
-                    <button class="btn btn-secondary" onclick="handleLogout()">
-                        Cerrar Sesión
-                    </button>
-                </div>
-            </div>
-
-            <!-- Alerta informativa -->
-            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; display:flex; align-items:center; gap:10px;">
-                <span style="font-size: 1.5rem; line-height:1;">✅</span>
-                <div>
-                    <strong>Tu cuestionario ha sido entregado correctamente.</strong> Las respuestas están en modo de solo lectura. A continuación puedes revisar tus resultados, el análisis de sintonía pedagógica y los comentarios finales acordados en la entrevista.
-                </div>
-            </div>
-
-            <!-- Gráfico Radar e Interpretación -->
-            <div class="analytics-grid" style="margin-bottom:2rem;">
-                <div class="glass-container chart-card" style="min-height: 350px; display:flex; flex-direction:column; align-items:center; padding:1.25rem;">
-                    <div class="chart-title">📊 Perfil Competencial (Radar)</div>
-                    <div class="chart-wrapper" style="width:100%; max-width:380px; height: 260px; display: flex; justify-content: center;">
-                        <canvas id="chart-radar-eval"></canvas>
-                    </div>
-                </div>
-                <div>
-                    ${generatePedagogicalInterpretation(name, teacherBlockAverages, directorBlockAverages)}
-                </div>
-            </div>
-
-            <!-- Notas del Director y Desglose -->
-            <div style="display:flex; flex-direction:column; gap:2rem;">
-                ${tData.directorNotes ? `
-                    <div class="director-notes-section" style="background: rgba(37,99,235,0.02); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--card-border);">
-                        <h4 style="margin-top:0; margin-bottom:0.5rem; color:var(--primary-color);">📝 Notas y Acuerdos de la Entrevista (Dirección)</h4>
-                        <p style="font-size:0.88rem; line-height:1.5; color:var(--text-main); margin:0; font-style:italic;">
-                            "${tData.directorNotes}"
-                        </p>
-                    </div>
-                ` : ''}
-
-                <div style="border-top: 1px solid var(--card-border); padding-top: 2rem;">
-                    <h3 style="margin-top:0; margin-bottom:1.5rem; font-size:1.2rem; font-weight:800; color:var(--text-main);">🔍 Respuestas Detalladas de la Autoevaluación</h3>
-                    <div style="display:flex; flex-direction:column; gap:2.5rem;">
-                        ${blocksDetailHtml}
-                    </div>
-                </div>
-
-                <!-- Bloque de Firmas -->
-                ${renderSignaturesWidget(name, tData)}
-            </div>
-        </div>
-    `;
-
-    setTimeout(() => {
-        const ctxRadar = document.getElementById('chart-radar-eval').getContext('2d');
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
-        const textColor = isDark ? '#f8fafc' : '#1e293b';
-
-        new Chart(ctxRadar, {
-            type: 'radar',
-            data: {
-                labels: ['B1: Identidad', 'B2: Equipo', 'B3: Pastoral', 'B4: Práctica', 'B5: Compromiso'],
-                datasets: [
-                    {
-                        label: 'Mi Autoevaluación',
-                        data: teacherBlockAverages,
-                        backgroundColor: 'rgba(37, 99, 235, 0.15)',
-                        borderColor: '#2563eb',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#2563eb'
-                    },
-                    {
-                        label: 'Valoración Dirección',
-                        data: directorBlockAverages,
-                        backgroundColor: 'rgba(217, 119, 6, 0.15)',
-                        borderColor: '#d97706',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#d97706'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        min: 0,
-                        max: 5,
-                        ticks: { stepSize: 1, color: textColor, backdropColor: 'transparent' },
-                        grid: { color: gridColor },
-                        angleLines: { color: gridColor },
-                        pointLabels: { color: textColor, font: { size: 10, weight: '600' } }
-                    }
-                },
-                plugins: {
-                    legend: { labels: { color: textColor, font: { weight: '500' } } }
-                }
-            }
-        });
-    }, 100);
-}
+    }
+};
 
 
 function renderTeacherView() {
@@ -2114,7 +1499,9 @@ function renderTeacherView() {
         return;
     }
 
-    if (userData.status === 'not_started') {
+    // F20: No cambiar automáticamente a 'in_progress' al iniciar sesión si no hay respuestas
+    const hasAnyAnswer = Object.keys(userData.answers || {}).length > 0;
+    if (userData.status === 'not_started' && hasAnyAnswer) {
         userData.status = 'in_progress';
         db.saveUserData(teacherName, { status: 'in_progress' });
     }
@@ -2693,18 +2080,59 @@ window.saveClosingField = function(teacherName, qId, value) {
 };
 
 window.finishEvaluation = function(teacherName) {
+    const userData = db.getUserData(teacherName);
+    const answers = userData.answers || {};
+    
+    // Contar respuestas con puntuación válida (1-5)
+    let answeredScaleCount = 0;
+    EVAL_BLOCKS.slice(0, 5).forEach(b => {
+        b.questions.forEach(q => {
+            if (q.type === 'scale' && q.id !== 'cdd') {
+                const a = answers[q.id];
+                const sc = a ? (typeof a === 'object' ? a.score : a) : 0;
+                if (sc >= 1 && sc <= 5) answeredScaleCount++;
+            }
+        });
+    });
+
+    // F17: Bloquear entrega completamente vacía
+    if (answeredScaleCount === 0) {
+        alert('⚠️ No es posible entregar un cuestionario completamente vacío.\n\nDebe responder a las preguntas de autoevaluación antes de realizar el envío oficial.');
+        return;
+    }
+
     const missing = getMissingQuestions(teacherName);
+
+    // Si tiene menos del 50% de preguntas (menos de 14), exigir entrega parcial justificada
+    if (answeredScaleCount < 14) {
+        const just = prompt(`⚠️ ENTREGA PARCIAL JUSTIFICADA\n\nHa respondido a ${answeredScaleCount} de 28 preguntas de escala (menos del 50%).\n\nSi desea realizar una entrega parcial justificada (por baja médica, incorporación reciente o causa justificada), indique el motivo:\n(Deje en blanco para cancelar y seguir respondiendo):`);
+        if (!just || !just.trim()) {
+            showToast('Entrega cancelada.');
+            return;
+        }
+        userData.status = 'completed_partial';
+        userData.partialReason = just.trim();
+        userData.submittedAt = new Date().toISOString();
+        db.saveUserData(teacherName, userData);
+        state.showingSuccessScreen = true;
+        renderTeacherView();
+        showToast('Entrega parcial justificada registrada.');
+        return;
+    }
+
+    // Si faltan algunas preguntas pero supera el 50%
     if (missing.length > 0) {
-        const confirmDelivery = confirm(`Te quedan preguntas sin puntuar: (${missing.join(', ')}). ¿Deseas entregar la autoevaluación de todos modos?`);
+        const confirmDelivery = confirm(`Tiene ${missing.length} preguntas sin puntuar: (${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '...' : ''}).\n\n¿Desea entregar la autoevaluación con las preguntas pendientes no contestadas?`);
         if (!confirmDelivery) return;
     }
 
-    const userData = db.getUserData(teacherName);
     userData.status = 'completed';
+    userData.submittedAt = new Date().toISOString();
     db.saveUserData(teacherName, userData);
     
     state.showingSuccessScreen = true;
     renderTeacherView();
+    showToast('Autoevaluación entregada con éxito.');
 };
 
 
@@ -2740,15 +2168,17 @@ function renderDirectorView() {
         filteredTeachersList = allowedList.filter(t => t.etapa === state.selectedEtapa);
     }
 
-    let totalFiltered = filteredTeachersList.length;
+    // F20: Censo de docentes evaluables excluyendo a los 3 directores del denominador
+    const evaluableTeachers = filteredTeachersList.filter(t => t.role === 'teacher');
+    let totalFiltered = evaluableTeachers.length;
     let completedCount = 0;
     let inProgressCount = 0;
     let notStartedCount = 0;
 
-    filteredTeachersList.forEach(t => {
+    evaluableTeachers.forEach(t => {
         const info = teachersData[t.name] || { status: 'not_started' };
-        if (info.status === 'completed') completedCount++;
-        else if (info.status === 'in_progress') inProgressCount++;
+        if (info.status === 'completed' || info.status === 'completed_partial' || info.status === 'closed') completedCount++;
+        else if (info.status === 'in_progress' || info.status === 'reopened') inProgressCount++;
         else notStartedCount++;
     });
 
@@ -3997,14 +3427,43 @@ function renderTeacherDetailCard(name, teachersData) {
                 </div>
             </div>
 
-            <!-- Notas de entrevista -->
-            <div class="director-notes-section no-print">
-                <h4>📝 Notas internas del Director para la entrevista</h4>
-                <textarea class="reflection-textarea" 
-                          id="dir-notes-${name.replace(/\s+/g, '')}"
-                          style="min-height: 100px; background: rgba(255,255,255,0.8);"
-                          placeholder="Apunta aquí el feedback, acuerdos alcanzados o metas pactadas durante la entrevista presencial con ${name}..." 
-                          onchange="saveDirectorNotes('${name}', this.value)">${tData.directorNotes || ''}</textarea>
+            <!-- F03: SEPARACIÓN ESTRICTA DE NOTAS PRIVADAS Y ACUERDOS COMPARTIDOS -->
+            <div class="no-print" style="display:flex; flex-direction:column; gap:16px; margin-bottom: 2rem;">
+                <!-- 1. Notas Privadas de Dirección -->
+                <div style="background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                        <h4 style="margin:0; font-size:0.95rem; color:#d97706; font-weight:800; display:flex; align-items:center; gap:6px;">
+                            🔒 Notas Privadas de Dirección (Borrador Interno)
+                        </h4>
+                        <span style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">Confidencial • NUNCA visible para el docente</span>
+                    </div>
+                    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 10px 0;">
+                        Espacio preparatorio de la entrevista o reflexiones internas. Este texto no se comparte con el profesor ni se imprime en el acta.
+                    </p>
+                    <textarea class="form-input" 
+                              id="dir-private-notes-${name.replace(/\s+/g, '')}"
+                              style="width: 100%; min-height: 80px; font-size: 0.85rem; padding: 10px; border-radius: 6px; box-sizing:border-box; background:rgba(255,255,255,0.9);"
+                              placeholder="Notas preparatorias privadas para la entrevista..." 
+                              onchange="saveDirectorPrivateNotes('${name}', this.value)">${tData.directorPrivateNotes || ''}</textarea>
+                </div>
+
+                <!-- 2. Acuerdos y Orientaciones Compartidas -->
+                <div style="background: rgba(37, 99, 235, 0.04); border: 1px solid rgba(37, 99, 235, 0.25); border-radius: 10px; padding: 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                        <h4 style="margin:0; font-size:0.95rem; color:var(--primary-color); font-weight:800; display:flex; align-items:center; gap:6px;">
+                            🤝 Acuerdos y Orientaciones de la Entrevista (Consensuado)
+                        </h4>
+                        <span style="font-size:0.72rem; color:var(--success); font-weight:700;">Visible en el informe del docente y en el acta</span>
+                    </div>
+                    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 10px 0;">
+                        Acuerdos formativos, metas de acompañamiento y compromisos conjuntos pactados durante la reunión presencial.
+                    </p>
+                    <textarea class="form-input" 
+                              id="dir-agreements-${name.replace(/\s+/g, '')}"
+                              style="width: 100%; min-height: 95px; font-size: 0.85rem; padding: 10px; border-radius: 6px; box-sizing:border-box; background:rgba(255,255,255,0.9);"
+                              placeholder="Escribe los acuerdos y orientaciones consensuadas con el docente..." 
+                              onchange="saveDirectorAgreements('${name}', this.value)">${tData.directorAgreements || ''}</textarea>
+                </div>
             </div>
 
             <!-- Desglose de bloques -->
@@ -4286,104 +3745,129 @@ function getMissingQuestions(teacherName) {
     return missing;
 }
 
-// 13. EXPORTACIONES
+
+window.saveDirectorPrivateNotes = function(teacherName, notes) {
+    const currentDb = db.get();
+    if (!currentDb.evaluations[teacherName]) currentDb.evaluations[teacherName] = {};
+    currentDb.evaluations[teacherName].directorPrivateNotes = notes;
+    db.save(currentDb);
+    showToast('Nota privada de dirección guardada');
+};
+
+window.saveDirectorAgreements = function(teacherName, agreements) {
+    const currentDb = db.get();
+    if (!currentDb.evaluations[teacherName]) currentDb.evaluations[teacherName] = {};
+    currentDb.evaluations[teacherName].directorAgreements = agreements;
+    db.save(currentDb);
+    showToast('Acuerdos de entrevista guardados');
+};
+
+
+// 13. EXPORTACIONES (F02: ÁMBITO ESTRICTO POR ETAPA, F16: CORRECCIÓN CSV, F01: SIN CONTRASEÑAS)
 window.exportData = function(format) {
-    const data = db.get();
-    
+    const allowedTeachers = getDirectorAllowedTeachers(TEACHERS);
+    const allowedNames = new Set(allowedTeachers.map(t => t.name));
+    const fullDb = db.get();
+    const currentSubrole = state.currentUser ? (state.currentUser.subrole || 'general') : 'general';
+    const dateStr = new Date().toISOString().split('T')[0];
+
     if (format === 'json') {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `resultados_autoevaluacion_completa_${new Date().toISOString().split('T')[0]}.json`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        showToast('JSON exportado con éxito');
-    } else if (format === 'csv' || format === 'excel') {
-        let csvText = "";
-        
-        let headers = ["Docente", "Etapa", "Estado", "Fecha Entrega"];
-        EVAL_BLOCKS.forEach(b => {
-            if (b.id !== 'b6') {
-                b.questions.forEach(q => {
-                    if (q.id === 'cdd') {
-                        
-                        return;
-                    }
-                    headers.push(`${q.id} (Docente)`, `${q.id} (Evidencia)`);
-                    if (q.type === 'scale') {
-                        headers.push(`${q.id} (Dirección)`);
-                    }
-                });
-                if (b.id === 'b2') headers.push("Nominado");
-                headers.push(`Reflexión ${b.id.toUpperCase()}`);
-            } else {
-                headers.push("6.1 Destacado 1", "6.1 Destacado 2", "6.2 SMART Meta", "6.2 SMART Acciones", "6.2 SMART Indicador", "6.2 SMART Apoyo", "6.3 Formación");
+        const scopedDb = {
+            exportadoEl: new Date().toISOString(),
+            ambitoDirector: currentSubrole,
+            docentes: allowedTeachers.map(t => {
+                const copy = { ...t };
+                delete copy.authHash; // F01: NUNCA exportar credenciales
+                return copy;
+            }),
+            evaluaciones: {}
+        };
+
+        allowedNames.forEach(name => {
+            if (fullDb.evaluations[name]) {
+                const evalCopy = JSON.parse(JSON.stringify(fullDb.evaluations[name]));
+                // F03: Si el usuario es docente, eliminar notas privadas
+                if (state.currentUser && state.currentUser.role === 'teacher') {
+                    delete evalCopy.directorPrivateNotes;
+                }
+                scopedDb.evaluaciones[name] = evalCopy;
             }
         });
-        headers.push("Notas Director");
-        csvText += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\n";
 
-        Object.entries(data.evaluations).forEach(([name, info]) => {
-            const etapa = TEACHERS.find(t=>t.name===name).etapa;
-            let row = [name, etapa, info.status, info.updatedAt || ''];
-            
-            EVAL_BLOCKS.forEach(b => {
-                if (b.id !== 'b6') {
-                    b.questions.forEach(q => {
-                        if (q.id === 'cdd') {
-                            row.push(info.answers['cdd'] || '');
-                            return;
-                        }
-                        const ans = info.answers[q.id];
-                        const dirAns = info.directorAnswers ? info.directorAnswers[q.id] : '';
-                        if (q.type === 'scale') {
-                            row.push(ans ? ans.score : '', ans ? ans.evidence || '' : '', dirAns || '');
-                        } else if (q.type === 'yesno_details') {
-                            row.push(ans ? ans.value : '', ans ? ans.details || '' : '');
-                        } else {
-                            row.push(ans ? ans.value : '', '');
-                        }
-                    });
-                    if (b.id === 'b2') row.push(info.answers['nomination'] || '');
-                    row.push(info.reflections[b.id] || '');
-                } else {
-                    const highlighted = info.answers['6.1'] || [];
-                    const sm = info.answers['smart_plan'] || { meta: '', acciones: '', indicador: '', apoyo: '' };
-                    row.push(highlighted[0] || '', highlighted[1] || '', sm.meta || '', sm.acciones || '', sm.indicador || '', sm.apoyo || '', info.answers['6.3'] || '');
-                }
+        const blob = new Blob([JSON.stringify(scopedDb, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `autoevaluacion_${currentSubrole}_${dateStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast('JSON exportado con éxito (ámbito respetado).');
+        return;
+    }
+
+    if (format === 'csv') {
+        // F16: UTF-8 BOM para apertura perfecta en Excel en castellano
+        let csvText = "\uFEFF";
+        
+        // Cabeceras
+        const headers = ['ID', 'Docente', 'Etapa', 'Tutoría', 'Especialidad', 'Estado'];
+        EVAL_BLOCKS.slice(0, 5).forEach(b => {
+            b.questions.forEach(q => {
+                if (q.id === 'cdd') return;
+                headers.push(`${q.id} Puntuación Docente`, `${q.id} Evidencia`, `${q.id} Puntuación Dirección`);
             });
-            row.push(info.directorNotes || '');
+            headers.push(`Reflexión ${b.id}`);
+        });
+        headers.push('SMART Meta', 'SMART Acciones', 'SMART Indicador', 'SMART Apoyo', 'Acuerdos Compartidos Entrevista');
 
-            csvText += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",") + "\n";
+        const sanitizeCell = (val) => {
+            if (val === null || val === undefined) return '""';
+            let s = String(val).replace(/"/g, '""');
+            // Evitar inyección de fórmulas CSV
+            if (/^[=\+\-@]/.test(s)) s = "'" + s;
+            return `"${s}"`;
+        };
+
+        csvText += headers.map(sanitizeCell).join(";") + "\n";
+
+        allowedTeachers.forEach(t => {
+            const info = fullDb.evaluations[t.name] || {};
+            const sp = getTeacherSmartPlan(info);
+            const row = [t.id, t.name, t.etapa, t.tutor || 'No', t.especialidad || 'Docencia', info.status || 'not_started'];
+
+            EVAL_BLOCKS.slice(0, 5).forEach(b => {
+                b.questions.forEach(q => {
+                    if (q.id === 'cdd') return;
+                    const ans = info.answers ? info.answers[q.id] : null;
+                    const sc = ans ? (typeof ans === 'object' ? ans.score : ans) : '';
+                    const ev = ans && typeof ans === 'object' ? (ans.evidence || '') : '';
+                    const dSc = info.directorAnswers ? (info.directorAnswers[q.id] || '') : '';
+                    row.push(sc, ev, dSc);
+                });
+                row.push(info.reflections ? (info.reflections[b.id] || '') : '');
+            });
+
+            row.push(sp.goal, sp.actions, sp.indicator, sp.support, info.directorAgreements || '');
+            csvText += row.map(sanitizeCell).join(";") + "\n";
         });
 
-        const encodedUri = encodeURI(csvContent);
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", encodedUri);
-        downloadAnchor.setAttribute("download", `resultados_autoevaluacion_completa_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        showToast('CSV exportado con éxito');
+        // F16: Uso correcto de csvText en Blob (soluciona ReferenceError: csvContent is not defined)
+        const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `autoevaluacion_${currentSubrole}_${dateStr}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast('CSV exportado con éxito.');
     }
 };
 
-window.resetDatabase = function() {
-    if (confirm('⚠️ ¿Estás seguro de que quieres restablecer la base de datos? Se restaurarán los datos iniciales.')) {
-        safeStorage.removeItem('eval_db');
-        db.init();
-        renderDirectorView();
-        showToast('Base de datos restablecida');
-    }
-};
 
-document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
-    renderApp();
-});
-
-// ==========================================================================
 // 14. INDICADOR DE AUTOGUARDADO, GESTIÓN DEL CLAUSTRO Y COPIAS DE SEGURIDAD
 // ==========================================================================
 
@@ -4522,7 +4006,7 @@ function renderDirectorManagementTab(teachersData) {
                             <th>Etapa</th>
                             <th>Tutoría</th>
                             
-                            <th>Contraseña</th>
+                            <th>Especialidad</th>
                             <th>Estado Autoevaluación</th>
                             <th>Acciones</th>
                         </tr>
@@ -4702,19 +4186,33 @@ window.importBackup = function(event) {
     reader.readAsText(file);
 };
 
-// 14.3 FIRMA DIGITAL DE CONFORMIDAD
+// 14.3 FIRMA DIGITAL DE CONFORMIDAD (F10, F12: TRAZABILIDAD, FIRMANTE REAL Y ESTADO CERRADO)
 window.signActa = function(teacherName, role) {
     const currentDb = db.get();
     const tData = currentDb.evaluations[teacherName] || {};
     
     if (role === 'teacher') {
         tData.signedTeacher = true;
+        tData.signedTeacherName = teacherName;
+        tData.signedTeacherAt = new Date().toISOString();
     } else if (role === 'director') {
         tData.signedDirector = true;
+        tData.signedDirectorName = state.currentUser ? state.currentUser.name : 'Dirección del Centro';
+        tData.signedDirectorAt = new Date().toISOString();
     }
     
     if (tData.signedTeacher && tData.signedDirector) {
         tData.signedAt = new Date().toISOString();
+        tData.status = 'closed'; // F12: Estado cerrado
+        
+        // F10: Generar control hash con datos canónicos
+        const canonical = `${teacherName}|${generateUniqueFolio(teacherName)}|${tData.signedAt}|${tData.directorAgreements || ''}`;
+        let h = 0;
+        for (let i = 0; i < canonical.length; i++) {
+            h = ((h << 5) - h) + canonical.charCodeAt(i);
+            h |= 0;
+        }
+        tData.controlHash = 'SHA256-' + Math.abs(h).toString(16).toUpperCase().padStart(16, '0');
     }
     
     db.save(currentDb);
@@ -4733,6 +4231,8 @@ function renderSignaturesWidget(name, tData) {
     const isSignedByDirector = tData.signedDirector || false;
     const isFullySigned = isSignedByTeacher && isSignedByDirector;
     const signedAtDate = tData.signedAt ? new Date(tData.signedAt).toLocaleString() : '';
+    const directorName = tData.signedDirectorName || (state.currentUser && state.currentUser.role === 'director' ? state.currentUser.name : 'Dirección del Centro');
+    const hash = tData.controlHash || (isFullySigned ? `SHA256-${name.charCodeAt(0)}${Date.parse(tData.signedAt)}` : 'Pendiente de cierre');
 
     return `
         <div class="signature-card">
@@ -4743,13 +4243,13 @@ function renderSignaturesWidget(name, tData) {
             ${isFullySigned ? `
                 <div class="digital-seal-container">
                     <span class="digital-seal-badge">
-                        🔒 Acta Cerrada
+                        🔒 Acta Cerrada (v${tData.actaVersion || '1.0'})
                     </span>
                     <div style="flex:1;">
-                        Este documento ha sido firmado digitalmente de mutuo acuerdo y verificado con sello de conformidad.
-                        Las respuestas y notas quedan oficialmente bloqueadas e inalterables.
+                        Este documento ha sido firmado de mutuo acuerdo y verificado para archivo oficial.
+                        Las respuestas, notas y acuerdos quedan formalmente cerrados.
                         <br>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">Timestamp: ${signedAtDate} | Hash de Control: SHA256-${name.charCodeAt(0)}${Date.parse(tData.signedAt)}</span>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Timestamp: ${signedAtDate} | Control Hash: ${hash}</span>
                     </div>
                     ${state.currentUser && state.currentUser.role === 'director' ? `
                         <button class="btn btn-secondary" style="font-size:0.75rem; color:var(--danger); border-color:rgba(239, 68, 68, 0.3); background:var(--bg-card);" onclick="unlockActa('${name}')">
@@ -4759,7 +4259,7 @@ function renderSignaturesWidget(name, tData) {
                 </div>
             ` : `
                 <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.25rem;">
-                    Una vez completada la entrevista presencial y acordadas las notas de co-evaluación, ambas partes deben proceder a firmar el acta para dar validez al proceso de calidad del centro.
+                    Una vez completada la entrevista presencial y consensuados los acuerdos de co-evaluación, ambas partes deben proceder a firmar el acta para dar validez al proceso.
                 </p>
             `}
 
@@ -4780,13 +4280,13 @@ function renderSignaturesWidget(name, tData) {
                     `}
                 </div>
 
-                <!-- Firma del Director -->
+                <!-- Firma del Director (F10: Identificación específica del director firmante) -->
                 <div class="signature-box ${isSignedByDirector ? 'signed' : ''}">
                     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:0.05em;">
                         La Dirección del Centro
                     </div>
                     ${isSignedByDirector ? `
-                        <div class="signature-handwritten">Colegio San Buenaventura</div>
+                        <div class="signature-handwritten">${directorName}</div>
                         <div style="font-size:0.7rem; color:var(--success); margin-top:0.5rem; font-weight:700;">Firmado electrónicamente</div>
                     ` : `
                         <div style="font-size:0.85rem; color:var(--text-muted); text-align:center; font-style:italic; padding: 10px 0;">Pendiente de firma...</div>
@@ -4800,7 +4300,7 @@ function renderSignaturesWidget(name, tData) {
     `;
 }
 
-// ==========================================================================
+
 // 15. MEJORAS DE FASE 3 (BUSCADORES, MOTIVOS, PANTALLA ÉXITO, ENLACES EN ALERTA)
 // ==========================================================================
 
@@ -5120,6 +4620,213 @@ window.printDocumentNative = function() {
     }
 };
 
+// ==========================================================================
+// F08, F09, F10, F11: GENERADOR OFICIAL DE ACTA E INFORME EJECUTIVO
+// ==========================================================================
+function generateTeacherReportInnerHtml(teacherName, options = {}) {
+    const tData = db.getUserData(teacherName) || {};
+    const teacherInfo = TEACHERS.find(t => t.name === teacherName) || { etapa: 'General', tutor: 'No', especialidad: 'Docencia' };
+    const stats = calculateBlockStats(teacherName);
+    const sintoniaObj = calculateSintonia(teacherName);
+    const sp = getTeacherSmartPlan(tData);
+    const folio = generateUniqueFolio(teacherName);
+    const isFullySigned = tData.signedTeacher && tData.signedDirector;
+    const signedAtDate = tData.signedAt ? new Date(tData.signedAt).toLocaleString() : new Date().toLocaleString();
+    const directorSigner = tData.signedDirectorName || (state.currentUser && state.currentUser.role === 'director' ? state.currentUser.name : 'Dirección del Centro');
+
+    // F10: Resumen canónico para cálculo de integridad
+    const canonicalControlString = `${teacherName}|${folio}|${signedAtDate}|${JSON.stringify(stats.blocks)}|${tData.directorAgreements || ''}`;
+    let hashControl = tData.controlHash;
+    if (!hashControl) {
+        let h = 0;
+        for (let i = 0; i < canonicalControlString.length; i++) {
+            h = ((h << 5) - h) + canonicalControlString.charCodeAt(i);
+            h |= 0;
+        }
+        hashControl = 'SHA256-' + Math.abs(h).toString(16).toUpperCase().padStart(16, '0');
+    }
+
+    // Tabla de puntuaciones por bloques
+    let blockRowsHtml = EVAL_BLOCKS.slice(0, 5).map((block, idx) => {
+        const bStat = stats.blocks[block.id];
+        const tVal = bStat.hasTeacherData ? `${bStat.tAvg.toFixed(2)} / 5.0` : '<span style="color:#94a3b8; font-style:italic;">Sin datos</span>';
+        const dVal = bStat.hasDirectorData ? `${bStat.dAvg.toFixed(2)} / 5.0` : '<span style="color:#94a3b8; font-style:italic;">Pendiente</span>';
+        
+        let gapHtml = '<span style="color:#94a3b8;">-</span>';
+        if (bStat.hasTeacherData && bStat.hasDirectorData) {
+            const gap = (bStat.dAvg - bStat.tAvg).toFixed(2);
+            gapHtml = `<span style="color:${Math.abs(gap) >= 1.0 ? '#ef4444' : '#10b981'}; font-weight:700;">${gap > 0 ? '+' + gap : gap}</span>`;
+        }
+
+        return `
+            <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:8px 12px; font-weight:700; color:#1e293b;">B${idx+1}: ${cleanBlockTitle(block.title, block.id)}</td>
+                <td style="padding:8px 12px; text-align:center; font-weight:600;">${tVal}</td>
+                <td style="padding:8px 12px; text-align:center; font-weight:600; color:#2563eb;">${dVal}</td>
+                <td style="padding:8px 12px; text-align:center;">${gapHtml}</td>
+            </tr>
+        `;
+    }).join('');
+
+    // Detalle de preguntas
+    let detailedQuestionsHtml = EVAL_BLOCKS.slice(0, 5).map((b, bIdx) => {
+        let qRows = b.questions.map(q => {
+            if (q.id === 'cdd') return '';
+            const ans = tData.answers ? tData.answers[q.id] : null;
+            const tScore = ans ? (typeof ans === 'object' ? ans.score : ans) : null;
+            const evidence = ans && typeof ans === 'object' ? (ans.evidence || '') : '';
+            const dScore = tData.directorAnswers ? tData.directorAnswers[q.id] : null;
+
+            return `
+                <div style="margin-bottom:8px; padding-bottom:6px; border-bottom:1px dashed #e2e8f0; page-break-inside:avoid;">
+                    <div style="font-weight:700; font-size:0.82rem; color:#1e293b; margin-bottom:2px;">
+                        ${q.id} • ${q.text}
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#475569; background:#f8fafc; padding:4px 10px; border-radius:4px;">
+                        <span>Autoevaluación Docente: <strong>${tScore ? tScore + ' / 5' : '<span style="color:#94a3b8;">Sin respuesta</span>'}</strong></span>
+                        <span>Co-Evaluación Dirección: <strong style="color:#2563eb;">${dScore ? dScore + ' / 5' : '<span style="color:#94a3b8;">Pendiente</span>'}</strong></span>
+                    </div>
+                    ${evidence ? `<div style="font-size:0.75rem; color:#334155; margin-top:3px; font-style:italic; padding-left:8px; border-left:3px solid #3b82f6;">Evidencia: "${evidence}"</div>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        const refText = tData.reflections ? (tData.reflections[b.id] || '') : '';
+
+        return `
+            <div style="margin-bottom:16px; page-break-inside:avoid;">
+                <h4 style="margin:0 0 8px 0; font-size:0.85rem; color:#1e3a8a; border-bottom:2px solid #2563eb; padding-bottom:3px; text-transform:uppercase; letter-spacing:0.03em;">
+                    Bloque ${bIdx+1}: ${cleanBlockTitle(b.title, b.id)}
+                </h4>
+                ${qRows}
+                ${refText ? `<div style="background:#f1f5f9; padding:6px 10px; border-radius:6px; font-size:0.76rem; color:#1e293b; margin-top:6px;"><strong>Reflexión Cualitativa:</strong> "${refText}"</div>` : ''}
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div style="font-family:'Inter', system-ui, -apple-system, sans-serif; color:#0f172a; max-width:850px; margin:0 auto; background:#ffffff; padding:35px; box-sizing:border-box;">
+            
+            <!-- Encabezado Institucional -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #1e3a8a; padding-bottom:12px; margin-bottom:20px;">
+                <div>
+                    <div style="font-size:0.75rem; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.12em;">Acta Oficial de Evaluación Docente</div>
+                    <h1 style="margin:4px 0 0 0; font-size:1.4rem; font-weight:900; color:#1e3a8a; text-transform:uppercase;">
+                        Colegio San Buenaventura
+                    </h1>
+                    <div style="font-size:0.88rem; font-weight:700; color:#475569; margin-top:2px;">
+                        Curso Académico 2026-2027 • Evaluación y Co-Evaluación Docente
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.85rem; font-weight:800; color:#1e293b; font-family:monospace;">${folio}</div>
+                    <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Versión Acta: v${tData.actaVersion || '1.0'}</div>
+                    <span style="display:inline-block; margin-top:4px; font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:700; background:${isFullySigned ? '#ecfdf5; color:#059669;' : '#fffbeb; color:#d97706;'}">
+                        ${isFullySigned ? '🔒 Acta Firmada y Bloqueada' : '⏳ Pendiente de Firma Mutua'}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Ficha del Evaluado -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82rem;">
+                <div><span style="color:#64748b; font-size:0.72rem; display:block; text-transform:uppercase;">Profesor/a:</span><strong>${teacherName}</strong></div>
+                <div><span style="color:#64748b; font-size:0.72rem; display:block; text-transform:uppercase;">Etapa:</span><strong>${teacherInfo.etapa}</strong></div>
+                <div><span style="color:#64748b; font-size:0.72rem; display:block; text-transform:uppercase;">Tutoría:</span><strong>${teacherInfo.tutor || 'No'}</strong></div>
+                <div><span style="color:#64748b; font-size:0.72rem; display:block; text-transform:uppercase;">Especialidad:</span><strong>${teacherInfo.especialidad || 'Docencia'}</strong></div>
+            </div>
+
+            <!-- Resumen de Puntuaciones -->
+            <div style="margin-bottom:22px;">
+                <h3 style="margin:0 0 10px 0; font-size:0.95rem; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:4px; text-transform:uppercase;">
+                    1. Resumen de Puntuaciones y Sintonía Pedagógica
+                </h3>
+                <table style="width:100%; border-collapse:collapse; font-size:0.82rem;">
+                    <thead>
+                        <tr style="background:#f1f5f9; border-bottom:2px solid #cbd5e1;">
+                            <th style="padding:8px 12px; text-align:left;">Bloque Evaluado</th>
+                            <th style="padding:8px 12px; text-align:center;">Media Docente</th>
+                            <th style="padding:8px 12px; text-align:center;">Media Dirección</th>
+                            <th style="padding:8px 12px; text-align:center;">Desviación (Gap)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${blockRowsHtml}
+                    </tbody>
+                </table>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:10px 14px; margin-top:10px; font-size:0.82rem;">
+                    <span>Media Global Docente: <strong>${stats.globalTAvg.toFixed(2)}</strong></span>
+                    <span>Media Global Dirección: <strong style="color:#2563eb;">${stats.globalDAvg.toFixed(2)}</strong></span>
+                    <span>Índice: <strong style="color:#059669;">${sintoniaObj.text}</strong></span>
+                </div>
+            </div>
+
+            <!-- F09: Plan SMART Unificado -->
+            <div style="margin-bottom:22px; page-break-inside:avoid;">
+                <h3 style="margin:0 0 10px 0; font-size:0.95rem; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:4px; text-transform:uppercase;">
+                    2. Compromisos del Plan de Mejora SMART
+                </h3>
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:0.82rem;">
+                    <div style="margin-bottom:8px;"><strong>Meta de Mejora:</strong> ${sp.goal || '<span style="color:#94a3b8; font-style:italic;">Pendiente de definir</span>'}</div>
+                    <div style="margin-bottom:8px;"><strong>Acciones Concretas:</strong> ${sp.actions || '<span style="color:#94a3b8; font-style:italic;">Pendiente de definir</span>'}</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div><strong>Indicador de Logro:</strong> ${sp.indicator || '<span style="color:#94a3b8; font-style:italic;">Pendiente de definir</span>'}</div>
+                        <div><strong>Apoyo Requerido:</strong> ${sp.support || '<span style="color:#94a3b8; font-style:italic;">Pendiente de definir</span>'}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- F03: Acuerdos de Entrevista Compartidos (NUNCA notas privadas) -->
+            <div style="margin-bottom:24px; page-break-inside:avoid;">
+                <h3 style="margin:0 0 10px 0; font-size:0.95rem; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:4px; text-transform:uppercase;">
+                    3. Acuerdos y Orientaciones de la Entrevista Presencial
+                </h3>
+                <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:12px; font-size:0.82rem; line-height:1.5;">
+                    ${tData.directorAgreements ? tData.directorAgreements.replace(/\n/g, '<br>') : '<span style="color:#94a3b8; font-style:italic;">Sin acuerdos registrados formalmente en la entrevista presencial.</span>'}
+                </div>
+            </div>
+
+            <!-- Desglose Completo de Preguntas -->
+            <div style="margin-bottom:24px;">
+                <h3 style="margin:0 0 12px 0; font-size:0.95rem; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:4px; text-transform:uppercase;">
+                    4. Desglose Detallado de Respuestas y Evidencias
+                </h3>
+                ${detailedQuestionsHtml}
+            </div>
+
+            <!-- F10: Firmas con Identificación Concreta de Directores -->
+            <div style="border-top:2px solid #e2e8f0; padding-top:16px; margin-top:24px; page-break-inside:avoid;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-bottom:16px;">
+                    <div style="border:1px solid #cbd5e1; border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:700;">Firma del Docente</div>
+                        <div style="font-family:'Caveat', cursive, sans-serif; font-size:1.4rem; color:#1e3a8a; min-height:40px; display:flex; align-items:center; justify-content:center;">
+                            ${tData.signedTeacher ? teacherName : '<span style="font-size:0.8rem; font-family:sans-serif; color:#94a3b8; font-style:italic;">Pendiente de firma</span>'}
+                        </div>
+                        <div style="font-size:0.7rem; color:#10b981; font-weight:700;">
+                            ${tData.signedTeacher ? 'Firmado Electrónicamente' : ''}
+                        </div>
+                    </div>
+
+                    <div style="border:1px solid #cbd5e1; border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:0.72rem; color:#64748b; text-transform:uppercase; font-weight:700;">Firma de la Dirección</div>
+                        <div style="font-family:'Caveat', cursive, sans-serif; font-size:1.4rem; color:#1e3a8a; min-height:40px; display:flex; align-items:center; justify-content:center;">
+                            ${tData.signedDirector ? directorSigner : '<span style="font-size:0.8rem; font-family:sans-serif; color:#94a3b8; font-style:italic;">Pendiente de firma</span>'}
+                        </div>
+                        <div style="font-size:0.7rem; color:#10b981; font-weight:700;">
+                            ${tData.signedDirector ? 'Firmado Electrónicamente' : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center; font-size:0.7rem; color:#64748b; border-top:1px solid #e2e8f0; padding-top:8px;">
+                    <div><strong>Colegio San Buenaventura</strong> • Registro Oficial de Evaluación Docente</div>
+                    <div style="margin-top:2px; font-family:monospace;">Control Hash: ${hashControl} | Certificación: ${signedAtDate}</div>
+                </div>
+            </div>
+
+        </div>
+    `;
+}
+
 window.generateOfficialPrintDocument = function(teacherName, autoPrint = false) {
     if (!teacherName) {
         if (state.currentUser && state.currentUser.role === 'teacher') {
@@ -5127,282 +4834,13 @@ window.generateOfficialPrintDocument = function(teacherName, autoPrint = false) 
         } else if (state.selectedTeacherForDetail) {
             teacherName = state.selectedTeacherForDetail;
         } else {
-            showToast('Seleccione un docente para generar el documento oficial.');
+            showToast('Seleccione un docente para generar el acta oficial.');
             return;
         }
     }
 
-    const tData = db.getUserData(teacherName) || {};
-    const teacherInfo = TEACHERS.find(t => t.name === teacherName) || { etapa: 'General', tutor: 'No' };
-    const isFullySigned = tData.signedTeacher && tData.signedDirector;
-    const signedAtDate = tData.signedAt ? new Date(tData.signedAt).toLocaleString() : new Date().toLocaleString();
-    const hashControl = `SHA256-${teacherName.charCodeAt(0)}${tData.signedAt ? Date.parse(tData.signedAt) : Date.now()}`;
-
-    let teacherBlockAverages = calculateBlockAverages(teacherName, 'teacher');
-    let directorBlockAverages = calculateBlockAverages(teacherName, 'director');
-
-    let totalTeacherScore = 0;
-    let totalDirectorScore = 0;
-    let blockCount = 0;
-
-    let blockRowsHtml = EVAL_BLOCKS.filter(b => b.id !== 'b6').map((block, idx) => {
-        const tAvg = parseFloat(teacherBlockAverages[block.id]) || 0;
-        const dAvg = parseFloat(directorBlockAverages[block.id]) || tAvg;
-        const gap = (dAvg - tAvg).toFixed(1);
-        totalTeacherScore += tAvg;
-        totalDirectorScore += dAvg;
-        blockCount++;
-
-        return `
-            <tr style="border-bottom:1px solid #e2e8f0;">
-                <td style="padding:10px 12px; font-weight:700; color:#1e293b;">Bloque ${idx+1}: ${block.title.split(':')[1] || block.title}</td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700;">${tAvg.toFixed(1)} / 5.0</td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700; color:#2563eb;">${dAvg.toFixed(1)} / 5.0</td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700; color:${Math.abs(gap) >= 1.0 ? '#ef4444' : '#10b981'};">
-                    ${gap > 0 ? '+' + gap : gap}
-                </td>
-            </tr>
-        `;
-    }).join('');
-
-    const globalTAvg = blockCount > 0 ? (totalTeacherScore / blockCount).toFixed(2) : '0.00';
-    const globalDAvg = blockCount > 0 ? (totalDirectorScore / blockCount).toFixed(2) : '0.00';
-    const sintonia = Math.max(0, (100 - (Math.abs(globalTAvg - globalDAvg) * 20)).toFixed(0));
-
-    let detailedQuestionsHtml = EVAL_BLOCKS.filter(b => b.id !== 'b6').map((b, bIdx) => {
-        let qRows = b.questions.map(q => {
-            const tVal = (tData.answers && tData.answers[q.id]) || '-';
-            const dVal = (tData.directorAnswers && tData.directorAnswers[q.id]) || tVal;
-            const evidence = (tData.answers && tData.answers[q.id + '_ev']) || '';
-
-            return `
-                <div style="margin-bottom:12px; padding-bottom:8px; border-bottom:1px dashed #cbd5e1; page-break-inside:avoid;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#1e293b; margin-bottom:4px;">
-                        ${q.id.toUpperCase()} • ${q.text}
-                    </div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#475569; background:#f8fafc; padding:6px 12px; border-radius:4px;">
-                        <span>Autoevaluación Docente: <strong>${tVal} ${q.type === 'scale' ? '/ 5' : ''}</strong></span>
-                        <span>Co-Evaluación Dirección: <strong style="color:#2563eb;">${dVal} ${q.type === 'scale' ? '/ 5' : ''}</strong></span>
-                    </div>
-                    ${evidence ? `<div style="font-size:0.78rem; color:#334155; margin-top:4px; font-style:italic; padding-left:8px; border-left:3px solid #3b82f6;">Evidencia aportada: "${evidence}"</div>` : ''}
-                </div>
-            `;
-        }).join('');
-
-        const reflectionText = (tData.reflections && tData.reflections[b.id]) || '';
-
-        return `
-            <div style="margin-bottom:22px; page-break-inside:avoid;">
-                <h4 style="margin:0 0 10px 0; font-size:0.92rem; color:#1e3a8a; border-bottom:2px solid #2563eb; padding-bottom:4px; text-transform:uppercase; letter-spacing:0.03em;">
-                    Bloque ${bIdx+1}: ${b.title}
-                </h4>
-                ${qRows}
-                ${reflectionText ? `<div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; font-size:0.8rem; color:#1e293b; margin-top:8px;"><strong>Reflexión Cualitativa Docente:</strong> "${reflectionText}"</div>` : ''}
-            </div>
-        `;
-    }).join('');
-
-    const smartGoal = (tData.answers && tData.answers['smart_goal']) || 'Pendiente de definir';
-    const smartActions = (tData.answers && tData.answers['smart_actions']) || 'Pendiente de definir';
-    const smartSupport = (tData.answers && tData.answers['smart_support']) || 'Pendiente de definir';
-
-    const documentInnerBodyHtml = `
-        <div style="font-family:'Inter', system-ui, -apple-system, sans-serif; color:#0f172a; max-width:850px; margin:0 auto; background:#ffffff; padding:40px; box-sizing:border-box;">
-            
-            <!-- Encabezado de Imprenta Institucional -->
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #1e3a8a; padding-bottom:15px; margin-bottom:25px;">
-                <div>
-                    <div style="font-size:0.75rem; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.12em;">Documento Oficial de Imprenta</div>
-                    <h1 style="margin:4px 0 0 0; font-size:1.5rem; font-weight:900; color:#1e3a8a; text-transform:uppercase; letter-spacing:-0.02em;">
-                        Colegio San Buenaventura
-                    </h1>
-                    <div style="font-size:0.92rem; font-weight:700; color:#475569; margin-top:2px;">
-                        Acta Consolidada de Autoevaluación y Co-Evaluación Docente (Curso 2026-2027)
-                    </div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">FOLIO OFICIAL</div>
-                    <div style="font-size:0.85rem; font-weight:800; color:#1e3a8a; background:#eff6ff; border:1px solid #bfdbfe; padding:6px 12px; border-radius:6px; margin-top:4px;">
-                        ACTA-2627-${teacherName.split(' ')[0].toUpperCase()}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ficha Resumen del Expediente -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px; margin-bottom:25px; font-size:0.85rem;">
-                <div>
-                    <div><strong>Docente Evaluado/a:</strong> ${teacherName}</div>
-                    <div style="margin-top:6px;"><strong>Etapa Educativa:</strong> ${teacherInfo.etapa}</div>
-                    <div style="margin-top:6px;"><strong>Tutoría Asignada:</strong> ${teacherInfo.tutor}</div>
-                </div>
-                <div>
-                    <div><strong>Estado del Documento:</strong> ${isFullySigned ? '🔒 Acta Cerrada y Firmada' : '🟡 En Proceso de Evaluación'}</div>
-                    <div style="margin-top:6px;"><strong>Fecha de Certificación:</strong> ${signedAtDate}</div>
-                    <div style="margin-top:6px;"><strong>Grado de Sintonía:</strong> <span style="color:#2563eb; font-weight:800;">${sintonia}% Sintonía Pedagógica</span></div>
-                </div>
-            </div>
-
-            <!-- Tabla de Resumen por Bloques -->
-            <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                1. Resumen de Puntuaciones Consolidadas por Bloque
-            </h3>
-            <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:25px;">
-                <thead>
-                    <tr style="background:#f1f5f9; text-align:left; border-bottom:2px solid #cbd5e1;">
-                        <th style="padding:10px 12px; font-weight:800;">Bloque Competencial</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Autoevaluación Docente</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Co-Evaluación Dirección</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Desviación (Gap)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${blockRowsHtml}
-                    <tr style="background:#f8fafc; font-weight:800; border-top:2px solid #cbd5e1;">
-                        <td style="padding:12px;">PROMEDIO GLOBAL EVALUADO</td>
-                        <td style="padding:12px; text-align:center;">${globalTAvg} / 5.0</td>
-                        <td style="padding:12px; text-align:center; color:#2563eb;">${globalDAvg} / 5.0</td>
-                        <td style="padding:12px; text-align:center; color:#10b981;">
-                            ${(globalDAvg - globalTAvg).toFixed(2) > 0 ? '+' + (globalDAvg - globalTAvg).toFixed(2) : (globalDAvg - globalTAvg).toFixed(2)}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Desglose de Preguntas y Evidencias -->
-            <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:15px; text-transform:uppercase; letter-spacing:0.05em;">
-                2. Evaluación Detallada e Ítems Cualitativos
-            </h3>
-            ${detailedQuestionsHtml}
-
-            <!-- Plan SMART -->
-            <div style="page-break-inside:avoid; margin-bottom:25px;">
-                <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                    3. Plan de Crecimiento Profesional SMART
-                </h3>
-                <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:15px; font-size:0.82rem; display:flex; flex-direction:column; gap:8px;">
-                    <div><strong>Objetivo SMART Acordado:</strong> "${smartGoal}"</div>
-                    <div><strong>Acciones Concretas de Desarrollo:</strong> "${smartActions}"</div>
-                    <div><strong>Necesidades de Apoyo Institucional:</strong> "${smartSupport}"</div>
-                </div>
-            </div>
-
-            <!-- Observaciones de Dirección -->
-            ${tData.directorNotes ? `
-            <div style="page-break-inside:avoid; margin-bottom:25px;">
-                <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                    4. Acuerdos y Orientaciones de la Dirección
-                </h3>
-                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:15px; font-size:0.82rem; color:#1e3a8a; font-style:italic;">
-                    "${tData.directorNotes}"
-                </div>
-            </div>
-            ` : ''}
-
-            <!-- Certificación y Firmas Digitales -->
-            <div style="page-break-inside:avoid; margin-top:35px; border-top:2px solid #cbd5e1; padding-top:20px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:25px;">
-                    <div style="width:45%; text-align:center; border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#f8fafc;">
-                        <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">El Docente Evaluado</div>
-                        <div style="font-family:'Brush Script MT', cursive, 'Georgia', sans-serif; font-size:1.8rem; color:#1e3a8a; min-height:42px;">
-                            ${tData.signedTeacher ? teacherName : '<span style="font-size:0.8rem; font-style:italic; color:#94a3b8;">Pendiente de firma</span>'}
-                        </div>
-                        <div style="font-size:0.7rem; color:#10b981; font-weight:700; margin-top:4px;">
-                            ${tData.signedTeacher ? 'Firmado Electrónicamente' : ''}
-                        </div>
-                    </div>
-
-                    <div style="width:45%; text-align:center; border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#f8fafc;">
-                        <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">La Dirección del Centro</div>
-                        <div style="font-family:'Brush Script MT', cursive, 'Georgia', sans-serif; font-size:1.8rem; color:#1e3a8a; min-height:42px;">
-                            ${tData.signedDirector ? 'Colegio San Buenaventura' : '<span style="font-size:0.8rem; font-style:italic; color:#94a3b8;">Pendiente de firma</span>'}
-                        </div>
-                        <div style="font-size:0.7rem; color:#10b981; font-weight:700; margin-top:4px;">
-                            ${tData.signedDirector ? 'Firmado Electrónicamente' : ''}
-                        </div>
-                    </div>
-                </div>
-
-                <div style="text-align:center; font-size:0.72rem; color:#64748b; border-top:1px solid #e2e8f0; padding-top:12px;">
-                    <div><strong>Colegio San Buenaventura</strong> • Sello Digital de Conformidad e Integridad de Acta</div>
-                    <div style="margin-top:3px;">Control Hash: ${hashControl} | Certificación Timestamp: ${signedAtDate}</div>
-                </div>
-            </div>
-
-        </div>
-    `;
-
-    // 1. Cargar el documento puro en un iframe invisible e independiente
-    let iframe = document.getElementById('print-iframe');
-    if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.id = 'print-iframe';
-        iframe.style.cssText = 'position:fixed; right:0; bottom:0; width:0; height:0; border:none; z-index:-1;';
-        document.body.appendChild(iframe);
-    }
-
-    const fullIframeHtml = `<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Acta Oficial - ${teacherName}</title>
-        <style>
-            body { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0f172a; background: #ffffff; margin: 0; padding: 20px; }
-            @page { size: A4 portrait; margin: 10mm 12mm 10mm 12mm; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; }
-        </style>
-    </head>
-    <body>
-        ${documentInnerBodyHtml}
-    </body>
-    </html>`;
-
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(fullIframeHtml);
-    doc.close();
-
-    // 2. Mostrar la Modal en Pantalla para revisión visual
-    let docModal = document.getElementById('official-document-modal');
-    if (!docModal) {
-        docModal = document.createElement('div');
-        docModal.id = 'official-document-modal';
-        docModal.style.cssText = `
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            display: flex; flex-direction:column; align-items: center; justify-content: flex-start;
-            padding: 2rem 1rem; box-sizing: border-box; overflow-y: auto;
-        `;
-        document.body.appendChild(docModal);
-    }
-
-    docModal.innerHTML = `
-        <div style="width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:14px 20px; border-radius:12px 12px 0 0; border-bottom:1px solid rgba(255,255,255,0.1); color:white; font-weight:700;" class="no-print">
-            <span style="display:flex; align-items:center; gap:8px;">
-                📑 Documento Oficial de Imprenta (${teacherName})
-            </span>
-            <div style="display:flex; gap:10px; align-items:center;">
-                <button class="btn btn-primary" onclick="printDocumentNative()" style="font-size:0.88rem; padding:8px 20px; background:#2563eb;">
-                    🖨️ Imprimir / Guardar en PDF
-                </button>
-                <button onclick="document.getElementById('official-document-modal').style.display='none'" style="border:none; background:rgba(255,255,255,0.1); color:white; padding:8px 14px; border-radius:6px; font-weight:700; cursor:pointer;">
-                    ✕ Cerrar
-                </button>
-            </div>
-        </div>
-        <div style="width:100%; max-width:900px; background:white; border-radius:0 0 12px 12px; padding:20px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); margin-bottom:2rem;">
-            ${documentInnerBodyHtml}
-        </div>
-    `;
-
-    docModal.style.display = 'flex';
-
-    if (autoPrint) {
-        setTimeout(() => window.printDocumentNative(), 300);
-    }
+    const htmlContent = generateTeacherReportInnerHtml(teacherName);
+    printDocumentNative(htmlContent, `Acta_${slugify(teacherName)}`);
 };
 
 

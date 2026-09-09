@@ -1,389 +1,706 @@
 [
   {
+    "id": "doc-01",
     "name": "Daniel Asenjo García",
     "etapa": "Infantil",
     "tutor": "3 Años-A",
-    "password": "Daniel#101"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "e4e5e0b8a75e68807f7333ce5b55ba40bcf6e5c7168114729f5d69f9910361a6"
   },
   {
+    "id": "doc-02",
     "name": "Elena Díaz Martín",
     "etapa": "Infantil",
     "tutor": "3 Años-B",
-    "password": "Elena#102"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "30e9b5f2751cf69ab6525d1339bcc1b90224c3698b6da2647bb10424304abcf9"
   },
   {
+    "id": "doc-03",
     "name": "María de las Nieves Jiménez Jiménez",
     "etapa": "Infantil",
     "tutor": "4 Años-A",
-    "password": "María#103"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "41bdb9ed2b6a51cadddce3b2df4e88eeebd43a977384f222903f60dd63849778"
   },
   {
+    "id": "doc-04",
     "name": "Susana López Gómez",
     "etapa": "Infantil",
     "tutor": "4 Años-B",
-    "password": "Susana#104"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "4a64cab73061bdc691f1a3fb668668aa8bbef596091e8c244b16f4d7bc189d09"
   },
   {
+    "id": "doc-05",
     "name": "María Jesús Parras Maeso",
     "etapa": "Infantil",
     "tutor": "5 Años-A",
-    "password": "María#105"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "3ef685d762b5414fcbffbdf5a3afb8785cd3224feae5ea61e0fc7638197a081d"
   },
   {
+    "id": "doc-06",
     "name": "Alejandra Pérez Villalba",
     "etapa": "Infantil",
     "tutor": "5 Años-B",
-    "password": "Alejandra#106"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "114d646b29464d755276ae927ef645486eb2ac18b4c6f041a9cc50d92545abe9"
   },
   {
+    "id": "doc-07",
     "name": "Gema del Pozo Villegas",
     "etapa": "Infantil",
     "tutor": "No",
-    "password": "Gema#107"
+    "especialidad": "Apoyo Infantil",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "127f442a0006e4243751e1c295512f76d051fba5114cd5c635619a4ec954f383"
   },
   {
+    "id": "doc-08",
     "name": "Marta Pilar Rodríguez Centeno",
     "etapa": "Infantil",
     "tutor": "No",
-    "password": "Marta#108"
+    "especialidad": "Psicomotricidad",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "d60b28d8fda06e1a65c6c5cbaea20b04cafdf33203fd60e962fd917ba246c590"
   },
   {
+    "id": "doc-09",
     "name": "Nuria Romero Sanz",
     "etapa": "Infantil",
     "tutor": "No",
-    "password": "Nuria#109"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "02d49fcf5b223b96bef6e15f68e0f6e462e826b1290a3782e7bd3d40520e467c"
   },
   {
+    "id": "doc-10",
     "name": "Alejandra Calvo",
     "etapa": "Infantil",
     "tutor": "No",
-    "password": "Alejandra#110"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "1bfe5d43d52599724b5f0a980e640e8df5925f9cceec42c8f6427e585e1a807f"
   },
   {
+    "id": "doc-11",
     "name": "Teresa",
     "etapa": "Infantil",
     "tutor": "No",
-    "password": "Teresa#112"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "3043d01a4842a73f4f2f14418c849d2b5a04300213f294673c6810d6add52651"
   },
   {
+    "id": "doc-12",
     "name": "Juan Antonio Alfonso Pizarro",
     "etapa": "Primaria",
-    "tutor": "5º EP-A",
-    "password": "Juan#113"
+    "tutor": "1º Primaria A",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "5c7e8db9af4a99162ba3949eadf8277ac0917e63e316c1c5e0eb3f581e43bd7e"
   },
   {
+    "id": "doc-13",
     "name": "Pilar Fuentes Saavedra",
     "etapa": "Primaria",
-    "tutor": "1º EP-A",
-    "password": "Pilar#114"
+    "tutor": "1º Primaria B",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "200cd585a8dd9aa7f33127d52bb3beb2e071198bdb7a1790d57ae6072f4452c8"
   },
   {
+    "id": "doc-14",
     "name": "María Belén Hernando Martín",
     "etapa": "Primaria",
-    "tutor": "1º EP-B",
-    "password": "María#115"
+    "tutor": "2º Primaria A",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "fd4c5fd0527329711d85a13320f3b9d4fb377f78666cbb2f5b6c36b1b6aa6b58"
   },
   {
+    "id": "doc-15",
     "name": "María del Carmen Ibañez Abad",
     "etapa": "Primaria",
-    "tutor": "2º EP-A",
-    "password": "María#116"
+    "tutor": "2º Primaria B",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "e730be8bd28a50383a862ac3261a69b6fdb3576c7861159a829774234a1036d6"
   },
   {
+    "id": "doc-16",
     "name": "Nuria Jarillo García",
     "etapa": "Primaria",
-    "tutor": "2º EP-B",
-    "password": "Nuria#117"
+    "tutor": "3º Primaria A",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "a379d0922cbb60c44f8f74a9f1695605e2e843f702c1fe4bf09520e1d4bfdb0f"
   },
   {
+    "id": "doc-17",
     "name": "Beatriz de León Ruiz",
     "etapa": "Primaria",
     "tutor": "3º EP-B",
-    "password": "Beatriz#118"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "147cb46e271d69910f7222d746ab661c98c7b9159f826248b61416d5cbe96835"
   },
   {
+    "id": "doc-18",
     "name": "Óscar Manuel Molina Márquez",
     "etapa": "Primaria",
     "tutor": "4º EP-A",
-    "password": "Óscar#119"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "4bcc30a59de87e44e275e7767d0db151ce111d8db5c8c6a3b668d823cb7071f3"
   },
   {
+    "id": "doc-19",
     "name": "Lorena Moreno Barrigas",
     "etapa": "Primaria",
-    "tutor": "6º EP-C",
-    "password": "Lorena#120"
+    "tutor": "4º Primaria B",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "960402df1014d648a5957bfeb89219ffcded705e79c9087b49072f1fd7859f07"
   },
   {
+    "id": "doc-20",
     "name": "Álvaro Ortega Bonilla",
     "etapa": "Primaria",
-    "tutor": "4º EP-B",
-    "password": "Álvaro#121"
+    "tutor": "5º Primaria A",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "19150332465727cfa661fc079571e9a7140e48075cb81b3b7b703969b05a2edc"
   },
   {
+    "id": "doc-21",
     "name": "Isabel Peña Escudero",
     "etapa": "Primaria",
     "tutor": "5º EP-B",
-    "password": "Isabel#122"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "b7dec616af36059ff6d3e71437b48b073e91587bd5d553219c4851b2e267852f"
   },
   {
+    "id": "doc-22",
     "name": "María Pilar Pérez Fernández",
     "etapa": "Primaria",
-    "tutor": "6º EP-B",
-    "password": "María#123"
+    "tutor": "6º Primaria A",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "1ea8c54a22567187339fa6c4d3bd38a02afc2ce591e9a4a2e2b68e51f842441c"
   },
   {
+    "id": "doc-23",
     "name": "Feli Priego Perete",
     "etapa": "Primaria",
-    "tutor": "3º EP-A",
-    "password": "Feli#124"
+    "tutor": "6º Primaria B",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "122db177c32a27b4a0475684444c8a84b361ce96ede79ff157bc00ce29e720e1"
   },
   {
+    "id": "doc-24",
     "name": "Rubén Recio Molina",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Rubén#125"
+    "especialidad": "Educación Física",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "53b9d35ef501dc571574ae950e456a0629893afb552551e380be56354f7907ad"
   },
   {
+    "id": "doc-25",
     "name": "Julia Rodríguez Gutiérrez",
     "etapa": "Primaria",
-    "tutor": "6º EP-A",
-    "password": "Julia#126"
+    "tutor": "No",
+    "especialidad": "Música",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "745f0b5bc803b4250b445f5ad69c9e98147f82c677477fd7ffc3fb4c9d9344ac"
   },
   {
+    "id": "doc-26",
     "name": "David Sagaseta Jiménez",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "David#127"
+    "especialidad": "Inglés",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "282bb83c5f78ac4b24a627025613116dbdc84d3aa87e488047e5031f66251039"
   },
   {
+    "id": "doc-27",
     "name": "José Manuel Santos",
     "etapa": "Primaria",
     "tutor": "Director EI y EP",
-    "role": "director_ei_ep",
-    "password": "Santos#2026"
+    "especialidad": "Docencia",
+    "role": "director",
+    "subrole": "ei_ep",
+    "cargo": "Director EI y EP",
+    "authHash": "cf97c9424a8f43509c63deab1553bfb084dc355a1727042d8761d585bf5b0208"
   },
   {
+    "id": "doc-28",
     "name": "José Antonio Utrillas Sánchez",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "José#129"
+    "especialidad": "Religión",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "a249bb09135ad218e2b7b7fbbc6484eec7a09ba1b8f85b4193859fb2df3df096"
   },
   {
+    "id": "doc-29",
     "name": "Pedro Vega Verdeja",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Pedro#130"
+    "especialidad": "PT / AL",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "eca102dca33d92aa42051307a383f96f3a5571ea92eb37c8d4b1d21da6f58321"
   },
   {
+    "id": "doc-30",
     "name": "Pedro Zapata Paredes",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Pedro#131"
+    "especialidad": "Apoyo Primaria",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "add9a42db73f59adc5ba5d588cda3da013f41a39247a198ac0a35d70180846d6"
   },
   {
+    "id": "doc-31",
     "name": "Jorge Cabana",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Jorge#132"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "80d6dada2e899a67a31db401c73eb8be9c93d4c0583db10a0487a1d9866c3f1c"
   },
   {
+    "id": "doc-32",
     "name": "Paula Gómez",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Paula#133"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "9f62902c1f2cfbd414632af72ebdb97f60143bef409d931f6565643bf977065c"
   },
   {
+    "id": "doc-33",
     "name": "María Sánchez",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "María#134"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "8f5e3ef5e6533ec27dd3eba9e563d851cbff3181dc2338c834208fc8f911bcc8"
   },
   {
+    "id": "doc-34",
     "name": "Álvaro Fernández",
     "etapa": "Primaria",
     "tutor": "No",
-    "password": "Álvaro#135"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "11aa44b0ef0443445ebc01d5061357f9af725da0084e91b09735abf9a026958f"
   },
   {
+    "id": "doc-35",
     "name": "Sergio Acevedo Trapote",
     "etapa": "Secundaria",
     "tutor": "1º ESO-A",
-    "password": "Sergio#136"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "e2c2fc4f60bc0c9c00ae66f8005537455a9f404bed70d2fd45ae21dd202c8420"
   },
   {
+    "id": "doc-36",
     "name": "Fidel Jorge Aguilar López",
     "etapa": "Secundaria",
     "tutor": "1º ESO-B",
-    "password": "Fidel#137"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "e45aabc581b86ae55371654a66e4a392be480217483d81c0ea0b4b9bd3338b51"
   },
   {
+    "id": "doc-37",
     "name": "Olga Almazán Pardo",
     "etapa": "Secundaria",
     "tutor": "2º ESO-A",
-    "password": "Olga#138"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "a381a8d279daba909763b00b7f9cb7ffe438539d98622143cdd3483523b62725"
   },
   {
+    "id": "doc-38",
     "name": "Ana Isabel Álvarez Gómez",
     "etapa": "Secundaria",
     "tutor": "2º ESO-B",
-    "password": "Ana#139"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "b74092c8851c46705b61a8ee154e84a626dc5a9bcb33a077ae0282a96164bf8c"
   },
   {
+    "id": "doc-39",
     "name": "María Laura Blanco Pérez",
     "etapa": "Secundaria",
     "tutor": "3º ESO-A",
-    "password": "María#140"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "2246c662d6b6f3bc7111f0828648b850be4a6e5397a19fed2c5410ec0fce1e98"
   },
   {
+    "id": "doc-40",
     "name": "Ángel Castellanos Cuenca",
     "etapa": "Secundaria",
     "tutor": "3º ESO-B",
-    "password": "Ángel#141"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "ce8c8666bb753206241088a2049aaf1285b5b7d7f6f780c0c85221829d349731"
   },
   {
+    "id": "doc-41",
     "name": "Francisco Cezón Gil",
     "etapa": "Secundaria",
     "tutor": "4º ESO-A",
-    "password": "Francisco#142"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "5e6f0f2741c0a85c3d21525feb40d0d142d27ff57bfb69747d730f1698406a7d"
   },
   {
+    "id": "doc-42",
     "name": "Juan Luis Cormenzana Carpio",
     "etapa": "Secundaria",
     "tutor": "4º ESO-B",
-    "password": "Juan#143"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "9a55f87f82d5c293c9bc1acd2afbab6bb503a967a7dfffd82ee458aa390aee28"
   },
   {
+    "id": "doc-43",
     "name": "Amalia del Carmen Paris Cuéllar",
     "etapa": "Secundaria",
     "tutor": "1º BACH-A",
-    "password": "Amalia#144"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "a708bfd01c4bcef9ffd71ea5636e3e43b86facc7864c8a16ad451aa7bdd595b0"
   },
   {
+    "id": "doc-44",
     "name": "Maria Lourdes Diez Pérez",
     "etapa": "Secundaria",
     "tutor": "1º BACH-B",
-    "password": "Maria#145"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "921889693c8c29562b6422cd328a940a4569b32b52358b724d6ea06d07a6babe"
   },
   {
+    "id": "doc-45",
     "name": "Florencio Díez Sanz",
     "etapa": "Secundaria",
     "tutor": "2º BACH-A",
-    "password": "Florencio#146"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "771ae5c9be32e31334c66e4ee5ab72d8ae7b6d8410e1bfaa31fe8e609ebd3cf1"
   },
   {
+    "id": "doc-46",
     "name": "Javier Félix",
     "etapa": "Secundaria",
     "tutor": "Director General",
-    "role": "director_general",
-    "password": "Javier#2026"
+    "especialidad": "Docencia",
+    "role": "director",
+    "subrole": "general",
+    "cargo": "Director General",
+    "authHash": "e09dce09211cf2e69471243c744986437139201ff2887ec693096ddc897de89d"
   },
   {
+    "id": "doc-47",
     "name": "María Esperanza García Moreda",
     "etapa": "Secundaria",
-    "tutor": "No",
-    "password": "María#148"
+    "tutor": "2º Bachillerato B",
+    "especialidad": "Tutoría",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "327c5bf51c20abe0af3fde60a3b3c39a6d4686b41952978c96f1cee876ce74ee"
   },
   {
+    "id": "doc-48",
     "name": "Jesús Abel García-Cezón Roldán",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Jesús#149"
+    "especialidad": "Matemáticas",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "402562675d112ec8f6471803b8182d5f2ffd1641f0829b8dd5d296b9e43ff42d"
   },
   {
+    "id": "doc-49",
     "name": "Soledad Garrido García-Calvo",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Soledad#150"
+    "especialidad": "Lengua Castellana y Literatura",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "df2c865b76c7a037c85d92400040af73eb5ece88504a71622af2a5dd322b6fb3"
   },
   {
+    "id": "doc-50",
     "name": "José Antonio Gaspar Laborie",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "José#151"
+    "especialidad": "Inglés",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "63ec5179a0f756f61c95213f94476a97c7c40dac1892f3a4989ca26819e3238e"
   },
   {
+    "id": "doc-51",
     "name": "Carolina González García",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Carolina#152"
+    "especialidad": "Física y Química",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "dcc3db492fbbcc21038caf590783f2061acc7e9e1e6f09c514af87c9dc0eb106"
   },
   {
+    "id": "doc-52",
     "name": "Luis González Ludeña",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Luis#153"
+    "especialidad": "Biología y Geología",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "f1341ab094ecc14e16b7dc6026d785ae1dcdf9cd1b7bc1903be0613b86d47154"
   },
   {
+    "id": "doc-53",
     "name": "Vicente Hernández Gordo",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Vicente#154"
+    "especialidad": "Geografía e Historia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "efce3b08fa193c48968ff65ad48ffb147faee3df5c3c46d3f2c418724a7f8fad"
   },
   {
+    "id": "doc-54",
     "name": "Francisco José Lozano Maya",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Francisco#155"
+    "especialidad": "Filosofía",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "33d793590de91d5d74380810d73f38029a1883f7d80b402de19e43f19a5cdabc"
   },
   {
+    "id": "doc-55",
     "name": "Tania Martín Almendra",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Tania#156"
+    "especialidad": "Educación Física",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "d524ffceb6b49649f868adf99960db4c1b579aef23a0c20087b030aab28e4822"
   },
   {
+    "id": "doc-56",
     "name": "Almudena Martínez Fernández",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Almudena#157"
+    "especialidad": "Dibujo y Educación Plástica",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "45291dc59db60d8c63205e7545f28ae8bb28e72a25dfd10393d1362487a7c6b5"
   },
   {
+    "id": "doc-57",
     "name": "José Manuel Pulido Palomo",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "José#158"
+    "especialidad": "Tecnología e Informática",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "1859c53ef780dc81859ec2827516dc45d33205bb80a3a959c8b2a83f7ea9db0e"
   },
   {
+    "id": "doc-58",
     "name": "Luis Redruello",
     "etapa": "Secundaria",
     "tutor": "Director ESO y BTO",
-    "role": "director_eso_bto",
-    "password": "Redruello#2026"
+    "especialidad": "Docencia",
+    "role": "director",
+    "subrole": "eso_bto",
+    "cargo": "Director ESO y BTO",
+    "authHash": "80aa107c53453595979999f94ba0353d0938984ecf9e9486bfabfca19b6d0a4f"
   },
   {
+    "id": "doc-59",
     "name": "Antonio Jesús Royo Tomás",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Antonio#160"
+    "especialidad": "Música",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "2007af0f4fb1bc9be4ce6799174d6d2c3a263b90e81e78dc95dabdb05b94bb56"
   },
   {
+    "id": "doc-60",
     "name": "Philippe Georges Saint-Mard",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Philippe#161"
+    "especialidad": "Francés",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "08381d6ff1d5e2f772d9342616272748ff33201e41636e9ef7295c8daab9a6c5"
   },
   {
+    "id": "doc-61",
     "name": "María del Carmen Valera Soriano",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "María#162"
+    "especialidad": "Orientación / Psicopedagogía",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "8e50ebd3827e53efc5316630888f511a6d4982dbe143385f467e3d9978bdcdca"
   },
   {
+    "id": "doc-62",
     "name": "Isabel Ezquerra",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Isabel#163"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "12842ca66dbc3f0204363a38d49f1ca41ff9fe78242c2a89fdd0471ee8578ffe"
   },
   {
+    "id": "doc-63",
     "name": "Daniel Lozano",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Daniel#164"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "9b4412295bb23025d695e6ecc1608a1a9e41cafc9ec1dfb3126a1d06d960be90"
   },
   {
+    "id": "doc-64",
     "name": "Alejandro Gaspar",
     "etapa": "Secundaria",
     "tutor": "No",
-    "password": "Alejandro#165"
+    "especialidad": "Docencia",
+    "role": "teacher",
+    "subrole": null,
+    "cargo": "Docente",
+    "authHash": "4ffa927fa1b2a1b1722d4777a3d9276c1b2450c4950e139276987f51d890f940"
   }
 ]
