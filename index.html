@@ -1327,7 +1327,7 @@ window.safeStorage = {
     getItem: function(key) {
         try {
             if (window.localStorage) {
-                return window.safeStorage.getItem(key);
+                return window.localStorage.getItem(key);
             }
         } catch(e) {}
         return this._mem[key] || null;
@@ -1335,7 +1335,7 @@ window.safeStorage = {
     setItem: function(key, val) {
         try {
             if (window.localStorage) {
-                window.safeStorage.setItem(key, val);
+                window.localStorage.setItem(key, val);
             }
         } catch(e) {}
         this._mem[key] = val;
@@ -1343,7 +1343,7 @@ window.safeStorage = {
     removeItem: function(key) {
         try {
             if (window.localStorage) {
-                window.safeStorage.removeItem(key);
+                window.localStorage.removeItem(key);
             }
         } catch(e) {}
         delete this._mem[key];
@@ -2686,47 +2686,66 @@ function showToast(message) {
 
 // 8. AUTENTICACIÓN
 async function handleLogin(username, password) {
-    if (!username.trim() || !password.trim()) {
-        showToast('Por favor, rellene todos los campos.');
-        return;
-    }
-
-    const inputUser = username.trim().toLowerCase();
-    const cleanInputUser = inputUser.replace(/\s+/g, '');
-    const hashedInputPwd = await hashPassword(password);
-
-    // Match teacher by exact ID, exact Name, or clean name
-    const matchedTeacher = TEACHERS.find(t => {
-        const tClean = t.name.toLowerCase().replace(/\s+/g, '');
-        return t.id.toLowerCase() === inputUser || t.name.toLowerCase() === inputUser || tClean === cleanInputUser;
-    });
-
-    if (matchedTeacher) {
-        // Aceptar 1234 o demo123 para perfiles demo
-        const pwdClean = password.trim();
-        const isDemoMatch = matchedTeacher.id.startsWith('demo-') && (pwdClean === '1234' || pwdClean === 'demo123' || pwdClean === 'demo' || pwdClean.toLowerCase() === 'demo');
-        if (hashedInputPwd === matchedTeacher.authHash || isDemoMatch) {
-            state.currentUser = {
-                id: matchedTeacher.id,
-                name: matchedTeacher.name,
-                role: matchedTeacher.role,
-                subrole: matchedTeacher.subrole,
-                etapa: matchedTeacher.etapa,
-                cargo: matchedTeacher.cargo
-            };
-            state.currentBlockIndex = 0;
-            state.showingSuccessScreen = false;
-            safeStorage.setItem('session', JSON.stringify(state.currentUser));
-            renderApp();
-            showToast(`Bienvenido/a, ${matchedTeacher.name}`);
-            return;
-        } else {
-            showToast('Contraseña incorrecta. Por favor, verifique su clave.');
+    try {
+        if (!username || !password || !username.trim() || !password.trim()) {
+            showToast('Por favor, rellene todos los campos.');
             return;
         }
-    }
 
-    showToast('Usuario no encontrado. Seleccione su nombre de la lista de acceso rápido.');
+        const inputUser = username.trim().toLowerCase();
+        const cleanInputUser = inputUser.replace(/\s+/g, '');
+        const hashedInputPwd = await hashPassword(password);
+
+        // Match teacher by exact ID, exact Name, or clean name (ignoring spaces and accents)
+        const normalizeStr = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
+        const normInput = normalizeStr(username);
+
+        const matchedTeacher = TEACHERS.find(t => {
+            const tId = (t.id || '').toLowerCase();
+            const tName = (t.name || '').toLowerCase();
+            const tClean = tName.replace(/\s+/g, '');
+            const tNorm = normalizeStr(t.name);
+            return tId === inputUser || tName === inputUser || tClean === cleanInputUser || tNorm === normInput || tId === normInput;
+        });
+
+        if (matchedTeacher) {
+            // Aceptar 1234 o demo123 para perfiles demo
+            const pwdClean = password.trim();
+            const isDemoAccount = matchedTeacher.id.startsWith('demo-');
+            const isDemoMatch = isDemoAccount && (pwdClean === '1234' || pwdClean === 'demo123' || pwdClean === 'demo' || pwdClean.toLowerCase() === 'demo');
+            
+            if (hashedInputPwd === matchedTeacher.authHash || isDemoMatch) {
+                state.currentUser = {
+                    id: matchedTeacher.id,
+                    name: matchedTeacher.name,
+                    role: matchedTeacher.role,
+                    subrole: matchedTeacher.subrole,
+                    etapa: matchedTeacher.etapa,
+                    cargo: matchedTeacher.cargo
+                };
+                state.currentBlockIndex = 0;
+                state.showingSuccessScreen = false;
+                safeStorage.setItem('session', JSON.stringify(state.currentUser));
+                
+                // Asegurar inicialización de la evaluación en la base de datos
+                if (db && typeof db.getUserData === 'function') {
+                    db.getUserData(matchedTeacher.name);
+                }
+                
+                renderApp();
+                showToast(`Bienvenido/a, ${matchedTeacher.name}`);
+                return;
+            } else {
+                showToast('Contraseña incorrecta. Por favor, verifique su clave.');
+                return;
+            }
+        }
+
+        showToast('Usuario no encontrado. Seleccione su nombre de la lista de acceso rápido.');
+    } catch (err) {
+        console.error('Login Error:', err);
+        showToast('Error al iniciar sesión: ' + (err.message || 'Error inesperado'));
+    }
 }
 
 function handleLogout() {
@@ -2742,20 +2761,6 @@ function handleLogout() {
     
     renderApp();
     showToast('Sesión cerrada correctamente');
-}
-
-function handleLogout() {
-    state.currentUser = null;
-    state.currentBlockIndex = 0;
-    state.selectedTeacherForDetail = null;
-    state.interviewModeActive = false;
-    safeStorage.removeItem('session');
-    
-    Object.values(state.chartInstances).forEach(chart => chart.destroy());
-    state.chartInstances = {};
-    
-    renderApp();
-    showToast('Sesión cerrada');
 }
 
 // 9. ROUTER PRINCIPAL (SPLIT-SCREEN LOGIN ADAPTADO)
@@ -2864,7 +2869,11 @@ window.handleQuickSelect = function(teacherId) {
 function renderTeacherView() {
     const teacherName = state.currentUser.name;
     const userData = db.getUserData(teacherName);
-    const teacherInfo = TEACHERS.find(t => t.name === teacherName);
+    const teacherInfo = TEACHERS.find(t => t.name === teacherName) || {
+        etapa: (state.currentUser && state.currentUser.etapa) || 'Primaria',
+        tutor: 'Docente',
+        cargo: (state.currentUser && state.currentUser.cargo) || 'Docente'
+    };
     
     if (state.showingSuccessScreen) {
         renderTeacherSuccessScreen(teacherName);
