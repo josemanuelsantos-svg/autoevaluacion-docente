@@ -150,7 +150,7 @@ let TEACHERS = [
         "id": "demo-infantil",
         "name": "Demo Infantil",
         "etapa": "Infantil",
-        "tutor": "Infantil (Pruebas)",
+        "tutor": "Sí",
         "especialidad": "Docencia Infantil",
         "role": "teacher",
         "subrole": null,
@@ -161,7 +161,7 @@ let TEACHERS = [
         "id": "demo-primaria",
         "name": "Demo Primaria",
         "etapa": "Primaria",
-        "tutor": "Primaria (Pruebas)",
+        "tutor": "Sí",
         "especialidad": "Docencia Primaria",
         "role": "teacher",
         "subrole": null,
@@ -172,8 +172,8 @@ let TEACHERS = [
         "id": "demo-secundaria",
         "name": "Demo Secundaria",
         "etapa": "Secundaria",
-        "tutor": "Secundaria / BTO (Pruebas)",
-        "especialidad": "Docencia Secundaria",
+        "tutor": "Sí",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente de Prueba",
@@ -194,7 +194,7 @@ let TEACHERS = [
         "id": "doc-01",
         "name": "Daniel Asenjo García",
         "etapa": "Infantil",
-        "tutor": "3 Años-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -205,7 +205,7 @@ let TEACHERS = [
         "id": "doc-02",
         "name": "Elena Díaz Martín",
         "etapa": "Infantil",
-        "tutor": "3 Años-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -216,7 +216,7 @@ let TEACHERS = [
         "id": "doc-03",
         "name": "María de las Nieves Jiménez Jiménez",
         "etapa": "Infantil",
-        "tutor": "4 Años-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -227,7 +227,7 @@ let TEACHERS = [
         "id": "doc-04",
         "name": "Susana López Gómez",
         "etapa": "Infantil",
-        "tutor": "4 Años-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -238,7 +238,7 @@ let TEACHERS = [
         "id": "doc-05",
         "name": "María Jesús Parras Maeso",
         "etapa": "Infantil",
-        "tutor": "5 Años-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -249,7 +249,7 @@ let TEACHERS = [
         "id": "doc-06",
         "name": "Alejandra Pérez Villalba",
         "etapa": "Infantil",
-        "tutor": "5 Años-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -315,7 +315,7 @@ let TEACHERS = [
         "id": "doc-12",
         "name": "Juan Antonio Alfonso Pizarro",
         "etapa": "Primaria",
-        "tutor": "1º Primaria A",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -326,7 +326,7 @@ let TEACHERS = [
         "id": "doc-13",
         "name": "Pilar Fuentes Saavedra",
         "etapa": "Primaria",
-        "tutor": "1º Primaria B",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -337,7 +337,7 @@ let TEACHERS = [
         "id": "doc-14",
         "name": "María Belén Hernando Martín",
         "etapa": "Primaria",
-        "tutor": "2º Primaria A",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -348,7 +348,7 @@ let TEACHERS = [
         "id": "doc-15",
         "name": "María del Carmen Ibañez Abad",
         "etapa": "Primaria",
-        "tutor": "2º Primaria B",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -359,7 +359,7 @@ let TEACHERS = [
         "id": "doc-16",
         "name": "Nuria Jarillo García",
         "etapa": "Primaria",
-        "tutor": "3º Primaria A",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -370,7 +370,7 @@ let TEACHERS = [
         "id": "doc-17",
         "name": "Beatriz de León Ruiz",
         "etapa": "Primaria",
-        "tutor": "3º EP-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -381,7 +381,7 @@ let TEACHERS = [
         "id": "doc-18",
         "name": "Óscar Manuel Molina Márquez",
         "etapa": "Primaria",
-        "tutor": "4º EP-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -392,7 +392,7 @@ let TEACHERS = [
         "id": "doc-19",
         "name": "Lorena Moreno Barrigas",
         "etapa": "Primaria",
-        "tutor": "4º Primaria B",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -403,7 +403,7 @@ let TEACHERS = [
         "id": "doc-20",
         "name": "Álvaro Ortega Bonilla",
         "etapa": "Primaria",
-        "tutor": "5º Primaria A",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -414,7 +414,7 @@ let TEACHERS = [
         "id": "doc-21",
         "name": "Isabel Peña Escudero",
         "etapa": "Primaria",
-        "tutor": "5º EP-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -425,7 +425,7 @@ let TEACHERS = [
         "id": "doc-22",
         "name": "María Pilar Pérez Fernández",
         "etapa": "Primaria",
-        "tutor": "6º Primaria A",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -436,7 +436,7 @@ let TEACHERS = [
         "id": "doc-23",
         "name": "Feli Priego Perete",
         "etapa": "Primaria",
-        "tutor": "6º Primaria B",
+        "tutor": "Sí",
         "especialidad": "Tutoría",
         "role": "teacher",
         "subrole": null,
@@ -568,7 +568,7 @@ let TEACHERS = [
         "id": "doc-35",
         "name": "Sergio Acevedo Trapote",
         "etapa": "Secundaria",
-        "tutor": "1º ESO-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -579,7 +579,7 @@ let TEACHERS = [
         "id": "doc-36",
         "name": "Fidel Jorge Aguilar López",
         "etapa": "Secundaria",
-        "tutor": "1º ESO-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -590,7 +590,7 @@ let TEACHERS = [
         "id": "doc-37",
         "name": "Olga Almazán Pardo",
         "etapa": "Secundaria",
-        "tutor": "2º ESO-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -601,7 +601,7 @@ let TEACHERS = [
         "id": "doc-38",
         "name": "Ana Isabel Álvarez Gómez",
         "etapa": "Secundaria",
-        "tutor": "2º ESO-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -612,7 +612,7 @@ let TEACHERS = [
         "id": "doc-39",
         "name": "María Laura Blanco Pérez",
         "etapa": "Secundaria",
-        "tutor": "3º ESO-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -623,7 +623,7 @@ let TEACHERS = [
         "id": "doc-40",
         "name": "Ángel Castellanos Cuenca",
         "etapa": "Secundaria",
-        "tutor": "3º ESO-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -634,7 +634,7 @@ let TEACHERS = [
         "id": "doc-41",
         "name": "Francisco Cezón Gil",
         "etapa": "Secundaria",
-        "tutor": "4º ESO-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -645,7 +645,7 @@ let TEACHERS = [
         "id": "doc-42",
         "name": "Juan Luis Cormenzana Carpio",
         "etapa": "Secundaria",
-        "tutor": "4º ESO-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -656,7 +656,7 @@ let TEACHERS = [
         "id": "doc-43",
         "name": "Amalia del Carmen Paris Cuéllar",
         "etapa": "Secundaria",
-        "tutor": "1º BACH-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -667,7 +667,7 @@ let TEACHERS = [
         "id": "doc-44",
         "name": "Maria Lourdes Diez Pérez",
         "etapa": "Secundaria",
-        "tutor": "1º BACH-B",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -678,7 +678,7 @@ let TEACHERS = [
         "id": "doc-45",
         "name": "Florencio Díez Sanz",
         "etapa": "Secundaria",
-        "tutor": "2º BACH-A",
+        "tutor": "Sí",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
@@ -700,8 +700,8 @@ let TEACHERS = [
         "id": "doc-47",
         "name": "María Esperanza García Moreda",
         "etapa": "Secundaria",
-        "tutor": "2º Bachillerato B",
-        "especialidad": "Tutoría",
+        "tutor": "Sí",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -712,7 +712,7 @@ let TEACHERS = [
         "name": "Jesús Abel García-Cezón Roldán",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Matemáticas",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -723,7 +723,7 @@ let TEACHERS = [
         "name": "Soledad Garrido García-Calvo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Lengua Castellana y Literatura",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -734,7 +734,7 @@ let TEACHERS = [
         "name": "José Antonio Gaspar Laborie",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Inglés",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -745,7 +745,7 @@ let TEACHERS = [
         "name": "Carolina González García",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Física y Química",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -756,7 +756,7 @@ let TEACHERS = [
         "name": "Luis González Ludeña",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Biología y Geología",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -767,7 +767,7 @@ let TEACHERS = [
         "name": "Vicente Hernández Gordo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Geografía e Historia",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -778,7 +778,7 @@ let TEACHERS = [
         "name": "Francisco José Lozano Maya",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Filosofía",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -789,7 +789,7 @@ let TEACHERS = [
         "name": "Tania Martín Almendra",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Educación Física",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -800,7 +800,7 @@ let TEACHERS = [
         "name": "Almudena Martínez Fernández",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Dibujo y Educación Plástica",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -811,7 +811,7 @@ let TEACHERS = [
         "name": "José Manuel Pulido Palomo",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Tecnología e Informática",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -833,7 +833,7 @@ let TEACHERS = [
         "name": "Antonio Jesús Royo Tomás",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Música",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -844,7 +844,7 @@ let TEACHERS = [
         "name": "Philippe Georges Saint-Mard",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Francés",
+        "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
@@ -855,22 +855,11 @@ let TEACHERS = [
         "name": "María del Carmen Valera Soriano",
         "etapa": "Secundaria",
         "tutor": "No",
-        "especialidad": "Orientación / Psicopedagogía",
-        "role": "teacher",
-        "subrole": null,
-        "cargo": "Docente",
-        "authHash": "8e50ebd3827e53efc5316630888f511a6d4982dbe143385f467e3d9978bdcdca"
-    },
-    {
-        "id": "doc-62",
-        "name": "Isabel Ezquerra",
-        "etapa": "Secundaria",
-        "tutor": "No",
         "especialidad": "Docencia",
         "role": "teacher",
         "subrole": null,
         "cargo": "Docente",
-        "authHash": "12842ca66dbc3f0204363a38d49f1ca41ff9fe78242c2a89fdd0471ee8578ffe"
+        "authHash": "8e50ebd3827e53efc5316630888f511a6d4982dbe143385f467e3d9978bdcdca"
     },
     {
         "id": "doc-63",
@@ -1474,12 +1463,36 @@ function handleLogout() {
     renderApp();
     showToast('Sesión cerrada correctamente');
 }
+window.handleLogout = handleLogout;
+window.handleLogoClick = function() {
+    if (state.currentUser) {
+        if (state.currentUser.role === 'director') {
+            state.activeDirectorTab = 'summary';
+            state.selectedTeacherForDetail = null;
+            renderDirectorView();
+        } else {
+            renderTeacherView();
+        }
+    } else {
+        renderApp();
+    }
+};
 
 // 9. ROUTER PRINCIPAL (SPLIT-SCREEN LOGIN ADAPTADO)
 function renderApp() {
     const session = safeStorage.getItem('session');
     if (session) {
-        state.currentUser = JSON.parse(session);
+        try {
+            state.currentUser = JSON.parse(session);
+        } catch(e) {
+            state.currentUser = null;
+        }
+    }
+
+    // Actualizar visibilidad de botón cerrar sesión en la cabecera general
+    const headerLogout = document.getElementById('header-logout-btn');
+    if (headerLogout) {
+        headerLogout.style.display = state.currentUser ? 'inline-flex' : 'none';
     }
 
     if (!state.currentUser) {
@@ -1576,6 +1589,274 @@ window.handleQuickSelect = function(teacherId) {
         }
     }
 };
+
+
+
+// ==========================================================================
+// 10.1 VISTA DE INFORME ENTREGADO PARA EL DOCENTE (SOLO LECTURA)
+// ==========================================================================
+function renderTeacherCompletedView(name, tData, teacherInfo) {
+    window.scrollTo(0, 0);
+    const teacherBlockAverages = calculateBlockAverages(name);
+    const directorBlockAverages = calculateDirectorBlockAverages(name);
+    const dirAnswers = tData.directorAnswers || {};
+
+    let blocksDetailHtml = EVAL_BLOCKS.map(block => {
+        let blockAvg = 0;
+        let scoreCount = 0;
+        let blockScoreSum = 0;
+
+        let questionRows = block.questions.map(q => {
+            const answer = tData.answers ? tData.answers[q.id] : null;
+            
+            if (q.type === 'scale') {
+                const score = answer ? answer.score : null;
+                const dirScore = dirAnswers[q.id] || null;
+                
+                if (score) {
+                    blockScoreSum += score;
+                    scoreCount++;
+                }
+
+                let dirScoreHtml = dirScore ? `
+                    <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
+                        Valoración Consensuada Dirección: <strong style="color:var(--primary-color);">${dirScore}</strong>
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div class="detail-question-header">
+                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
+                            <div style="display:flex; gap:8px; align-items:center;">
+                                <span style="font-size:0.75rem; color:var(--text-muted);">Tuyo:</span>
+                                <span class="detail-score-pill" style="width:24px; height:24px; font-size:0.8rem;">${score || '-'}</span>
+                            </div>
+                        </div>
+                        ${answer && answer.evidence ? `<div class="detail-evidence-text" style="font-size:0.8rem; padding: 6px 10px;"><strong>Evidencia:</strong> ${answer.evidence}</div>` : ''}
+                        ${dirScoreHtml}
+                    </div>
+                `;
+            } else if (q.type === 'yesno_details') {
+                const val = answer ? answer.value : null;
+                const details = answer ? answer.details : '';
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div class="detail-question-header">
+                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
+                            <span class="badge ${val === 'yes' ? 'badge-completed' : 'badge-not-started'}">${val === 'yes' ? 'Sí' : val === 'no' ? 'No' : '-'}</span>
+                        </div>
+                        ${details ? `<div class="detail-evidence-text" style="font-size:0.8rem; padding: 6px 10px;"><strong>Detalles:</strong> ${details}</div>` : ''}
+                    </div>
+                `;
+            } else if (q.type === 'yesno_na') {
+                const val = answer ? answer.value : null;
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div class="detail-question-header">
+                            <span style="font-size: 0.9rem; font-weight: 600; flex:1; min-width:200px;">${q.id}. ${q.text}</span>
+                            <span class="badge ${val === 'yes' ? 'badge-completed' : val === 'no' ? 'badge-danger' : 'badge-not-started'}">
+                                ${val === 'yes' ? 'Sí' : val === 'no' ? 'No' : val === 'na' ? 'No aplica' : '-'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            } else if (q.type === 'cdd_select') {
+                const val = answer || '';
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div class="detail-question-header">
+                            <span style="font-size: 0.9rem; font-weight: 600;">CDD. Competencia Digital Docente (MRCDD)</span>
+                            <span class="badge badge-completed">${val || 'No seleccionado'}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (q.type === 'multiselect') {
+                const list = answer || [];
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom:0.5rem;">${q.id}. ${q.text}</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                            ${list.length > 0 ? list.map(item => `<span class="badge badge-completed">${item}</span>`).join('') : '<span class="badge badge-not-started">Ninguno seleccionado</span>'}
+                        </div>
+                    </div>
+                `;
+            } else if (q.type === 'smart_plan') {
+                const val = answer || { meta: '', acciones: '', indicador: '', apoyo: '' };
+                return `
+                    <div class="detail-question-row" style="padding: 1rem;">
+                        <div style="font-size: 0.9rem; font-weight: 700; margin-bottom:0.75rem; color:var(--primary-color);">6.2. Plan de Crecimiento SMART Pactado:</div>
+                        <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.85rem;">
+                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
+                                <strong>Meta Concreta:</strong> ${val.meta || '-'}
+                            </div>
+                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
+                                <strong>Acciones Propuestas:</strong> ${val.acciones || '-'}
+                            </div>
+                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
+                                <strong>Indicador de Éxito:</strong> ${val.indicador || '-'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            return '';
+        }).join('');
+
+        if (block.id === 'b2') {
+            const nominee = (tData.answers && tData.answers['nomination']) || '';
+            questionRows += `
+                <div class="detail-question-row" style="border-left: 2px solid var(--accent-color); background: rgba(217, 119, 6, 0.02); padding:1rem;">
+                    <div class="detail-question-header">
+                        <span style="font-size: 0.9rem; font-weight: 600; color:var(--accent-color);">★ Compañero/a que considera que más aporta al equipo:</span>
+                        <span class="badge badge-completed">${nominee || 'Ninguno'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        blockAvg = scoreCount > 0 ? (blockScoreSum / scoreCount).toFixed(2) : null;
+        const reflection = (tData.reflections && tData.reflections[block.id]) || '';
+
+        return `
+            <div class="detail-block-section">
+                <h4>
+                    <span>${block.title}</span>
+                    ${blockAvg ? `<span class="detail-block-avg">Promedio: <strong>${blockAvg} / 5</strong></span>` : ''}
+                </h4>
+                <div class="detail-questions-list">
+                    ${questionRows}
+                </div>
+                ${reflection ? `
+                    <div class="detail-reflection-row">
+                        <div class="detail-reflection-label">Reflexión abierta:</div>
+                        <div class="detail-reflection-body">${reflection}</div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+
+    const isTutor = teacherInfo && (teacherInfo.tutor === 'Sí' || (teacherInfo.tutor && teacherInfo.tutor !== 'No' && !teacherInfo.tutor.startsWith('Director')));
+
+    dom.app.innerHTML = `
+        <div class="director-container">
+            <div class="detail-header" style="margin-bottom: 2rem;">
+                <div class="detail-header-left">
+                    <h3 style="display:flex; align-items:center; gap:10px;">
+                        <span>${name}</span>
+                        <span class="badge badge-completed" style="font-size: 0.8rem; padding:4px 8px;">Autoevaluación Entregada</span>
+                    </h3>
+                    <p style="color: var(--text-muted); margin-top:4px;">
+                        Etapa: ${teacherInfo.etapa} | Tutoría: ${isTutor ? 'Sí' : 'No'}
+                    </p>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-secondary" onclick="generateOfficialPrintDocument('${name}')">
+                        ${ICONS.print} Imprimir Resumen
+                    </button>
+                    <button class="btn btn-secondary" onclick="handleLogout()">
+                        🚪 Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alerta informativa -->
+            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; display:flex; align-items:center; gap:10px;">
+                <span style="font-size: 1.5rem; line-height:1;">✅</span>
+                <div>
+                    <strong>Tu cuestionario ha sido entregado correctamente.</strong> Las respuestas están en modo de solo lectura. A continuación puedes revisar tus resultados, el análisis de sintonía pedagógica y los comentarios finales acordados en la entrevista.
+                </div>
+            </div>
+
+            <!-- Gráfico Radar e Interpretación -->
+            <div class="analytics-grid" style="margin-bottom:2rem;">
+                <div class="glass-container chart-card" style="min-height: 350px; display:flex; flex-direction:column; align-items:center; padding:1.25rem;">
+                    <div class="chart-title">📊 Perfil Competencial (Radar)</div>
+                    <div class="chart-wrapper" style="width:100%; max-width:380px; height: 260px; display: flex; justify-content: center;">
+                        <canvas id="chart-radar-eval"></canvas>
+                    </div>
+                </div>
+                <div>
+                    ${generatePedagogicalInterpretation(name, teacherBlockAverages, directorBlockAverages)}
+                </div>
+            </div>
+
+            <!-- Notas del Director y Desglose -->
+            <div style="display:flex; flex-direction:column; gap:2rem;">
+                ${tData.directorNotes ? `
+                    <div class="director-notes-section" style="background: rgba(37,99,235,0.02); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--card-border);">
+                        <h4 style="margin-top:0; margin-bottom:0.5rem; color:var(--primary-color);">📝 Notas y Acuerdos de la Entrevista (Dirección)</h4>
+                        <p style="font-size:0.88rem; line-height:1.5; color:var(--text-main); margin:0; font-style:italic;">
+                            "${tData.directorNotes}"
+                        </p>
+                    </div>
+                ` : ''}
+
+                <div style="border-top: 1px solid var(--card-border); padding-top: 2rem;">
+                    <h3 style="margin-top:0; margin-bottom:1.5rem; font-size:1.2rem; font-weight:800; color:var(--text-main);">🔍 Respuestas Detalladas de la Autoevaluación</h3>
+                    <div style="display:flex; flex-direction:column; gap:2.5rem;">
+                        ${blocksDetailHtml}
+                    </div>
+                </div>
+
+                <!-- Bloque de Firmas -->
+                ${renderSignaturesWidget(name, tData)}
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => {
+        const radarCanvas = document.getElementById('chart-radar-eval');
+        if (!radarCanvas) return;
+        const ctxRadar = radarCanvas.getContext('2d');
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
+        const textColor = isDark ? '#f8fafc' : '#1e293b';
+
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['B1: Identidad', 'B2: Equipo', 'B3: Pastoral', 'B4: Práctica', 'B5: Compromiso'],
+                datasets: [
+                    {
+                        label: 'Mi Autoevaluación',
+                        data: teacherBlockAverages,
+                        backgroundColor: 'rgba(37, 99, 235, 0.15)',
+                        borderColor: '#2563eb',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#2563eb'
+                    },
+                    {
+                        label: 'Valoración Dirección',
+                        data: directorBlockAverages,
+                        backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                        borderColor: '#d97706',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#d97706'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 5,
+                        ticks: { stepSize: 1, color: textColor, backdropColor: 'transparent' },
+                        grid: { color: gridColor },
+                        angleLines: { color: gridColor },
+                        pointLabels: { color: textColor, font: { size: 10, weight: '600' } }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: textColor, font: { weight: '500' } } }
+                }
+            }
+        });
+    }, 100);
+}
 
 
 function renderTeacherView() {
@@ -2243,7 +2524,6 @@ function getDirectorAllowedTeachers(list = TEACHERS) {
 
 // 11. VISTA DEL DIRECTOR
 function renderDirectorView() {
-    window.scrollTo(0, 0);
     const teachersData = db.get().evaluations;
 
     const allowedList = getDirectorAllowedTeachers(TEACHERS);
@@ -2384,6 +2664,7 @@ window.filterByEtapa = function(etapa) {
 };
 
 window.changeDirectorTab = function(tabName) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     state.activeDirectorTab = tabName;
     renderDirectorView();
 };
@@ -3625,10 +3906,31 @@ window.saveDirectorScore = function(teacherName, qId, score) {
     }
     userData.directorAnswers[qId] = score;
     db.saveUserData(teacherName, userData);
-    
+
+    // Actualización directa del DOM sin salto de scroll ni parpadeos
+    const legendEl = document.getElementById(`legend-dir-${qId}`);
+    if (legendEl) {
+        legendEl.innerHTML = getScoreLegendHtml(score);
+        const parentRating = legendEl.closest('.no-print');
+        if (parentRating) {
+            const btns = parentRating.querySelectorAll('.rating-btn');
+            btns.forEach((btn, idx) => {
+                const val = idx + 1;
+                btn.className = `rating-btn ${val === score ? 'selected val-' + val : ''}`;
+                btn.onmouseout = function() { restoreScoreLegendDir(qId, score); };
+            });
+        }
+        if (state.selectedTeacherForDetail) {
+            setTimeout(renderRadarComparison, 50);
+        }
+        return;
+    }
+
+    const currentScrollY = window.scrollY;
     renderDirectorView();
+    window.scrollTo({ top: currentScrollY, behavior: 'instant' });
     if (state.selectedTeacherForDetail) {
-        setTimeout(renderRadarComparison, 100);
+        setTimeout(renderRadarComparison, 50);
     }
 };
 
@@ -4026,8 +4328,11 @@ function renderDirectorManagementTab(teachersData) {
                         </select>
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">¿Tutor de Aula?</label>
-                        <input type="text" class="form-input" id="crud-tutor" placeholder="Ej. 3º Primaria B / No" value="${editTeacherObj ? editTeacherObj.tutor : 'No'}">
+                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">¿Tiene Tutoría asignada?</label>
+                        <select class="form-input" id="crud-tutor" style="padding: 0.5rem 0.75rem; border: 1px solid var(--card-border); border-radius: 6px; background: var(--bg-card); color: var(--text-main);">
+                            <option value="No" ${!editTeacherObj || editTeacherObj.tutor === 'No' ? 'selected' : ''}>No</option>
+                            <option value="Sí" ${editTeacherObj && (editTeacherObj.tutor === 'Sí' || (editTeacherObj.tutor !== 'No' && !editTeacherObj.tutor.startsWith('Director'))) ? 'selected' : ''}>Sí</option>
+                        </select>
                     </div>
 
                     <div>
@@ -4057,12 +4362,12 @@ function renderDirectorManagementTab(teachersData) {
 
         const pwd = t.password || t.name.toLowerCase().split(' ')[0];
 
+        const isTutor = t.tutor === 'Sí' || (t.tutor && t.tutor !== 'No' && !t.tutor.startsWith('Director'));
         return `
             <tr>
                 <td style="font-weight:700; color:var(--text-main);">${t.name}</td>
                 <td>${t.etapa}</td>
-                <td>${t.tutor}</td>
-                
+                <td><span class="badge ${isTutor ? 'badge-completed' : 'badge-not-started'}">${isTutor ? 'Sí' : 'No'}</span></td>
                 <td><code style="background:rgba(0,0,0,0.03); padding:2px 6px; border-radius:4px; font-size:0.8rem; font-family:monospace; color: var(--primary-color);">${pwd}</code></td>
                 <td>${statusBadge}</td>
                 <td>
@@ -4097,9 +4402,8 @@ function renderDirectorManagementTab(teachersData) {
                         <tr>
                             <th>Docente</th>
                             <th>Etapa</th>
-                            <th>Tutoría</th>
-                            
-                            <th>Especialidad</th>
+                            <th>¿Tutoría?</th>
+                            <th>Clave de Acceso</th>
                             <th>Estado Autoevaluación</th>
                             <th>Acciones</th>
                         </tr>
@@ -4118,7 +4422,8 @@ window.handleCrudSubmit = function(event, editingName) {
     const name = document.getElementById('crud-name').value;
     const etapa = document.getElementById('crud-etapa').value;
     const tutor = document.getElementById('crud-tutor').value;
-    const cdd = document.getElementById('crud-cdd').value;
+    const cddEl = document.getElementById('crud-cdd');
+    const cdd = cddEl ? cddEl.value : 'A1';
     const password = document.getElementById('crud-password').value;
 
     if (editingName) {
@@ -4500,6 +4805,7 @@ window.filterCrudTable = function(query) {
 
 // 15.3 NAVEGACIÓN RÁPIDA DESDE ALERTA
 window.navigateToTeacherDetail = function(teacherName) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     state.activeDirectorTab = 'teachers';
     state.selectedTeacherForDetail = teacherName;
     renderDirectorView();
