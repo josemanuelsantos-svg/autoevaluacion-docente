@@ -1265,3 +1265,119 @@ main {
     color: #ef4444 !important;
     border-color: rgba(239, 68, 68, 0.3) !important;
 }
+
+
+/* ==========================================================================
+   MEJORAS DE INTERFAZ DEL PORTAL DE DIRECCIÓN (UX & CLARIDAD)
+   ========================================================================== */
+
+.director-hero-card {
+    border: 1px solid var(--card-border);
+    background: var(--bg-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.director-main {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .director-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+.teacher-list-panel {
+    padding: 1.25rem;
+    height: calc(100vh - 210px);
+    min-height: 580px;
+    max-height: 850px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    border-radius: var(--border-radius-lg);
+    position: sticky;
+    top: 85px;
+    border: 1px solid var(--card-border);
+    background: var(--bg-card);
+}
+
+.teacher-items-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 4px;
+}
+
+.teacher-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid var(--card-border);
+    background: rgba(0, 0, 0, 0.015);
+    transition: all 0.2s ease;
+}
+
+.teacher-item:hover {
+    background: rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateX(3px);
+}
+
+[data-theme="dark"] .teacher-item {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="dark"] .teacher-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(96, 165, 250, 0.4);
+}
+
+.teacher-item.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+.teacher-item.active .teacher-item-status,
+.teacher-item.active .badge {
+    color: white !important;
+}
+
+.teacher-item-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.teacher-item.active .teacher-item-name {
+    color: white !important;
+}
+
+.teacher-item-status {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Dropdown de Herramientas y Exportación */
+.dropdown-item {
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.dropdown-item:hover {
+    background: rgba(37, 99, 235, 0.08) !important;
+    color: var(--primary-color) !important;
+}
+[data-theme="dark"] .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #60a5fa !important;
+}

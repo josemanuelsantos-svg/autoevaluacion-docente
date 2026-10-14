@@ -1282,6 +1282,122 @@ main {
     border-color: rgba(239, 68, 68, 0.3) !important;
 }
 
+
+/* ==========================================================================
+   MEJORAS DE INTERFAZ DEL PORTAL DE DIRECCIÓN (UX & CLARIDAD)
+   ========================================================================== */
+
+.director-hero-card {
+    border: 1px solid var(--card-border);
+    background: var(--bg-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.director-main {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .director-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+.teacher-list-panel {
+    padding: 1.25rem;
+    height: calc(100vh - 210px);
+    min-height: 580px;
+    max-height: 850px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    border-radius: var(--border-radius-lg);
+    position: sticky;
+    top: 85px;
+    border: 1px solid var(--card-border);
+    background: var(--bg-card);
+}
+
+.teacher-items-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 4px;
+}
+
+.teacher-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid var(--card-border);
+    background: rgba(0, 0, 0, 0.015);
+    transition: all 0.2s ease;
+}
+
+.teacher-item:hover {
+    background: rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateX(3px);
+}
+
+[data-theme="dark"] .teacher-item {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="dark"] .teacher-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(96, 165, 250, 0.4);
+}
+
+.teacher-item.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+.teacher-item.active .teacher-item-status,
+.teacher-item.active .badge {
+    color: white !important;
+}
+
+.teacher-item-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.teacher-item.active .teacher-item-name {
+    color: white !important;
+}
+
+.teacher-item-status {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Dropdown de Herramientas y Exportación */
+.dropdown-item {
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.dropdown-item:hover {
+    background: rgba(37, 99, 235, 0.08) !important;
+    color: var(--primary-color) !important;
+}
+[data-theme="dark"] .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #60a5fa !important;
+}
+
 </style>
     
     <!-- Librerías de gráficos y animación CDN -->
@@ -3871,10 +3987,9 @@ function getDirectorAllowedTeachers(list = TEACHERS) {
     return list;
 }
 
-// 11. VISTA DEL DIRECTOR
+// 11. VISTA DEL DIRECTOR (INTERFAZ EJECUTIVA, INTUITIVA Y CLARA)
 function renderDirectorView() {
     const teachersData = db.get().evaluations;
-
     const allowedList = getDirectorAllowedTeachers(TEACHERS);
     
     // Si la etapa seleccionada no pertenece al subrole, resetear a 'Todas'
@@ -3890,7 +4005,7 @@ function renderDirectorView() {
         filteredTeachersList = allowedList.filter(t => t.etapa === state.selectedEtapa);
     }
 
-    // F20: Censo de docentes evaluables excluyendo a los 3 directores del denominador
+    // Censo de docentes evaluables excluyendo a los 3 directores del denominador
     const evaluableTeachers = filteredTeachersList.filter(t => t.role === 'teacher');
     let totalFiltered = evaluableTeachers.length;
     let completedCount = 0;
@@ -3907,93 +4022,134 @@ function renderDirectorView() {
     const isTabSummary = state.activeDirectorTab === 'summary';
     const isTabTeachers = state.activeDirectorTab === 'teachers';
 
+    // Rol descriptivo amigable
+    let roleDescription = "Dirección General";
+    if (subrole === 'ei_ep') roleDescription = "Dirección de Infantil y Primaria";
+    if (subrole === 'eso_bto') roleDescription = "Dirección de Secundaria y Bachillerato";
+
     dom.app.innerHTML = `
         <div class="director-container">
-            <!-- Barra superior Filtro Etapa + KPIs -->
-                <!-- Título Bienvenida Rol -->
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
-                    <h2 style="margin:0; font-size:1.4rem; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                        <span>🏫</span> ${state.currentUser.name}
-                        <span class="badge cloud-sync-status-badge" style="font-size:0.75rem; margin-left:8px;">☁️ Nube Conectada</span>
-                    </h2>
+            <!-- 1. CABECERA EJECUTIVA DE DIRECCIÓN -->
+            <div class="glass-container director-hero-card" style="padding: 1.25rem 1.75rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                        🎓
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 800; color: var(--text-main);">${state.currentUser.name}</h2>
+                            <span class="badge" style="background: rgba(37,99,235,0.1); color: var(--primary-color); font-weight: 700; font-size: 0.78rem;">${roleDescription}</span>
+                        </div>
+                        <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: var(--text-muted);">
+                            Supervisión y Co-evaluación del Claustro • Curso 2026-2027
+                        </p>
+                    </div>
                 </div>
 
-                <div class="stage-filter-segmented">
-                    ${(function() {
-                        const sRole = state.currentUser.subrole || 'general';
-                        if (sRole === 'ei_ep') {
-                            return `
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 EI + EP</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
-                            `;
-                        } else if (sRole === 'eso_bto') {
-                            return `
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 ESO + BTO</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria / Bachillerato</button>
-                            `;
-                        } else {
-                            return `
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 Todas</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
-                                <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria</button>
-                            `;
-                        }
-                    })()}
-                </div>
+                <!-- Filtro de Etapas y Menú de Herramientas -->
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <div class="stage-filter-segmented">
+                        ${(function() {
+                            const sRole = state.currentUser.subrole || 'general';
+                            if (sRole === 'ei_ep') {
+                                return `
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 EI + EP</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
+                                `;
+                            } else if (sRole === 'eso_bto') {
+                                return `
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 ESO + BTO</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria / BTO</button>
+                                `;
+                            } else {
+                                return `
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 Todas</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria</button>
+                                `;
+                            }
+                        })()}
+                    </div>
 
-            <!-- KPIs Header -->
-            <div class="stats-summary-cards">
-                <div class="glass-container stat-card">
-                    <div class="stat-val">${totalFiltered}</div>
-                    <div class="stat-lbl">Docentes (${state.selectedEtapa})</div>
-                </div>
-                <div class="glass-container stat-card" style="border-left: 4px solid var(--success);">
-                    <div class="stat-val" style="color: var(--success);">${completedCount}</div>
-                    <div class="stat-lbl">Entregadas</div>
-                </div>
-                <div class="glass-container stat-card" style="border-left: 4px solid var(--warning);">
-                    <div class="stat-val" style="color: var(--warning);">${inProgressCount}</div>
-                    <div class="stat-lbl">En Proceso</div>
-                </div>
-                <div class="glass-container stat-card" style="border-left: 4px solid var(--text-muted);">
-                    <div class="stat-val" style="color: var(--text-muted);">${notStartedCount}</div>
-                    <div class="stat-lbl">No Iniciadas</div>
+                    <!-- Botón Desplegable de Herramientas y Exportación -->
+                    <div style="position: relative;" id="director-tools-container">
+                        <button class="btn btn-secondary" onclick="toggleDirectorToolsMenu()" style="display: flex; align-items: center; gap: 6px; font-weight: 600; padding: 0.5rem 0.9rem; font-size: 0.85rem; border-radius: 8px;">
+                            ⚙️ Herramientas ▾
+                        </button>
+                        <div id="director-tools-dropdown" class="glass-container" style="display: none; position: absolute; right: 0; top: 115%; width: 270px; z-index: 100; border-radius: 12px; padding: 8px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); border: 1px solid var(--card-border); background: var(--bg-card);">
+                            <button class="dropdown-item" onclick="exportAllTeacherReports(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
+                                📦 Exportar Dossier Masivo PDF
+                            </button>
+                            <button class="dropdown-item" onclick="exportBackup(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                💾 Descargar Copia de Seguridad
+                            </button>
+                            <button class="dropdown-item" onclick="document.getElementById('backup-upload-input').click(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                📂 Restaurar Copia de Seguridad
+                            </button>
+                            <input type="file" id="backup-upload-input" accept=".json" style="display:none;" onchange="importBackup(event)">
+                            <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
+                            <button class="dropdown-item" onclick="exportData('csv'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                📊 Exportar a Excel / CSV
+                            </button>
+                            <button class="dropdown-item" onclick="exportData('json'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                📥 Exportar a JSON
+                            </button>
+                            <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
+                            <button class="dropdown-item" onclick="resetDatabase(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: #ef4444; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
+                                ⚠️ Reiniciar Datos del Centro
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Navegación Director -->
-            <div style="display: flex; gap: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem; align-items:center; flex-wrap:wrap;">
-                <button class="btn ${isTabSummary ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('summary')">
+            <!-- 2. TARJETAS KPI INTERACTIVAS -->
+            <div class="stats-summary-cards">
+                <div class="glass-container stat-card" style="cursor: pointer; padding: 1.25rem 1.5rem;" onclick="changeDirectorTab('teachers'); setTeacherStatusFilter('all');" title="Ver todo el censo de la etapa">
+                    <div class="stat-val" style="font-size: 2.4rem;">${totalFiltered}</div>
+                    <div class="stat-lbl">Docentes (${state.selectedEtapa})</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Censo activo evaluable</div>
+                </div>
+                <div class="glass-container stat-card" style="border-left: 4px solid var(--success); cursor: pointer; padding: 1.25rem 1.5rem;" onclick="changeDirectorTab('teachers'); setTeacherStatusFilter('completed');" title="Filtrar autoevaluaciones entregadas">
+                    <div class="stat-val" style="color: var(--success); font-size: 2.4rem;">
+                        ${completedCount} 
+                        <span style="font-size: 1rem; font-weight: 600; color: var(--text-muted);">(${totalFiltered > 0 ? Math.round((completedCount/totalFiltered)*100) : 0}%)</span>
+                    </div>
+                    <div class="stat-lbl">Entregadas</div>
+                    <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px; font-weight: 600;">Listas para co-evaluar</div>
+                </div>
+                <div class="glass-container stat-card" style="border-left: 4px solid var(--warning); cursor: pointer; padding: 1.25rem 1.5rem;" onclick="changeDirectorTab('teachers'); setTeacherStatusFilter('in_progress');" title="Filtrar evaluaciones en borrador">
+                    <div class="stat-val" style="color: var(--warning); font-size: 2.4rem;">${inProgressCount}</div>
+                    <div class="stat-lbl">En Proceso</div>
+                    <div style="font-size: 0.75rem; color: var(--warning); margin-top: 4px;">Respuestas en borrador</div>
+                </div>
+                <div class="glass-container stat-card" style="border-left: 4px solid var(--text-muted); cursor: pointer; padding: 1.25rem 1.5rem;" onclick="changeDirectorTab('teachers'); setTeacherStatusFilter('not_started');" title="Filtrar evaluaciones pendientes">
+                    <div class="stat-val" style="color: var(--text-muted); font-size: 2.4rem;">${notStartedCount}</div>
+                    <div class="stat-lbl">No Iniciadas</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Pendientes de acceder</div>
+                </div>
+            </div>
+
+            <!-- 3. PESTAÑAS DE NAVEGACIÓN PRINCIPAL -->
+            <div style="display: flex; gap: 8px; border-bottom: 2px solid var(--card-border); padding-bottom: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <button class="btn ${isTabSummary ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('summary')" style="border-radius: 8px; font-size: 0.9rem;">
                     ${ICONS.chart} Panel General y Estadísticas
                 </button>
-                <button class="btn ${isTabTeachers ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('teachers')">
-                    ${ICONS.users} Detalle y Co-Evaluación
+                <button class="btn ${isTabTeachers ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('teachers')" style="border-radius: 8px; font-size: 0.9rem; position: relative;">
+                    ${ICONS.users} Co-Evaluación de Docentes 
+                    ${completedCount > 0 ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981; font-size:0.75rem; margin-left:6px; font-weight:800;">${completedCount}</span>` : ''}
                 </button>
-                <button class="btn ${state.activeDirectorTab === 'management' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('management')">
+                <button class="btn ${state.activeDirectorTab === 'management' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('management')" style="border-radius: 8px; font-size: 0.9rem;">
                     👥 Gestión del Claustro
                 </button>
-                <button class="btn ${state.activeDirectorTab === 'tutorial' ? 'btn-primary' : 'btn-secondary'}" style="${state.activeDirectorTab === 'tutorial' ? 'background:linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color:white;' : ''}" onclick="changeDirectorTab('tutorial')">
-                    📚 Guía y Tutorial del Panel
+                <button class="btn ${state.activeDirectorTab === 'tutorial' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('tutorial')" style="border-radius: 8px; font-size: 0.9rem; ${state.activeDirectorTab === 'tutorial' ? 'background:linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color:white;' : ''}">
+                    📚 Guía y Tutorial
                 </button>
-                
-                <div style="margin-left: auto; display: flex; gap: 8px; flex-wrap:wrap; align-items:center;">
-                    <button class="btn btn-secondary" onclick="exportBackup()" title="Descargar Copia de Seguridad completa del colegio">💾 Exportar Backup</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('backup-upload-input').click()" title="Restaurar Copia de Seguridad completa desde un archivo JSON">📂 Restaurar Backup</button>
-                    <input type="file" id="backup-upload-input" accept=".json" style="display:none;" onchange="importBackup(event)">
-                    
-                    <button class="btn btn-primary" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);" onclick="exportAllTeacherReports()" title="Exportar Dossier PDF Completo con todas las evaluaciones de la etapa">📦 Exportar Dossier Masivo PDF</button>
-                    <button class="btn btn-secondary" onclick="exportData('json')">📥 Exportar JSON</button>
-                    <button class="btn btn-secondary" onclick="exportData('csv')">📥 Exportar CSV</button>
-                    <button class="btn btn-danger" onclick="resetDatabase()">⚠️ Reiniciar Datos</button>
-                    <button class="btn btn-secondary btn-icon" onclick="handleLogout()" title="Cerrar Sesión">
-                        ${ICONS.logout}
-                    </button>
-                </div>
             </div>
 
-            <!-- Contenido según la pestaña activa -->
+            <!-- 4. CONTENIDO SEGÚN LA PESTAÑA ACTIVA -->
             ${state.activeDirectorTab === 'summary' ? renderDirectorSummaryTab(teachersData, filteredTeachersList) : 
               state.activeDirectorTab === 'teachers' ? renderDirectorTeachersTab(teachersData) :
               state.activeDirectorTab === 'management' ? renderDirectorManagementTab(teachersData) :
@@ -4006,6 +4162,13 @@ function renderDirectorView() {
     }
 }
 
+window.toggleDirectorToolsMenu = function() {
+    const menu = document.getElementById('director-tools-dropdown');
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
 window.filterByEtapa = function(etapa) {
     state.selectedEtapa = etapa;
     state.selectedTeacherForDetail = null; 
@@ -4015,6 +4178,12 @@ window.filterByEtapa = function(etapa) {
 window.changeDirectorTab = function(tabName) {
     window.scrollTo({ top: 0, behavior: 'instant' });
     state.activeDirectorTab = tabName;
+    renderDirectorView();
+};
+
+window.setTeacherStatusFilter = function(status) {
+    state.teacherStatusFilter = status;
+    state.activeDirectorTab = 'teachers';
     renderDirectorView();
 };
 
@@ -4114,8 +4283,6 @@ function renderDirectorSummaryTab(teachersData, filteredTeachersList) {
                 </div>
             </div>
 
-
-
             <div class="glass-container peer-nominations-card" style="grid-column: span 2;">
                 <div class="chart-title">👥 Reconocimiento de Claustro (Bloque 2)</div>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
@@ -4191,34 +4358,37 @@ function renderDirectorCharts() {
         return count > 0 ? (blockSums[b.id] / count).toFixed(2) : 0;
     });
 
-    const ctxAvg = document.getElementById('chart-averages').getContext('2d');
-    const avgGrad = ctxAvg.createLinearGradient(0, 0, 0, 200);
-    avgGrad.addColorStop(0, '#2dd4bf');
-    avgGrad.addColorStop(1, '#0f766e');
+    const avgCanvas = document.getElementById('chart-averages');
+    if (avgCanvas) {
+        const ctxAvg = avgCanvas.getContext('2d');
+        const avgGrad = ctxAvg.createLinearGradient(0, 0, 0, 200);
+        avgGrad.addColorStop(0, '#2dd4bf');
+        avgGrad.addColorStop(1, '#0f766e');
 
-    state.chartInstances.averages = new Chart(ctxAvg, {
-        type: 'bar',
-        data: {
-            labels: ['B1: Identidad', 'B2: Equipo', 'B3: Pastoral', 'B4: Práctica', 'B5: Compromiso'],
-            datasets: [{
-                label: 'Promedio General',
-                data: blockAverages,
-                backgroundColor: avgGrad,
-                borderColor: '#0f766e',
-                borderWidth: 1.5,
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { min: 1, max: 5, grid: { color: gridColor }, ticks: { color: textColor } },
-                x: { grid: { display: false }, ticks: { color: textColor } }
+        state.chartInstances.averages = new Chart(ctxAvg, {
+            type: 'bar',
+            data: {
+                labels: ['B1: Identidad', 'B2: Equipo', 'B3: Pastoral', 'B4: Práctica', 'B5: Compromiso'],
+                datasets: [{
+                    label: 'Promedio General',
+                    data: blockAverages,
+                    backgroundColor: avgGrad,
+                    borderColor: '#0f766e',
+                    borderWidth: 1.5,
+                    borderRadius: 6
+                }]
             },
-            plugins: { legend: { display: false } }
-        }
-    });
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { min: 1, max: 5, grid: { color: gridColor }, ticks: { color: textColor } },
+                    x: { grid: { display: false }, ticks: { color: textColor } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
 
     // 2. Distribución de puntuaciones
     const scoreCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -4233,36 +4403,39 @@ function renderDirectorCharts() {
         }
     });
 
-    const ctxDist = document.getElementById('chart-distribution').getContext('2d');
-    const distGrad = ctxDist.createLinearGradient(0, 0, 0, 200);
-    distGrad.addColorStop(0, 'rgba(217, 119, 6, 0.4)');
-    distGrad.addColorStop(1, 'rgba(217, 119, 6, 0.02)');
+    const distCanvas = document.getElementById('chart-distribution');
+    if (distCanvas) {
+        const ctxDist = distCanvas.getContext('2d');
+        const distGrad = ctxDist.createLinearGradient(0, 0, 0, 200);
+        distGrad.addColorStop(0, 'rgba(217, 119, 6, 0.4)');
+        distGrad.addColorStop(1, 'rgba(217, 119, 6, 0.02)');
 
-    state.chartInstances.distribution = new Chart(ctxDist, {
-        type: 'line',
-        data: {
-            labels: ['1 estre.', '2 estre.', '3 estre.', '4 estre.', '5 estre.'],
-            datasets: [{
-                label: 'Frecuencia de puntuaciones',
-                data: [scoreCounts[1], scoreCounts[2], scoreCounts[3], scoreCounts[4], scoreCounts[5]],
-                backgroundColor: distGrad,
-                borderColor: '#d97706',
-                borderWidth: 3,
-                tension: 0.3,
-                fill: true,
-                pointBackgroundColor: '#d97706'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } },
-                x: { grid: { display: false }, ticks: { color: textColor } }
+        state.chartInstances.distribution = new Chart(ctxDist, {
+            type: 'line',
+            data: {
+                labels: ['1 estre.', '2 estre.', '3 estre.', '4 estre.', '5 estre.'],
+                datasets: [{
+                    label: 'Frecuencia de puntuaciones',
+                    data: [scoreCounts[1], scoreCounts[2], scoreCounts[3], scoreCounts[4], scoreCounts[5]],
+                    backgroundColor: distGrad,
+                    borderColor: '#d97706',
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: true,
+                    pointBackgroundColor: '#d97706'
+                }]
             },
-            plugins: { legend: { display: false } }
-        }
-    });
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } },
+                    x: { grid: { display: false }, ticks: { color: textColor } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
 
     // 3. Estado de entrega
     let completed = 0, inProgress = 0, notStarted = 0;
@@ -4273,206 +4446,258 @@ function renderDirectorCharts() {
         else notStarted++;
     });
 
-    const ctxStatus = document.getElementById('chart-status').getContext('2d');
-    state.chartInstances.status = new Chart(ctxStatus, {
-        type: 'doughnut',
-        data: {
-            labels: ['Entregadas', 'En Proceso', 'No Iniciadas'],
-            datasets: [{
-                data: [completed, inProgress, notStarted],
-                backgroundColor: [
-                    'rgba(16, 185, 129, 0.8)',
-                    'rgba(245, 158, 11, 0.8)',
-                    'rgba(148, 163, 184, 0.8)'
-                ],
-                borderColor: isDark ? '#1e1b4b' : '#ffffff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom', labels: { color: textColor } }
-            }
-        }
-    });
-
-    // 4. Competencia Digital Docente (MRCDD)
-    const cddCounts = { 'A1': 0, 'A2': 0, 'B1': 0, 'B2': 0, 'C1': 0, 'C2': 0, 'No especificado': 0 };
-    Object.entries(teachersData).forEach(([name, t]) => {
-        if (!filteredNames.includes(name)) return;
-        
-        // Si ya respondieron la autoevaluación, ver la respuesta
-        const cddAns = t.answers && t.answers['cdd'];
-        if (cddAns) {
-            cddCounts[cddAns] = (cddCounts[cddAns] || 0) + 1;
-        } else {
-            // Si no, tomar el valor CDD de partida de la base de datos de profesores
-            const teacherObj = TEACHERS.find(x => x.name === name);
-            if (teacherObj && teacherObj.cdd) {
-                cddCounts[teacherObj.cdd] = (cddCounts[teacherObj.cdd] || 0) + 1;
-            } else {
-                cddCounts['No especificado']++;
-            }
-        }
-    });
-
-    const cddLabels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-    const cddData = cddLabels.map(l => cddCounts[l] || 0);
-
-    const ctxCdd = document.getElementById('chart-cdd-dist').getContext('2d');
-    state.chartInstances.cdd = new Chart(ctxCdd, {
-        type: 'doughnut',
-        data: {
-            labels: cddLabels,
-            datasets: [{
-                data: cddData,
-                backgroundColor: [
-                    'rgba(59, 130, 246, 0.75)', // blue
-                    'rgba(147, 197, 253, 0.75)', // light blue
-                    'rgba(79, 70, 229, 0.75)', // indigo
-                    'rgba(168, 85, 247, 0.75)', // purple
-                    'rgba(6, 182, 212, 0.75)', // cyan
-                    'rgba(236, 72, 153, 0.75)'  // pink
-                ],
-                borderColor: isDark ? '#1e1b4b' : '#ffffff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right',
-                    labels: { color: textColor, font: { weight: '500', size: 10 } }
+    const statusCanvas = document.getElementById('chart-status');
+    if (statusCanvas) {
+        const ctxStatus = statusCanvas.getContext('2d');
+        state.chartInstances.status = new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: {
+                labels: ['Entregadas', 'En Proceso', 'No Iniciadas'],
+                datasets: [{
+                    data: [completed, inProgress, notStarted],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(148, 163, 184, 0.8)'
+                    ],
+                    borderColor: 'transparent'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: textColor, padding: 12 } }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
-// 11.3 DETALLE DOCENTE (LISTADO FILTRADO)
+// 11.3 PESTAÑA CO-EVALUACIÓN Y DETALLE (DISEÑO MAESTRO-DETALLE LIMPIO E INTUITIVO)
 function renderDirectorTeachersTab(teachersData) {
     const allowedList = getDirectorAllowedTeachers(TEACHERS);
     const filteredTeachersList = allowedList.filter(t => {
         return state.selectedEtapa === 'Todas' || t.etapa === state.selectedEtapa;
     });
 
-    const activeTeacherName = state.selectedTeacherForDetail;
-    const activeTeacherInfo = TEACHERS.find(t => t.name === activeTeacherName);
-    
-    let quickStatusHtml = '';
-    if (activeTeacherInfo) {
-        const info = teachersData[activeTeacherName] || { status: 'not_started' };
-        let statusBadge = '';
-        if (info.status === 'completed') {
-            statusBadge = `<span class="badge badge-completed">Autoevaluación Entregada</span>`;
-        } else if (info.status === 'in_progress') {
-            statusBadge = `<span class="badge badge-in-progress">En proceso</span>`;
-        } else {
-            statusBadge = `<span class="badge badge-not-started">No Iniciada</span>`;
-        }
-        quickStatusHtml = `
-            ${statusBadge}
-            
-            <span class="badge" style="background: rgba(0,0,0,0.03); color: var(--text-secondary); border: 1px solid var(--card-border);">Etapa: ${activeTeacherInfo.etapa}</span>
-        `;
-    }
+    const activeFilter = state.teacherStatusFilter || 'all';
+    const searchQuery = (state.teacherSearchQuery || '').toLowerCase();
 
-    const selectedText = activeTeacherName ? `${activeTeacherName} (${activeTeacherInfo.etapa})` : '';
-
-    // Opciones para el selector desplegable tradicional
-    let selectOptionsHtml = filteredTeachersList.map(t => {
+    // Filtrado de docentes para la barra lateral
+    const displayedTeachers = filteredTeachersList.filter(t => {
         const info = teachersData[t.name] || { status: 'not_started' };
-        let sText = '⚪ No iniciado';
-        if (info.status === 'completed') sText = '🟢 Entregado';
-        else if (info.status === 'in_progress') sText = '🟡 En proceso';
+        if (activeFilter === 'completed' && info.status !== 'completed' && info.status !== 'closed') return false;
+        if (activeFilter === 'in_progress' && info.status !== 'in_progress' && info.status !== 'reopened') return false;
+        if (activeFilter === 'not_started' && info.status !== 'not_started') return false;
+        if (searchQuery && !t.name.toLowerCase().includes(searchQuery)) return false;
+        return true;
+    });
+
+    const completedCount = filteredTeachersList.filter(t => {
+        const info = teachersData[t.name] || { status: 'not_started' };
+        return info.status === 'completed' || info.status === 'closed';
+    }).length;
+
+    const inProgressCount = filteredTeachersList.filter(t => {
+        const info = teachersData[t.name] || { status: 'not_started' };
+        return info.status === 'in_progress' || info.status === 'reopened';
+    }).length;
+
+    const notStartedCount = filteredTeachersList.length - completedCount - inProgressCount;
+
+    // Generar elementos de la lista lateral
+    const teacherItemsHtml = displayedTeachers.length > 0 ? displayedTeachers.map(t => {
+        const info = teachersData[t.name] || { status: 'not_started' };
+        const isActive = state.selectedTeacherForDetail === t.name;
         
-        const isSel = state.selectedTeacherForDetail === t.name;
-        return `<option value="${t.name}" ${isSel ? 'selected' : ''}>${t.name} (${t.etapa}) - ${sText}</option>`;
-    }).join('');
+        let statusBadge = '';
+        if (info.status === 'completed' || info.status === 'closed') {
+            statusBadge = `<span class="badge badge-completed" style="font-size:0.68rem; padding:2px 7px;">Entregado</span>`;
+        } else if (info.status === 'in_progress' || info.status === 'reopened') {
+            statusBadge = `<span class="badge badge-in-progress" style="font-size:0.68rem; padding:2px 7px;">En proceso</span>`;
+        } else {
+            statusBadge = `<span class="badge badge-not-started" style="font-size:0.68rem; padding:2px 7px;">No iniciado</span>`;
+        }
 
-    return `
-        <div style="display:flex; flex-direction:column; gap:1.5rem; animation:fadeIn 0.3s ease;">
-            <!-- Buscador y Selector de Profesores -->
-            <div class="glass-container" style="display:flex; align-items:center; gap:1.25rem; padding:1.25rem; flex-wrap:wrap; border-radius: var(--border-radius-lg); position:relative;">
-                <div style="font-weight:800; color:var(--text-muted); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:6px;">
-                    👥 Profesor (${filteredTeachersList.length} en ${state.selectedEtapa}):
-                </div>
+        // Indicador si Dirección ya ha calificado al docente
+        const dirAnswers = info.directorAnswers || {};
+        const hasCoEval = Object.keys(dirAnswers).length > 0;
+        const coEvalTag = hasCoEval ? `<span style="font-size:0.7rem; color:${isActive ? '#fef08a' : '#d97706'}; font-weight:700;">★ Co-evaluado</span>` : '';
 
-                <div style="flex:1; min-width:280px; max-width:480px; display:flex; flex-direction:column; gap:6px;">
-                    <select class="form-input" style="padding:0.6rem 1rem; border:1px solid var(--card-border); border-radius:8px; background:var(--bg-card); color:var(--text-main); font-weight:700; cursor:pointer;" onchange="selectTeacherForDetail(this.value)">
-                        <option value="">-- Elige un docente del claustro --</option>
-                        ${selectOptionsHtml}
-                    </select>
-                </div>
-                
-                <div class="autocomplete-wrapper" style="flex:1; min-width:240px; max-width:380px; position:relative;">
-                    <input type="text" class="form-input" id="teacher-autocomplete-input" 
-                           placeholder="🔍 Filtrar o buscar por nombre..." 
-                           value="${selectedText}" 
-                           onfocus="showTeacherDropdown()" 
-                           onclick="showTeacherDropdown()"
-                           oninput="filterTeacherDropdown(this.value)" 
-                           style="font-weight:600; cursor:text; padding-right:30px;">
-                    <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; font-size:0.8rem;">▼</span>
-                    
-                    <div id="teacher-autocomplete-list" class="autocomplete-dropdown" style="display:none;">
-                        <!-- Populate dinámicamente -->
+        const isTutor = t.tutor === 'Sí' || (t.tutor && t.tutor !== 'No' && !t.tutor.startsWith('Director'));
+
+        return `
+            <div class="teacher-item ${isActive ? 'active' : ''}" onclick="selectTeacherForDetail('${t.name}')">
+                <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
+                    <div style="width:34px; height:34px; border-radius:50%; background:${isActive ? 'rgba(255,255,255,0.25)' : 'var(--card-border)'}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; color:${isActive ? 'white' : 'var(--primary-color)'}; flex-shrink:0;">
+                        ${t.name.charAt(0)}
+                    </div>
+                    <div class="teacher-name-info" style="min-width:0; flex:1;">
+                        <span class="teacher-item-name" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.name}</span>
+                        <span class="teacher-item-status" style="display:block; font-size:0.72rem; color:${isActive ? 'rgba(255,255,255,0.85)' : 'var(--text-muted)'};">
+                            ${t.etapa} ${isTutor ? '• Tutor/a' : ''}
+                        </span>
                     </div>
                 </div>
-
-                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                    ${quickStatusHtml}
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:3px; flex-shrink:0;">
+                    ${statusBadge}
+                    ${coEvalTag}
                 </div>
             </div>
+        `;
+    }).join('') : `
+        <div style="text-align:center; padding:2rem 1rem; color:var(--text-muted); font-size:0.85rem;">
+            🔍 No hay docentes con los filtros aplicados.
+        </div>
+    `;
 
-            <!-- Ficha Detallada con Co-evaluación -->
-            <div class="glass-container director-content-panel" id="director-teacher-detail-card" style="position:relative; padding:2.5rem; display:flex; flex-direction:column; gap:2.5rem; border-radius:var(--border-radius-lg);">
-                ${renderTeacherDetailCard(state.selectedTeacherForDetail, teachersData)}
-            </div>
+    return `
+        <div class="director-main">
+            <!-- COLUMNA IZQUIERDA: DIRECTORIO DEL CLAUSTRO -->
+            <aside class="glass-container teacher-list-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-size:0.95rem; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+                        <span>👥</span> Claustro (${filteredTeachersList.length})
+                    </div>
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--primary-color);">${state.selectedEtapa}</span>
+                </div>
+
+                <!-- Buscador de docentes en tiempo real -->
+                <div>
+                    <input type="text" class="form-input" 
+                           placeholder="🔍 Buscar por nombre..." 
+                           value="${state.teacherSearchQuery || ''}"
+                           oninput="handleTeacherSidebarSearch(this.value)" 
+                           style="padding:0.45rem 0.75rem; font-size:0.82rem; border-radius:8px;">
+                </div>
+
+                <!-- Filtros rápidos por estado -->
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                    <button class="stage-filter-btn ${activeFilter === 'all' ? 'active' : ''}" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            onclick="setTeacherStatusFilter('all')">
+                        Todos (${filteredTeachersList.length})
+                    </button>
+                    <button class="stage-filter-btn ${activeFilter === 'completed' ? 'active' : ''}" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            onclick="setTeacherStatusFilter('completed')">
+                        🟢 Entregados (${completedCount})
+                    </button>
+                    <button class="stage-filter-btn ${activeFilter === 'in_progress' ? 'active' : ''}" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            onclick="setTeacherStatusFilter('in_progress')">
+                        🟡 Proceso (${inProgressCount})
+                    </button>
+                    <button class="stage-filter-btn ${activeFilter === 'not_started' ? 'active' : ''}" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            onclick="setTeacherStatusFilter('not_started')">
+                        ⚪ Pendientes (${notStartedCount})
+                    </button>
+                </div>
+
+                <!-- Lista de docentes con scroll -->
+                <div class="teacher-items-scroll">
+                    ${teacherItemsHtml}
+                </div>
+            </aside>
+
+            <!-- COLUMNA DERECHA: FICHA Y ÁREA DE CO-EVALUACIÓN -->
+            <main class="glass-container director-content-panel" id="director-teacher-detail-card" style="position:relative; padding:2rem; min-height:600px; border-radius:var(--border-radius-lg);">
+                ${renderTeacherDetailCard(state.selectedTeacherForDetail, teachersData, filteredTeachersList)}
+            </main>
         </div>
     `;
 }
 
-window.filterTeachersList = function(query) {
-    state.searchQuery = query;
-    const listScroll = document.querySelector('.teacher-items-scroll');
-    if (listScroll) {
-        const teachersData = db.get().evaluations;
-        const filtered = TEACHERS.filter(t => {
-            const matchesEtapa = state.selectedEtapa === 'Todas' || t.etapa === state.selectedEtapa;
-            const matchesQuery = t.name.toLowerCase().includes(query.toLowerCase());
-            return matchesEtapa && matchesQuery;
-        });
-        listScroll.innerHTML = filtered.map(t => {
-            const info = teachersData[t.name] || { status: 'not_started' };
-            const isActive = state.selectedTeacherForDetail === t.name;
-            let badge = '';
-            if (info.status === 'completed') badge = `<span class="badge badge-completed">Entregado</span>`;
-            else if (info.status === 'in_progress') badge = `<span class="badge badge-in-progress">En proceso</span>`;
-            else badge = `<span class="badge badge-not-started">No iniciado</span>`;
+window.handleTeacherSidebarSearch = function(query) {
+    state.teacherSearchQuery = query;
+    const teachersData = db.get().evaluations;
+    const allowedList = getDirectorAllowedTeachers(TEACHERS);
+    const filteredTeachersList = allowedList.filter(t => state.selectedEtapa === 'Todas' || t.etapa === state.selectedEtapa);
+    const activeFilter = state.teacherStatusFilter || 'all';
 
-            return `
-                <div class="teacher-item ${isActive ? 'active' : ''}" onclick="selectTeacherForDetail('${t.name}')">
-                    <div class="teacher-name-info">
-                        <span class="teacher-item-name">${t.name}</span>
-                        <span class="teacher-item-status">${t.etapa} | CDD: ${t.cdd}</span>
+    const displayedTeachers = filteredTeachersList.filter(t => {
+        const info = teachersData[t.name] || { status: 'not_started' };
+        if (activeFilter === 'completed' && info.status !== 'completed' && info.status !== 'closed') return false;
+        if (activeFilter === 'in_progress' && info.status !== 'in_progress' && info.status !== 'reopened') return false;
+        if (activeFilter === 'not_started' && info.status !== 'not_started') return false;
+        if (query && !t.name.toLowerCase().includes(query.toLowerCase())) return false;
+        return true;
+    });
+
+    const scrollContainer = document.querySelector('.teacher-items-scroll');
+    if (!scrollContainer) return;
+
+    scrollContainer.innerHTML = displayedTeachers.length > 0 ? displayedTeachers.map(t => {
+        const info = teachersData[t.name] || { status: 'not_started' };
+        const isActive = state.selectedTeacherForDetail === t.name;
+        
+        let statusBadge = '';
+        if (info.status === 'completed' || info.status === 'closed') {
+            statusBadge = `<span class="badge badge-completed" style="font-size:0.68rem; padding:2px 7px;">Entregado</span>`;
+        } else if (info.status === 'in_progress' || info.status === 'reopened') {
+            statusBadge = `<span class="badge badge-in-progress" style="font-size:0.68rem; padding:2px 7px;">En proceso</span>`;
+        } else {
+            statusBadge = `<span class="badge badge-not-started" style="font-size:0.68rem; padding:2px 7px;">No iniciado</span>`;
+        }
+
+        const dirAnswers = info.directorAnswers || {};
+        const hasCoEval = Object.keys(dirAnswers).length > 0;
+        const coEvalTag = hasCoEval ? `<span style="font-size:0.7rem; color:${isActive ? '#fef08a' : '#d97706'}; font-weight:700;">★ Co-evaluado</span>` : '';
+        const isTutor = t.tutor === 'Sí' || (t.tutor && t.tutor !== 'No' && !t.tutor.startsWith('Director'));
+
+        return `
+            <div class="teacher-item ${isActive ? 'active' : ''}" onclick="selectTeacherForDetail('${t.name}')">
+                <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
+                    <div style="width:34px; height:34px; border-radius:50%; background:${isActive ? 'rgba(255,255,255,0.25)' : 'var(--card-border)'}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; color:${isActive ? 'white' : 'var(--primary-color)'}; flex-shrink:0;">
+                        ${t.name.charAt(0)}
                     </div>
-                    ${badge}
+                    <div class="teacher-name-info" style="min-width:0; flex:1;">
+                        <span class="teacher-item-name" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.name}</span>
+                        <span class="teacher-item-status" style="display:block; font-size:0.72rem; color:${isActive ? 'rgba(255,255,255,0.85)' : 'var(--text-muted)'};">
+                            ${t.etapa} ${isTutor ? '• Tutor/a' : ''}
+                        </span>
+                    </div>
                 </div>
-            `;
-        }).join('');
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:3px; flex-shrink:0;">
+                    ${statusBadge}
+                    ${coEvalTag}
+                </div>
+            </div>
+        `;
+    }).join('') : `
+        <div style="text-align:center; padding:2rem 1rem; color:var(--text-muted); font-size:0.85rem;">
+            🔍 No hay docentes que coincidan con la búsqueda.
+        </div>
+    `;
+};
+
+window.selectFirstDeliveredTeacher = function() {
+    const teachersData = db.get().evaluations;
+    const allowedList = getDirectorAllowedTeachers(TEACHERS);
+    const filtered = allowedList.filter(t => state.selectedEtapa === 'Todas' || t.etapa === state.selectedEtapa);
+    const delivered = filtered.find(t => {
+        const info = teachersData[t.name];
+        return info && (info.status === 'completed' || info.status === 'closed');
+    });
+
+    if (delivered) {
+        selectTeacherForDetail(delivered.name);
+    } else if (filtered.length > 0) {
+        selectTeacherForDetail(filtered[0].name);
     }
 };
 
-// 11.3.1.1 COMPONENTES DE COMPARACIÓN Y ANÁLISIS
-window.changeRadarComparisonTarget = function(value) {
-    state.comparisonTarget = value;
-    renderRadarComparison();
+window.selectTeacherForDetail = function(name) {
+    state.selectedTeacherForDetail = name;
+    state.comparisonTarget = 'none';
+    renderDirectorView();
+    if (name) {
+        setTimeout(renderRadarComparison, 100);
+    }
 };
+
 
 function calculateBlockAverages(teacherName) {
     const tData = db.getUserData(teacherName);
@@ -4809,10 +5034,50 @@ window.selectTeacherForDetail = function(name) {
 // 11.3.1 FICHA DE DETALLE DEL DOCENTE CON GAP ANALYSIS Y SMART PLANS
 function renderTeacherDetailCard(name, teachersData) {
     if (!name) {
+        const allowedList = getDirectorAllowedTeachers(TEACHERS);
+        const filtered = allowedList.filter(t => state.selectedEtapa === 'Todas' || t.etapa === state.selectedEtapa);
+        const deliveredTeachers = filtered.filter(t => {
+            const inf = teachersData[t.name];
+            return inf && (inf.status === 'completed' || inf.status === 'closed');
+        });
+
+        let deliveredChips = deliveredTeachers.slice(0, 6).map(t => `
+            <button class="btn btn-secondary" style="padding:6px 14px; font-size:0.85rem; border-radius:8px; display:inline-flex; align-items:center; gap:8px;" onclick="selectTeacherForDetail('${t.name}')">
+                <span>👤</span> <strong>${t.name}</strong> (${t.etapa})
+            </button>
+        `).join('');
+
         return `
-            <div class="empty-state" style="margin: auto;">
-                <i>👥</i>
-                <p>Selecciona un docente del listado de la izquierda para visualizar sus resultados de autoevaluación.</p>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:3rem 1.5rem; gap:1.75rem; max-width:680px; margin:auto;">
+                <div style="width:72px; height:72px; border-radius:20px; background:linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(37,99,235,0.2) 100%); display:flex; align-items:center; justify-content:center; font-size:2.2rem; color:var(--primary-color);">
+                    📝
+                </div>
+                <div>
+                    <h3 style="font-size:1.5rem; font-weight:800; color:var(--text-main); margin:0 0 0.5rem 0;">
+                        Espacio de Co-Evaluación y Entrevistas
+                    </h3>
+                    <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.6; margin:0;">
+                        Selecciona a cualquier docente en el directorio de la izquierda para analizar sus respuestas, comparar el radar competencial y cumplimentar la valoración consensuada de Dirección.
+                    </p>
+                </div>
+
+                ${deliveredTeachers.length > 0 ? `
+                    <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:14px; padding:1.25rem 1.5rem; width:100%; text-align:left;">
+                        <div style="font-weight:700; color:#10b981; font-size:0.9rem; margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between;">
+                            <span>🟢 ${deliveredTeachers.length} Autoevaluaciones entregadas listas para co-evaluar:</span>
+                            <button class="btn btn-primary" style="padding:4px 12px; font-size:0.78rem;" onclick="selectFirstDeliveredTeacher()">
+                                Iniciar con la primera →
+                            </button>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            ${deliveredChips}
+                        </div>
+                    </div>
+                ` : `
+                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--card-border); border-radius:12px; padding:1rem 1.5rem; font-size:0.85rem; color:var(--text-muted);">
+                        ℹ️ Todavía no hay cuestionarios entregados en <strong>${state.selectedEtapa}</strong>. Podrás comenzar la co-evaluación en cuanto el profesorado vaya enviando sus cuestionarios.
+                    </div>
+                `}
             </div>
         `;
     }
