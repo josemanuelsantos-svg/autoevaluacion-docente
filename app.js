@@ -1517,15 +1517,21 @@ function renderLoginView() {
             <div class="login-hero-side">
                 <div style="z-index:2; position:relative; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
                     <div>
-                        <div style="margin-bottom: 20px; display:flex; align-items:center; gap:12px;">
-                            <div style="width:50px; height:50px; border-radius:10px; background:white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
-                                <span style="font-size:1.8rem;">🏫</span>
-                            </div>
-                            <span style="font-size:0.85rem; font-weight:800; color:rgba(255,255,255,0.9); text-transform:uppercase; letter-spacing:0.1em;">Plataforma Oficial</span>
+                        <!-- Logo Oficial Colegio San Buenaventura -->
+                        <div class="login-brand-banner" style="background: rgba(255,255,255,0.98); border-radius: 16px; padding: 1.25rem 2rem; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); margin-bottom: 2rem; max-width: 320px;">
+                            <img src="logo.png" alt="Colegio San Buenaventura" style="max-height: 80px; width: auto; object-fit: contain; display: block;">
                         </div>
-                        <h2 style="font-size:2.8rem; font-weight:900; line-height:1.1; letter-spacing:-0.05em; color:white;">
-                            Colegio<br>San Buenaventura
+
+                        <div style="margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
+                            <span class="badge" style="background: rgba(255,255,255,0.2); color:white; font-size:0.8rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding: 4px 10px; border-radius: 6px;">Plataforma Oficial</span>
+                            <span class="badge" style="background: rgba(217,119,6,0.3); color:#fef08a; font-size:0.8rem; font-weight:700; padding: 4px 10px; border-radius: 6px;">Curso 2026-2027</span>
+                        </div>
+                        <h2 style="font-size:2.6rem; font-weight:900; line-height:1.15; letter-spacing:-0.04em; color:white;">
+                            Autoevaluación<br>y Co-Evaluación
                         </h2>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top: 12px; line-height: 1.5; max-width: 420px;">
+                            Marco de desarrollo profesional, reflexión pedagógica e identidad compartida para el Claustro.
+                        </p>
                         <div style="width:50px; height:4px; background:var(--accent-color); margin-top:20px; border-radius:2px;"></div>
                     </div>
                     
@@ -1544,6 +1550,12 @@ function renderLoginView() {
             <div class="login-form-side">
                 <div class="auth-wrapper glass-container">
                     <div class="auth-header" style="text-align:left;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; flex-wrap:wrap; gap:10px;">
+                            <div style="background: white; border-radius: 10px; padding: 6px 14px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06);">
+                                <img src="logo.png" alt="Logo Colegio San Buenaventura" style="height: 38px; width: auto; object-fit: contain;">
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight:700; color:var(--primary-color); text-transform:uppercase; letter-spacing:0.1em; background: rgba(37,99,235,0.08); padding: 4px 10px; border-radius: 20px;">Curso 2026-2027</span>
+                        </div>
                         <span style="font-size: 0.8rem; font-weight:700; color:var(--primary-color); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:6px;">Autoevaluación Docente</span>
                         <h2>Portal del Claustro</h2>
                         <p style="color: var(--text-muted); font-size: 0.95rem;">Ingresa para completar tu autoevaluación o visualizar informes.</p>
