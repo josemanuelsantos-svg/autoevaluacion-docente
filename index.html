@@ -567,13 +567,11 @@ main {
 }
 
 .block-header h2 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--primary-color);
 }
 
 .block-desc {
@@ -1399,6 +1397,208 @@ main {
     color: #60a5fa !important;
 }
 
+/* ===== TEMA INSTITUCIONAL GLOBAL ===== */
+:root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+    --bg-gradient: #f3f1ea;
+    --bg-card: #ffffff;
+    --card-bg: #ffffff;
+    --card-border: #d9dde3;
+    --text-main: #1b2733;
+    --text-primary: #1b2733;
+    --text-secondary: #3a4757;
+    --text-muted: #5b6776;
+
+    --primary-color: #0b2545;
+    --primary-hover: #13315c;
+    --primary-glow: rgba(11, 37, 69, 0.12);
+    --accent-color: #b8892b;
+    --accent-glow: rgba(184, 137, 43, 0.15);
+
+    --success: #1f7a52;
+    --warning: #b7791f;
+    --danger: #b3261e;
+
+    --glass-shadow: 0 1px 2px rgba(11, 37, 69, 0.05), 0 6px 18px -8px rgba(11, 37, 69, 0.12);
+    --inner-glow: none;
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+    --transition: all 0.15s ease;
+}
+
+[data-theme="dark"] {
+    --bg-gradient: #0a1626;
+    --bg-card: #101f35;
+    --card-bg: #101f35;
+    --card-border: #243653;
+    --text-main: #e8edf4;
+    --text-primary: #e8edf4;
+    --text-secondary: #c3cddb;
+    --text-muted: #8c9bb0;
+    --primary-color: #8fb4e8;
+    --primary-hover: #b3cdf2;
+    --primary-glow: rgba(143, 180, 232, 0.18);
+    --accent-color: #d9b25e;
+    --success: #4cc38a;
+    --warning: #e0b24f;
+    --danger: #f1857d;
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Base: sin manchas ni animaciones decorativas */
+body { background: var(--bg-gradient); font-family: var(--font-sans); }
+body::before, body::after { display: none !important; }
+h1, h2, h3 { font-family: var(--font-serif); letter-spacing: -0.01em; }
+.logo-icon { animation: none; filter: none; }
+
+/* Superficies planas */
+.glass-container {
+    background: var(--bg-card);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--glass-shadow);
+}
+.glass-container:hover { box-shadow: var(--glass-shadow); }
+
+/* Cabecera institucional */
+.app-header {
+    margin: 0 !important; padding: 0.75rem 2.5rem !important; border-radius: 0 !important;
+    border: none !important; border-bottom: 3px solid var(--accent-color) !important;
+    background: var(--bg-card) !important;
+    display: flex; align-items: center;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+}
+.brand-emblem-wrap { box-shadow: none; border: 1px solid var(--card-border); border-radius: 4px; background: #ffffff; }
+.brand-titles h1 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; color: var(--primary-color); }
+[data-theme="dark"] .brand-titles h1 { color: #f8fafc; }
+.brand-titles p { font-size: 0.75rem; letter-spacing: 0.02em; color: var(--text-muted); }
+.header-actions { display: flex; align-items: center; gap: 0.75rem; }
+.header-logout-btn {
+    font-family: var(--font-sans); font-weight: 600; font-size: 0.85rem; color: var(--text-main);
+    background: var(--bg-card); border: 1px solid #b9c0ca; padding: 0.45rem 0.95rem;
+    border-radius: var(--border-radius-sm); display: inline-flex; align-items: center; gap: 0.45rem;
+    transition: var(--transition);
+}
+.header-logout-btn:hover { background: #fdf2f2 !important; color: var(--danger) !important; border-color: rgba(179, 38, 30, 0.4) !important; }
+[data-theme="dark"] .header-logout-btn { border-color: var(--card-border); }
+[data-theme="dark"] .header-logout-btn:hover { background: rgba(179, 38, 30, 0.15) !important; }
+.cloud-sync-status-badge {
+    background: #eef2f6; color: #3b506c; border: 1px solid #ccd5e0;
+    font-size: 0.72rem; font-weight: 600; border-radius: 3px; padding: 3px 8px;
+}
+[data-theme="dark"] .cloud-sync-status-badge { background: #132338; color: #9cb3ce; border-color: var(--card-border); }
+@media (max-width: 768px) {
+    .app-header { padding: 0.6rem 1rem !important; }
+    .header-content { gap: 0.75rem; }
+    .brand-titles p { display: none; }
+}
+main { padding-top: 1.75rem; }
+
+/* Botones */
+.btn { border-radius: var(--border-radius-sm); font-weight: 600; font-size: 0.9rem; padding: 0.6rem 1.2rem; box-shadow: none; }
+.btn-primary, .btn-primary[style] {
+    background: var(--primary-color) !important; color: #fff !important;
+    border: 1px solid var(--primary-color); box-shadow: none !important;
+}
+[data-theme="dark"] .btn-primary, [data-theme="dark"] .btn-primary[style] { color: #0a1626 !important; }
+.btn-primary:hover { background: var(--primary-hover) !important; transform: none; filter: none; box-shadow: none; }
+.btn-secondary { background: var(--bg-card); color: var(--text-main); border: 1px solid #b9c0ca; }
+.btn-secondary:hover { background: #eef1f5; border-color: var(--primary-color); color: var(--primary-color); transform: none; }
+[data-theme="dark"] .btn-secondary { border-color: var(--card-border); }
+[data-theme="dark"] .btn-secondary:hover { background: #17294a; }
+.btn-danger { background: var(--danger); box-shadow: none; }
+.btn-danger:hover { transform: none; box-shadow: none; filter: brightness(0.92); }
+.btn-icon { border-radius: var(--border-radius-sm); }
+.theme-toggle-btn { border-radius: var(--border-radius-sm); }
+
+/* Formularios */
+.form-input, .evidence-textarea, .reflection-textarea {
+    background: var(--bg-card); border: 1px solid #b9c0ca; border-radius: var(--border-radius-sm); color: var(--text-main);
+}
+[data-theme="dark"] .form-input, [data-theme="dark"] .evidence-textarea, [data-theme="dark"] .reflection-textarea { border-color: var(--card-border); }
+.form-input:focus, .evidence-textarea:focus, .reflection-textarea:focus {
+    background: var(--bg-card); border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+/* Panel del docente */
+.sidebar, .content-panel { border-radius: var(--border-radius-md); }
+.profile-avatar { background: var(--primary-color) !important; color: #fff; border-radius: 4px; }
+[data-theme="dark"] .profile-avatar { color: #0a1626; }
+.nav-item { border-radius: var(--border-radius-sm); }
+.nav-item:hover { transform: none; background: #eef1f5; }
+.nav-item.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); box-shadow: none; }
+[data-theme="dark"] .nav-item.active { color: #0a1626; }
+[data-theme="dark"] .nav-item:hover { background: #17294a; }
+.block-header h2 { font-family: var(--font-serif); font-weight: 700; color: var(--primary-color) !important; -webkit-text-fill-color: var(--primary-color) !important; }
+[data-theme="dark"] .block-header h2 { color: #f8fafc !important; -webkit-text-fill-color: #f8fafc !important; }
+.block-header h2::after { content: none; }
+.block-header, .detail-header { border-bottom: 1px solid var(--card-border); }
+
+.question-card {
+    background: var(--bg-card); border: 1px solid var(--card-border); border-radius: var(--border-radius-md); padding: 1.5rem;
+}
+.question-card:hover { transform: none; box-shadow: var(--glass-shadow); border-color: #aab4c1; }
+.question-card.card-answered { border-left: 4px solid var(--success); background: var(--bg-card); }
+.question-num { background: var(--primary-color); border-radius: 3px; box-shadow: none; font-weight: 700; }
+[data-theme="dark"] .question-num { color: #0a1626; }
+.question-text { font-size: 1.02rem; font-weight: 600; }
+
+/* Escala de valoración: paleta sobria, sin degradados */
+.rating-btn { background: var(--bg-card); border: 1px solid #b9c0ca; border-radius: var(--border-radius-sm); box-shadow: none; height: 46px; font-weight: 700; font-size: 1.05rem; }
+[data-theme="dark"] .rating-btn { background: var(--bg-card); border-color: var(--card-border); }
+.rating-btn:hover { transform: none; border-color: var(--primary-color); color: var(--primary-color); box-shadow: none; background: #eef1f5; }
+.rating-btn.selected, .rating-btn.selected[class*="val-"] {
+    color: #fff; box-shadow: none; transform: none;
+}
+.rating-btn.selected.val-1 { background: #a32a2a; border-color: #a32a2a; }
+.rating-btn.selected.val-2 { background: #b8601f; border-color: #b8601f; }
+.rating-btn.selected.val-3 { background: #a8841f; border-color: #a8841f; }
+.rating-btn.selected.val-4 { background: #2f6d8f; border-color: #2f6d8f; }
+.rating-btn.selected.val-5 { background: #0b2545; border-color: #0b2545; }
+.option-tag.selected, .option-tag.active { background: var(--primary-color); border-color: var(--primary-color); color: #fff; }
+
+/* Insignias de estado */
+.badge { border-radius: 3px; font-weight: 600; letter-spacing: 0.01em; }
+
+/* Panel de Dirección */
+.director-hero-card { border-radius: var(--border-radius-md); }
+.director-hero-card [style*="linear-gradient"] { background: var(--primary-color) !important; border-radius: 4px !important; box-shadow: none !important; }
+.stat-card { border-radius: var(--border-radius-md); }
+.stat-val { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0; color: var(--primary-color); }
+.stat-lbl { font-size: 0.75rem; letter-spacing: 0.08em; }
+.stage-filter-segmented { border-radius: var(--border-radius-sm); }
+.stage-filter-btn { border-radius: 3px; font-weight: 600; }
+.stage-filter-btn.active { background: var(--primary-color) !important; color: #fff !important; box-shadow: none; }
+[data-theme="dark"] .stage-filter-btn.active { color: #0a1626 !important; }
+.teacher-list-panel, .director-content-panel { border-radius: var(--border-radius-md); }
+.teacher-item { border-radius: var(--border-radius-sm); }
+.teacher-item:hover { transform: none; }
+.teacher-item.active {
+    background: var(--primary-color) !important; border-color: var(--primary-color) !important; box-shadow: none !important;
+}
+[data-theme="dark"] .teacher-item.active, [data-theme="dark"] .teacher-item.active .teacher-item-name { color: #0a1626 !important; }
+.chart-card { border-radius: var(--border-radius-md); }
+.chart-title { font-family: var(--font-serif); font-weight: 600; }
+.detail-block-section h4 { font-family: var(--font-serif); font-weight: 600; color: var(--primary-color); }
+.detail-score-pill { background: var(--primary-color); border-radius: 3px; box-shadow: none; }
+[data-theme="dark"] .detail-score-pill { color: #0a1626; }
+.director-notes-section, .peer-nominations-card { border-radius: var(--border-radius-md); }
+.crud-table th { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.dropdown-item:hover { background: #eef1f5 !important; color: var(--primary-color) !important; }
+.toast { border-radius: var(--border-radius-sm); }
+.header-logout-btn:hover { background: rgba(179, 38, 30, 0.08) !important; color: var(--danger) !important; border-color: rgba(179, 38, 30, 0.3) !important; }
+.empty-state { color: var(--text-muted); }
+
 /* ===== LOGIN INSTITUCIONAL (lp-*) ===== */
 
 body.is-login::before, body.is-login::after { display: none; }
@@ -1575,9 +1775,10 @@ body.is-login .app-header { display: none; }
                 </div>
             </div>
             <div class="header-actions">
-                <span class="badge cloud-sync-status-badge" style="display:none;" id="cloud-sync-badge">☁️ Conectando...</span>
-                <button class="btn btn-secondary header-logout-btn" id="header-logout-btn" onclick="handleLogout()" title="Cerrar sesión" style="display:none; align-items:center; gap:6px; padding:0.4rem 0.85rem; font-size:0.85rem; font-weight:600; border-radius:8px;">
-                    🚪 Salir
+                <span class="badge cloud-sync-status-badge" style="display:none;" id="cloud-sync-badge">Conexión activa</span>
+                <button class="header-logout-btn" id="header-logout-btn" onclick="handleLogout()" title="Cerrar sesión" style="display:none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 15px; height: 15px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>
+                    <span>Cerrar Sesión</span>
                 </button>
                 <button class="theme-toggle-btn" id="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">
                     <span id="theme-icon">🌙</span>
@@ -2517,13 +2718,13 @@ const EVAL_BLOCKS = [
                 id: '1.1', 
                 text: 'Me siento feliz y motivado/a al desarrollar mi labor diaria en el colegio.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Desmotivado/a y con desgaste alto | 3 = Cumplo correctamente pero con altibajos | 5 = Plena ilusión, alegría y energía en mi labor diaria.'
+                rubric: 'Criterio orientativo: 1 = Desmotivado/a y con desgaste alto | 3 = Cumplo correctamente pero con altibajos | 5 = Plena ilusión, alegría y energía en mi labor diaria.'
             },
             { 
                 id: '1.2', 
                 text: 'Me siento identificado/a con los valores del centro y el carisma franciscano, y procuro reflejarlos en mi día a día.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Distante con el Ideario | 3 = Los conozco y respeto en mi trato | 5 = Referente activo de fraternidad, humildad y alegría franciscana.'
+                rubric: 'Criterio orientativo: 1 = Distante con el Ideario | 3 = Los conozco y respeto en mi trato | 5 = Referente activo de fraternidad, humildad y alegría franciscana.'
             },
             { id: '1.4', text: 'Considero que el colegio se preocupa por mi bienestar emocional y profesional.', type: 'scale' },
             { id: '1.5', text: 'Encuentro en el centro un ambiente de respeto, cercanía y fraternidad alineado con nuestro estilo institucional.', type: 'scale' },
@@ -2543,7 +2744,7 @@ const EVAL_BLOCKS = [
                 id: '2.3', 
                 text: 'Ofrezco mi ayuda de manera proactiva a los compañeros que lo necesitan (sustituciones imprevistas, compartir materiales, apoyo en momentos de alta carga, situaciones momentáneas, profesores nuevos…).', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Me limito a mis horas y tareas individuales | 3 = Colaboro si me lo solicitan | 5 = Ayudo de forma espontánea y proactiva, facilitando la vida del centro.'
+                rubric: 'Criterio orientativo: 1 = Me limito a mis horas y tareas individuales | 3 = Colaboro si me lo solicitan | 5 = Ayudo de forma espontánea y proactiva, facilitando la vida del centro.'
             },
             { id: '2.4', text: 'Me siento ayudado por mis compañeros.', type: 'scale' },
             { id: '2.5', text: 'Pido ayuda a mis compañeros cuando tengo una necesidad.', type: 'scale' },
@@ -2551,7 +2752,7 @@ const EVAL_BLOCKS = [
                 id: '2.6', 
                 text: 'Mis comentarios, críticas, actitudes y forma de actuar influyen en el clima de trabajo de mis compañeros de forma positiva.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Mis quejas o desganas a veces afectan al grupo | 3 = Mantengo una actitud neutral y respetuosa | 5 = Aporto optimismo, críticas constructivas y cohesión al claustro.'
+                rubric: 'Criterio orientativo: 1 = Mis quejas o desganas a veces afectan al grupo | 3 = Mantengo una actitud neutral y respetuosa | 5 = Aporto optimismo, críticas constructivas y cohesión al claustro.'
             }
         ],
         specialQuestion: {
@@ -2584,7 +2785,7 @@ const EVAL_BLOCKS = [
                 id: '4.2', 
                 text: 'Utilizo metodologías variadas en el aula para captar la atención del alumnado y atender a los diferentes ritmos de aprendizaje.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Clase magistral tradicional | 3 = Uso ocasional de dinámicas activas | 5 = Aplicación del DUA, aprendizaje cooperativo, proyectos y recursos variados.'
+                rubric: 'Criterio orientativo: 1 = Clase magistral tradicional | 3 = Uso ocasional de dinámicas activas | 5 = Aplicación del DUA, aprendizaje cooperativo, proyectos y recursos variados.'
             },
             { id: '4.3', text: 'Logro mantener un clima de aula ordenado y propicio para el aprendizaje.', type: 'scale' },
             { id: '4.4', text: 'Me siento seguro/a y actualizado/a en el uso de las herramientas digitales y recursos metodológicos que requiere mi asignatura.', type: 'scale' },
@@ -2592,7 +2793,7 @@ const EVAL_BLOCKS = [
                 id: '4.5', 
                 text: 'Diseño y cumplo criterios e instrumentos de evaluación claros, variados y conocidos por los alumnos desde el principio.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Examen único sin rúbricas | 3 = Exámenes y tareas ponderadas informadas | 5 = Rúbricas detalladas previas, autoevaluación de alumnos y feedback continuo.'
+                rubric: 'Criterio orientativo: 1 = Examen único sin rúbricas | 3 = Exámenes y tareas ponderadas informadas | 5 = Rúbricas detalladas previas, autoevaluación de alumnos y feedback continuo.'
             },
             { id: '4.6', text: 'Corrijo y devuelvo los exámenes, tareas o proyectos en plazos razonables y aportando correcciones constructivas.', type: 'scale' },
             { id: '4.7', text: 'Ofrezco a los alumnos oportunidades reales de mejora (segundas oportunidades, planes de refuerzo) si no alcanzan los objetivos a la primera.', type: 'scale' },
@@ -2621,7 +2822,7 @@ const EVAL_BLOCKS = [
                 id: '5.3', 
                 text: 'Me implico con iniciativa y de forma voluntariosa en las comisiones de trabajo propuestas por el centro para diferentes alternativas.', 
                 type: 'scale',
-                rubric: '💡 Rúbrica: 1 = Evito formar parte de comisiones | 3 = Cumplo si me lo asignan | 5 = Me apunto de forma voluntaria y asumo responsabilidades con ilusión.'
+                rubric: 'Criterio orientativo: 1 = Evito formar parte de comisiones | 3 = Cumplo si me lo asignan | 5 = Me apunto de forma voluntaria y asumo responsabilidades con ilusión.'
             },
             { id: '5.4', text: 'Considero que mi nivel de compromiso y participación en estas tareas y eventos comunes es lo que el colegio espera de mí.', type: 'scale' }
         ]
@@ -3379,20 +3580,20 @@ function renderTeacherCompletedView(name, tData, teacherInfo) {
                     </p>
                 </div>
                 <div style="display:flex; gap:8px;">
-                    <button class="btn btn-secondary" onclick="generateOfficialPrintDocument('${name}')">
+                    <button class="btn btn-secondary" onclick="generateOfficialPrintDocument('${name}')" style="display:inline-flex; align-items:center; gap:6px;">
                         ${ICONS.print} Imprimir Resumen
                     </button>
-                    <button class="btn btn-secondary" onclick="handleLogout()">
-                        🚪 Cerrar Sesión
+                    <button class="btn btn-secondary" onclick="handleLogout()" style="display:inline-flex; align-items:center; gap:6px;">
+                        ${ICONS.logout} Cerrar Sesión
                     </button>
                 </div>
             </div>
 
             <!-- Alerta informativa -->
-            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; display:flex; align-items:center; gap:10px;">
-                <span style="font-size: 1.5rem; line-height:1;">✅</span>
+            <div style="background: rgba(11, 37, 69, 0.04); border: 1px solid var(--card-border); border-radius: var(--border-radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; display:flex; align-items:center; gap:12px;">
+                <div style="color:var(--success); display:flex; align-items:center; justify-content:center;">${ICONS.check}</div>
                 <div>
-                    <strong>Tu cuestionario ha sido entregado correctamente.</strong> Las respuestas están en modo de solo lectura. A continuación puedes revisar tus resultados, el análisis de sintonía pedagógica y los comentarios finales acordados en la entrevista.
+                    <strong>Cuestionario entregado formalmente.</strong> El registro se encuentra en modo de lectura. A continuación puedes consultar los resultados consolidados, el contraste de criterios y las orientaciones pactadas con Dirección.
                 </div>
             </div>
 
@@ -4192,18 +4393,18 @@ function renderDirectorView() {
     dom.app.innerHTML = `
         <div class="director-container">
             <!-- 1. CABECERA EJECUTIVA DE DIRECCIÓN -->
-            <div class="glass-container director-hero-card" style="padding: 1.25rem 1.75rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+            <div class="glass-container director-hero-card" style="padding: 1.25rem 1.75rem; border-radius: var(--border-radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
                 <div style="display: flex; align-items: center; gap: 14px;">
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
-                        🎓
+                    <div style="width: 44px; height: 44px; border-radius: 4px; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white;">
+                        ${ICONS.identity}
                     </div>
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 800; color: var(--text-main);">${state.currentUser.name}</h2>
-                            <span class="badge" style="background: rgba(37,99,235,0.1); color: var(--primary-color); font-weight: 700; font-size: 0.78rem;">${roleDescription}</span>
+                            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--text-main); font-family: var(--font-serif);">${state.currentUser.name}</h2>
+                            <span class="badge" style="background: rgba(11,37,69,0.08); color: var(--primary-color); font-weight: 700; font-size: 0.78rem;">${roleDescription}</span>
                         </div>
                         <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: var(--text-muted);">
-                            Supervisión y Co-evaluación del Claustro • Curso 2026-2027
+                            Supervisión y Evaluación Colegiada del Claustro • Curso 2026-2027
                         </p>
                     </div>
                 </div>
@@ -4215,21 +4416,21 @@ function renderDirectorView() {
                             const sRole = state.currentUser.subrole || 'general';
                             if (sRole === 'ei_ep') {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 EI + EP</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas (EI + EP)</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">Educación Infantil</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">Educación Primaria</button>
                                 `;
                             } else if (sRole === 'eso_bto') {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 ESO + BTO</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria / BTO</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas (ESO + BTO)</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">Secundaria y Bachillerato</button>
                                 `;
                             } else {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">🏫 Todas</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">👶 Infantil</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">👦 Primaria</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">🎓 Secundaria</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas las etapas</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">Educación Infantil</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">Educación Primaria</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">Secundaria y Bachillerato</button>
                                 `;
                             }
                         })()}
@@ -4237,30 +4438,30 @@ function renderDirectorView() {
 
                     <!-- Botón Desplegable de Herramientas y Exportación -->
                     <div style="position: relative;" id="director-tools-container">
-                        <button class="btn btn-secondary" onclick="toggleDirectorToolsMenu()" style="display: flex; align-items: center; gap: 6px; font-weight: 600; padding: 0.5rem 0.9rem; font-size: 0.85rem; border-radius: 8px;">
-                            ⚙️ Herramientas ▾
+                        <button class="btn btn-secondary" onclick="toggleDirectorToolsMenu()" style="display: flex; align-items: center; gap: 6px; font-weight: 600; padding: 0.5rem 0.9rem; font-size: 0.85rem; border-radius: var(--border-radius-sm);">
+                            Herramientas ▾
                         </button>
-                        <div id="director-tools-dropdown" class="glass-container" style="display: none; position: absolute; right: 0; top: 115%; width: 270px; z-index: 100; border-radius: 12px; padding: 8px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); border: 1px solid var(--card-border); background: var(--bg-card);">
-                            <button class="dropdown-item" onclick="exportAllTeacherReports(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
-                                📦 Exportar Dossier Masivo PDF
+                        <div id="director-tools-dropdown" class="glass-container" style="display: none; position: absolute; right: 0; top: 115%; width: 280px; z-index: 100; border-radius: var(--border-radius-sm); padding: 8px; box-shadow: var(--glass-shadow); border: 1px solid var(--card-border); background: var(--bg-card);">
+                            <button class="dropdown-item" onclick="exportAllTeacherReports(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
+                                Exportar Dossier Consolidado (PDF)
                             </button>
-                            <button class="dropdown-item" onclick="exportBackup(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
-                                💾 Descargar Copia de Seguridad
+                            <button class="dropdown-item" onclick="exportBackup(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                Copia de Seguridad (JSON)
                             </button>
-                            <button class="dropdown-item" onclick="document.getElementById('backup-upload-input').click(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
-                                📂 Restaurar Copia de Seguridad
+                            <button class="dropdown-item" onclick="document.getElementById('backup-upload-input').click(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                Restaurar Copia de Seguridad
                             </button>
                             <input type="file" id="backup-upload-input" accept=".json" style="display:none;" onchange="importBackup(event)">
                             <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
-                            <button class="dropdown-item" onclick="exportData('csv'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
-                                📊 Exportar a Excel / CSV
+                            <button class="dropdown-item" onclick="exportData('csv'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                Exportar a Hoja de Cálculo (CSV)
                             </button>
-                            <button class="dropdown-item" onclick="exportData('json'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
-                                📥 Exportar a JSON
+                            <button class="dropdown-item" onclick="exportData('json'); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                Exportar Matriz de Evaluación (JSON)
                             </button>
                             <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
-                            <button class="dropdown-item" onclick="resetDatabase(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: #ef4444; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
-                                ⚠️ Reiniciar Datos del Centro
+                            <button class="dropdown-item" onclick="resetDatabase(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--danger); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
+                                Restablecer Datos del Centro
                             </button>
                         </div>
                     </div>
@@ -4280,7 +4481,7 @@ function renderDirectorView() {
                         <span style="font-size: 1rem; font-weight: 600; color: var(--text-muted);">(${totalFiltered > 0 ? Math.round((completedCount/totalFiltered)*100) : 0}%)</span>
                     </div>
                     <div class="stat-lbl">Entregadas</div>
-                    <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px; font-weight: 600;">Listas para co-evaluar</div>
+                    <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px; font-weight: 600;">Listas para evaluar por Dirección</div>
                 </div>
                 <div class="glass-container stat-card" style="border-left: 4px solid var(--warning); cursor: pointer; padding: 1.25rem 1.5rem;" onclick="changeDirectorTab('teachers'); setTeacherStatusFilter('in_progress');" title="Filtrar evaluaciones en borrador">
                     <div class="stat-val" style="color: var(--warning); font-size: 2.4rem;">${inProgressCount}</div>
@@ -4296,18 +4497,18 @@ function renderDirectorView() {
 
             <!-- 3. PESTAÑAS DE NAVEGACIÓN PRINCIPAL -->
             <div style="display: flex; gap: 8px; border-bottom: 2px solid var(--card-border); padding-bottom: 0.75rem; align-items: center; flex-wrap: wrap;">
-                <button class="btn ${isTabSummary ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('summary')" style="border-radius: 8px; font-size: 0.9rem;">
-                    ${ICONS.chart} Panel General y Estadísticas
+                <button class="btn ${isTabSummary ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('summary')" style="border-radius: var(--border-radius-sm); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+                    ${ICONS.chart} Resumen Ejecutivo
                 </button>
-                <button class="btn ${isTabTeachers ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('teachers')" style="border-radius: 8px; font-size: 0.9rem; position: relative;">
-                    ${ICONS.users} Co-Evaluación de Docentes 
-                    ${completedCount > 0 ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981; font-size:0.75rem; margin-left:6px; font-weight:800;">${completedCount}</span>` : ''}
+                <button class="btn ${isTabTeachers ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('teachers')" style="border-radius: var(--border-radius-sm); font-size: 0.9rem; position: relative; display: inline-flex; align-items: center; gap: 8px;">
+                    ${ICONS.interview} Evaluación de Docentes (Dirección)
+                    ${completedCount > 0 ? `<span class="badge" style="background:var(--success); color:white; font-size:0.75rem; margin-left:6px; font-weight:700;">${completedCount}</span>` : ''}
                 </button>
-                <button class="btn ${state.activeDirectorTab === 'management' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('management')" style="border-radius: 8px; font-size: 0.9rem;">
-                    👥 Gestión del Claustro
+                <button class="btn ${state.activeDirectorTab === 'management' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('management')" style="border-radius: var(--border-radius-sm); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+                    ${ICONS.users} Directorio del Claustro
                 </button>
-                <button class="btn ${state.activeDirectorTab === 'tutorial' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('tutorial')" style="border-radius: 8px; font-size: 0.9rem; ${state.activeDirectorTab === 'tutorial' ? 'background:linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color:white;' : ''}">
-                    📚 Guía y Tutorial
+                <button class="btn ${state.activeDirectorTab === 'tutorial' ? 'btn-primary' : 'btn-secondary'}" onclick="changeDirectorTab('tutorial')" style="border-radius: var(--border-radius-sm); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; ${state.activeDirectorTab === 'tutorial' ? 'background:var(--primary-color); color:white;' : ''}">
+                    ${ICONS.practice} Guía Metodológica
                 </button>
             </div>
 
@@ -4446,9 +4647,9 @@ function renderDirectorSummaryTab(teachersData, filteredTeachersList) {
             </div>
 
             <div class="glass-container peer-nominations-card" style="grid-column: span 2;">
-                <div class="chart-title">👥 Reconocimiento de Claustro (Bloque 2)</div>
+                <div class="chart-title">Reconocimiento entre Compañeros (Bloque 2)</div>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
-                    Docentes nominados por aportar mayor valor humano e implicación en ${state.selectedEtapa}:
+                    Docentes reconocidos por aportar mayor valor humano e implicación en ${state.selectedEtapa}:
                 </p>
                 <div style="display:flex; flex-direction:column; gap:0.25rem;">
                     ${nominationsHtml}
@@ -4458,7 +4659,7 @@ function renderDirectorSummaryTab(teachersData, filteredTeachersList) {
             <!-- Alertas de Discrepancia Crítica -->
             <div class="glass-container peer-nominations-card" style="grid-column: span 2; border-left: 4px solid var(--danger);">
                 <div class="chart-title" style="color: var(--danger); display:flex; align-items:center; gap:6px;">
-                    ⚠️ Alertas de Discrepancia de Criterio (Gaps ≥ 1.0)
+                    Alertas de Discrepancia Metodológica (Diferencias ≥ 1.0)
                 </div>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
                     Identifica docentes en donde la autoevaluación individual difiere significativamente de la valoración de Dirección (promedios por bloque):
@@ -4719,42 +4920,42 @@ function renderDirectorTeachersTab(teachersData) {
             <!-- COLUMNA IZQUIERDA: DIRECTORIO DEL CLAUSTRO -->
             <aside class="glass-container teacher-list-panel">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-size:0.95rem; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:6px;">
-                        <span>👥</span> Claustro (${filteredTeachersList.length})
+                    <div style="font-size:0.95rem; font-weight:700; color:var(--text-main); font-family:var(--font-serif);">
+                        Claustro Docente (${filteredTeachersList.length})
                     </div>
-                    <span style="font-size:0.75rem; font-weight:700; color:var(--primary-color);">${state.selectedEtapa}</span>
+                    <span style="font-size:0.75rem; font-weight:600; color:var(--primary-color);">${state.selectedEtapa}</span>
                 </div>
 
                 <!-- Buscador de docentes en tiempo real -->
                 <div>
                     <input type="text" class="form-input" 
-                           placeholder="🔍 Buscar por nombre..." 
+                           placeholder="Buscar por nombre..." 
                            value="${state.teacherSearchQuery || ''}"
                            oninput="handleTeacherSidebarSearch(this.value)" 
-                           style="padding:0.45rem 0.75rem; font-size:0.82rem; border-radius:8px;">
+                           style="padding:0.45rem 0.75rem; font-size:0.82rem; border-radius:var(--border-radius-sm);">
                 </div>
 
                 <!-- Filtros rápidos por estado -->
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                     <button class="stage-filter-btn ${activeFilter === 'all' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
                             onclick="setTeacherStatusFilter('all')">
                         Todos (${filteredTeachersList.length})
                     </button>
                     <button class="stage-filter-btn ${activeFilter === 'completed' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
                             onclick="setTeacherStatusFilter('completed')">
-                        🟢 Entregados (${completedCount})
+                        Entregados (${completedCount})
                     </button>
                     <button class="stage-filter-btn ${activeFilter === 'in_progress' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
                             onclick="setTeacherStatusFilter('in_progress')">
-                        🟡 Proceso (${inProgressCount})
+                        En proceso (${inProgressCount})
                     </button>
                     <button class="stage-filter-btn ${activeFilter === 'not_started' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:6px;" 
+                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
                             onclick="setTeacherStatusFilter('not_started')">
-                        ⚪ Pendientes (${notStartedCount})
+                        Pendientes (${notStartedCount})
                     </button>
                 </div>
 
@@ -5211,22 +5412,22 @@ function renderTeacherDetailCard(name, teachersData) {
 
         return `
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:3rem 1.5rem; gap:1.75rem; max-width:680px; margin:auto;">
-                <div style="width:72px; height:72px; border-radius:20px; background:linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(37,99,235,0.2) 100%); display:flex; align-items:center; justify-content:center; font-size:2.2rem; color:var(--primary-color);">
-                    📝
+                <div style="width:56px; height:56px; border-radius:4px; background:var(--primary-color); display:flex; align-items:center; justify-content:center; color:white;">
+                    ${ICONS.interview}
                 </div>
                 <div>
-                    <h3 style="font-size:1.5rem; font-weight:800; color:var(--text-main); margin:0 0 0.5rem 0;">
-                        Espacio de Co-Evaluación y Entrevistas
+                    <h3 style="font-size:1.4rem; font-weight:700; color:var(--text-main); font-family:var(--font-serif); margin:0 0 0.5rem 0;">
+                        Espacio de Evaluación Docente por Dirección
                     </h3>
-                    <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.6; margin:0;">
-                        Selecciona a cualquier docente en el directorio de la izquierda para analizar sus respuestas, comparar el radar competencial y cumplimentar la valoración consensuada de Dirección.
+                    <p style="font-size:0.92rem; color:var(--text-muted); line-height:1.6; margin:0;">
+                        Selecciona a un/a docente en el directorio de la izquierda para examinar sus evidencias, contrastar criterios y formalizar la valoración y acuerdos de Dirección.
                     </p>
                 </div>
 
                 ${deliveredTeachers.length > 0 ? `
-                    <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:14px; padding:1.25rem 1.5rem; width:100%; text-align:left;">
-                        <div style="font-weight:700; color:#10b981; font-size:0.9rem; margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between;">
-                            <span>🟢 ${deliveredTeachers.length} Autoevaluaciones entregadas listas para co-evaluar:</span>
+                    <div style="background:rgba(11,37,69,0.03); border:1px solid var(--card-border); border-radius:var(--border-radius-sm); padding:1.25rem 1.5rem; width:100%; text-align:left;">
+                        <div style="font-weight:700; color:var(--primary-color); font-size:0.88rem; margin-bottom:0.75rem; display:flex; align-items:center; justify-content:space-between;">
+                            <span>${deliveredTeachers.length} Autoevaluaciones entregadas listas para valorar:</span>
                             <button class="btn btn-primary" style="padding:4px 12px; font-size:0.78rem;" onclick="selectFirstDeliveredTeacher()">
                                 Iniciar con la primera →
                             </button>
@@ -5236,8 +5437,8 @@ function renderTeacherDetailCard(name, teachersData) {
                         </div>
                     </div>
                 ` : `
-                    <div style="background:rgba(0,0,0,0.02); border:1px solid var(--card-border); border-radius:12px; padding:1rem 1.5rem; font-size:0.85rem; color:var(--text-muted);">
-                        ℹ️ Todavía no hay cuestionarios entregados en <strong>${state.selectedEtapa}</strong>. Podrás comenzar la co-evaluación en cuanto el profesorado vaya enviando sus cuestionarios.
+                    <div style="background:var(--bg-card); border:1px solid var(--card-border); border-radius:var(--border-radius-sm); padding:1rem 1.5rem; font-size:0.85rem; color:var(--text-muted);">
+                        No hay cuestionarios entregados en <strong>${state.selectedEtapa}</strong> en este momento. La valoración se habilitará conforme el profesorado formalice sus entregas.
                     </div>
                 `}
             </div>
@@ -6070,55 +6271,55 @@ function renderDirectorManagementTab(teachersData) {
 
     const formHtml = `
         <div class="crud-form-container glass-container">
-            <h4 style="margin-top:0; margin-bottom:1rem; color:var(--primary-color);">
-                ${isEditing ? '📝 Editar Ficha de Docente' : '➕ Registrar Nuevo Docente en el Centro'}
+            <h4 style="margin-top:0; margin-bottom:1rem; color:var(--primary-color); font-family:var(--font-serif); font-weight:700;">
+                ${isEditing ? 'Editar Ficha de Docente' : 'Registrar Nuevo Docente en el Centro'}
             </h4>
             <form id="crud-teacher-form" onsubmit="handleCrudSubmit(event, '${state.editingTeacherName || ''}')">
                 <div class="crud-form-grid">
                     <div>
-                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Nombre Completo</label>
-                        <input type="text" class="form-input" id="crud-name" placeholder="Ej. Pedro Picapiedra" required value="${editTeacherObj ? editTeacherObj.name : ''}">
+                        <label class="form-label" style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">Nombre Completo</label>
+                        <input type="text" class="form-input" id="crud-name" placeholder="Nombre y Apellidos" required value="${editTeacherObj ? editTeacherObj.name : ''}">
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Etapa Educativa</label>
-                        <select class="form-input" id="crud-etapa" style="padding: 0.5rem 0.75rem; border: 1px solid var(--card-border); border-radius: 6px; background: var(--bg-card); color: var(--text-main);">
+                        <label class="form-label" style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">Etapa Educativa</label>
+                        <select class="form-input" id="crud-etapa" style="padding: 0.5rem 0.75rem; border: 1px solid var(--card-border); border-radius: var(--border-radius-sm); background: var(--bg-card); color: var(--text-main);">
                             ${(function() {
                                 const sRole = state.currentUser.subrole || 'general';
                                 if (sRole === 'ei_ep') {
                                     return `
-                                        <option value="Infantil" ${editTeacherObj && editTeacherObj.etapa === 'Infantil' ? 'selected' : ''}>👶 Infantil</option>
-                                        <option value="Primaria" ${editTeacherObj && editTeacherObj.etapa === 'Primaria' ? 'selected' : ''}>👦 Primaria</option>
+                                        <option value="Infantil" ${editTeacherObj && editTeacherObj.etapa === 'Infantil' ? 'selected' : ''}>Educación Infantil</option>
+                                        <option value="Primaria" ${editTeacherObj && editTeacherObj.etapa === 'Primaria' ? 'selected' : ''}>Educación Primaria</option>
                                     `;
                                 } else if (sRole === 'eso_bto') {
                                     return `
-                                        <option value="Secundaria" ${editTeacherObj && editTeacherObj.etapa === 'Secundaria' ? 'selected' : ''}>🎓 Secundaria</option>
+                                        <option value="Secundaria" ${editTeacherObj && editTeacherObj.etapa === 'Secundaria' ? 'selected' : ''}>Secundaria y Bachillerato</option>
                                     `;
                                 } else {
                                     return `
-                                        <option value="Infantil" ${editTeacherObj && editTeacherObj.etapa === 'Infantil' ? 'selected' : ''}>👶 Infantil</option>
-                                        <option value="Primaria" ${editTeacherObj && editTeacherObj.etapa === 'Primaria' ? 'selected' : ''}>👦 Primaria</option>
-                                        <option value="Secundaria" ${editTeacherObj && editTeacherObj.etapa === 'Secundaria' ? 'selected' : ''}>🎓 Secundaria</option>
+                                        <option value="Infantil" ${editTeacherObj && editTeacherObj.etapa === 'Infantil' ? 'selected' : ''}>Educación Infantil</option>
+                                        <option value="Primaria" ${editTeacherObj && editTeacherObj.etapa === 'Primaria' ? 'selected' : ''}>Educación Primaria</option>
+                                        <option value="Secundaria" ${editTeacherObj && editTeacherObj.etapa === 'Secundaria' ? 'selected' : ''}>Secundaria y Bachillerato</option>
                                     `;
                                 }
                             })()}
                         </select>
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">¿Tiene Tutoría asignada?</label>
-                        <select class="form-input" id="crud-tutor" style="padding: 0.5rem 0.75rem; border: 1px solid var(--card-border); border-radius: 6px; background: var(--bg-card); color: var(--text-main);">
+                        <label class="form-label" style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">¿Tiene Tutoría asignada?</label>
+                        <select class="form-input" id="crud-tutor" style="padding: 0.5rem 0.75rem; border: 1px solid var(--card-border); border-radius: var(--border-radius-sm); background: var(--bg-card); color: var(--text-main);">
                             <option value="No" ${!editTeacherObj || editTeacherObj.tutor === 'No' ? 'selected' : ''}>No</option>
                             <option value="Sí" ${editTeacherObj && (editTeacherObj.tutor === 'Sí' || (editTeacherObj.tutor !== 'No' && !editTeacherObj.tutor.startsWith('Director'))) ? 'selected' : ''}>Sí</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="form-label" style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Contraseña de Acceso</label>
+                        <label class="form-label" style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">Clave de Acceso</label>
                         <input type="text" class="form-input" id="crud-password" placeholder="Clave de inicio de sesión" required value="${editTeacherObj ? (editTeacherObj.password || editTeacherObj.name.toLowerCase().split(' ')[0]) : ''}">
                     </div>
                 </div>
                 <div style="display:flex; gap:8px;">
                     <button class="btn btn-primary" type="submit">
-                        ${isEditing ? '✓ Guardar Cambios' : '➕ Registrar Docente'}
+                        ${isEditing ? 'Guardar Cambios' : 'Registrar Docente'}
                     </button>
                     ${isEditing ? `
                         <button class="btn btn-secondary" type="button" onclick="cancelCrudEdit()">Cancelar</button>
@@ -6141,15 +6342,15 @@ function renderDirectorManagementTab(teachersData) {
         const isTutor = t.tutor === 'Sí' || (t.tutor && t.tutor !== 'No' && !t.tutor.startsWith('Director'));
         return `
             <tr>
-                <td style="font-weight:700; color:var(--text-main);">${t.name}</td>
+                <td style="font-weight:600; color:var(--text-main);">${t.name}</td>
                 <td>${t.etapa}</td>
                 <td><span class="badge ${isTutor ? 'badge-completed' : 'badge-not-started'}">${isTutor ? 'Sí' : 'No'}</span></td>
-                <td><code style="background:rgba(0,0,0,0.03); padding:2px 6px; border-radius:4px; font-size:0.8rem; font-family:monospace; color: var(--primary-color);">${pwd}</code></td>
+                <td><code style="background:rgba(0,0,0,0.03); padding:2px 6px; border-radius:3px; font-size:0.8rem; font-family:monospace; color: var(--primary-color);">${pwd}</code></td>
                 <td>${statusBadge}</td>
                 <td>
                     <div style="display:flex; gap:6px;">
-                        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="startCrudEdit('${t.name}')">✏️ Editar</button>
-                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="deleteTeacher('${t.name}')">🗑️ Eliminar</button>
+                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="startCrudEdit('${t.name}')">Editar</button>
+                        <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteTeacher('${t.name}')">Eliminar</button>
                     </div>
                 </td>
             </tr>
@@ -6158,11 +6359,11 @@ function renderDirectorManagementTab(teachersData) {
 
     const searchHtml = `
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top: 1rem; border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
-            <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">📋 Personal del Claustro</h3>
+            <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:var(--text-main); font-family:var(--font-serif);">Directorio del Claustro</h3>
             <input type="text" class="form-input" id="crud-search-input" 
-                   placeholder="🔍 Buscar docente en la tabla..." 
+                   placeholder="Buscar docente en la tabla..." 
                    oninput="filterCrudTable(this.value)" 
-                   style="max-width:320px; font-size:0.8rem; padding: 0.4rem 0.8rem;">
+                   style="max-width:320px; font-size:0.8rem; padding: 0.4rem 0.8rem; border-radius:var(--border-radius-sm);">
         </div>
     `;
 
@@ -6599,17 +6800,19 @@ function renderTeacherSuccessScreen(teacherName) {
     window.scrollTo(0, 0);
     dom.app.innerHTML = `
         <div class="glass-container success-screen-container">
-            <div class="success-icon">🎉</div>
-            <h2 style="color:var(--success); margin-bottom:1rem; font-weight:800; letter-spacing:-0.03em;">¡Cuestionario Entregado con Éxito!</h2>
+            <div style="width:56px; height:56px; border-radius:50%; background:rgba(30,110,67,0.1); color:var(--success); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem auto;">
+                ${ICONS.check}
+            </div>
+            <h2 style="color:var(--primary-color); margin-bottom:1rem; font-weight:700; font-family:var(--font-serif);">Cuestionario Entregado con Éxito</h2>
             <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:2rem; font-size:0.95rem;">
-                Muchas gracias, <strong>${teacherName}</strong>. Tu autoevaluación se ha guardado de forma permanente y ya está a disposición de la Dirección. El acta ha quedado registrada de cara a tu entrevista presencial de co-evaluación.
+                Muchas gracias, <strong>${teacherName}</strong>. Tu autoevaluación ha quedado registrada formalmente y se encuentra a disposición del Equipo Directivo para el contraste de criterios y la entrevista colegiada.
             </p>
             <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-                <button class="btn btn-primary" onclick="viewMyCompletedEvaluation()">
-                    📄 Consultar mi Informe
+                <button class="btn btn-primary" onclick="viewMyCompletedEvaluation()" style="display:inline-flex; align-items:center; gap:6px;">
+                    ${ICONS.practice} Consultar mi Informe
                 </button>
-                <button class="btn btn-secondary" onclick="handleLogout()">
-                    🚪 Cerrar Sesión
+                <button class="btn btn-secondary" onclick="handleLogout()" style="display:inline-flex; align-items:center; gap:6px;">
+                    ${ICONS.logout} Cerrar Sesión
                 </button>
             </div>
         </div>
@@ -7038,15 +7241,15 @@ function renderDirectorTutorialTab() {
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
                     <div>
                         <span style="font-size:0.75rem; font-weight:800; color:#8b5cf6; text-transform:uppercase; letter-spacing:0.12em;">Manual de Uso Institucional</span>
-                        <h2 style="margin:4px 0 6px 0; font-size:1.6rem; font-weight:900; color:var(--text-main);">
-                            📚 Guía Interactiva y Tutorial del Panel Directivo
+                        <h2 style="margin:4px 0 6px 0; font-size:1.5rem; font-weight:700; color:var(--text-main); font-family:var(--font-serif);">
+                            Guía Metodológica y Operativa del Panel Directivo
                         </h2>
                         <p style="margin:0; font-size:0.92rem; color:var(--text-secondary);">
-                            Bienvenido/a, <strong>${directorName}</strong> (${roleDescription}). Esta guía explica paso a paso cada una de las funcionalidades de la plataforma.
+                            Bienvenido/a, <strong>${directorName}</strong> (${roleDescription}). Esta guía describe los procedimientos y herramientas institucionales para la evaluación del profesorado.
                         </p>
                     </div>
-                    <button class="btn btn-primary" onclick="window.printDocumentNative()" style="background:linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); font-size:0.85rem;">
-                        🖨️ Imprimir / Exportar Guía
+                    <button class="btn btn-primary" onclick="window.printDocumentNative()" style="background:var(--primary-color); font-size:0.85rem;">
+                        Imprimir / Exportar Guía
                     </button>
                 </div>
             </div>
@@ -7055,64 +7258,58 @@ function renderDirectorTutorialTab() {
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:1.5rem;">
                 
                 <!-- Módulo 1 -->
-                <div class="glass-container" style="padding:1.5rem; border-radius:14px; border-left:4px solid #3b82f6;">
+                <div class="glass-container" style="padding:1.5rem; border-radius:var(--border-radius-md); border-left:4px solid var(--primary-color);">
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
-                        <span style="font-size:1.5rem;">📊</span>
-                        <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">1. Panel General y Estadísticas Globals</h3>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:var(--primary-color); font-family:var(--font-serif);">1. Resumen Ejecutivo y Métricas Globales</h3>
                     </div>
                     <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; line-height:1.6; margin:0; display:flex; flex-direction:column; gap:8px;">
                         <li><strong>Tarjetas KPI:</strong> Monitoriza el total de docentes asignados a tu etapa, cuántos han finalizado su entrega, cuántos están en proceso y cuántos faltan por iniciar.</li>
-                        <li><strong>Gráfico de Radar Interactivo:</strong> Muestra la huella competencial comparando la autoevaluación del docente frente a la valoración de la Dirección y el promedio del claustro.</li>
-                        <li><strong>Gráfico de Sintonía Pedagógica:</strong> Mide el grado de alineación (%) entre las expectativas del docente y las observaciones de la Dirección.</li>
-                        <li><strong>Métricas del Claustro:</strong> Muestra los reconocimientos de buenas prácticas votados por los propios profesores.</li>
+                        <li><strong>Gráfico de Radar Competencial:</strong> Muestra la huella competencial comparando la autoevaluación del docente frente a la valoración de la Dirección y el promedio del claustro.</li>
+                        <li><strong>Gráfico de Sintonía Pedagógica:</strong> Mide el grado de alineación (%) entre las valoraciones del docente y las observaciones de la Dirección.</li>
+                        <li><strong>Reconocimiento de Buenas Prácticas:</strong> Muestra menciones constructivas entre compañeros de etapa.</li>
                     </ul>
                 </div>
 
                 <!-- Módulo 2 -->
-                <div class="glass-container" style="padding:1.5rem; border-radius:14px; border-left:4px solid #10b981;">
+                <div class="glass-container" style="padding:1.5rem; border-radius:var(--border-radius-md); border-left:4px solid var(--accent-color);">
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
-                        <span style="font-size:1.5rem;">🎙️</span>
-                        <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">2. Detalle y Co-Evaluación Directiva</h3>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:var(--primary-color); font-family:var(--font-serif);">2. Evaluación Docente por Dirección y Entrevistas</h3>
                     </div>
                     <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; line-height:1.6; margin:0; display:flex; flex-direction:column; gap:8px;">
-                        <li><strong>Selector Completo de Profesores:</strong> Despliega el listado completo de los docentes de la etapa con 1 solo clic o mediante el buscador rápido.</li>
-                        <li><strong>Modo Entrevista Presencial (🎙️):</strong> Activa una interfaz ágil para que la Dirección puntúe y tome notas cualitativas en vivo durante la reunión cara a cara con el profesor.</li>
-                        <li><strong>Reapertura de Actas (🔓):</strong> Permite desarchivar una autoevaluación entregada si el profesor necesita corregir o ampliar sus evidencias.</li>
-                        <li><strong>Generador IA de Propuestas:</strong> Analiza las respuestas del docente y propone acciones de mejora basadas únicamente en autoevaluaciones reales entregadas.</li>
+                        <li><strong>Directorio Completo del Claustro:</strong> Despliega el listado completo de los docentes de la etapa con 1 solo clic o mediante el buscador rápido.</li>
+                        <li><strong>Modo Entrevista Presencial:</strong> Activa una interfaz ágil para que la Dirección contraste criterios y registre acuerdos y notas cualitativas durante la reunión de contraste con el docente.</li>
+                        <li><strong>Reapertura de Autoevaluaciones:</strong> Permite desarchivar una autoevaluación entregada si el profesor necesita corregir o ampliar sus evidencias.</li>
+                        <li><strong>Propuestas de Desarrollo Profesional:</strong> Analiza las fortalezas y áreas de mejora basándose en las evidencias registradas.</li>
                     </ul>
                 </div>
 
                 <!-- Módulo 3 -->
-                <div class="glass-container" style="padding:1.5rem; border-radius:14px; border-left:4px solid #f59e0b;">
+                <div class="glass-container" style="padding:1.5rem; border-radius:var(--border-radius-md); border-left:4px solid #2f6d8f;">
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
-                        <span style="font-size:1.5rem;">🖨️</span>
-                        <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">3. Informes Oficiales de Imprenta y PDF</h3>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:var(--primary-color); font-family:var(--font-serif);">3. Informes Oficiales de Imprenta y PDF</h3>
                     </div>
                     <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; line-height:1.6; margin:0; display:flex; flex-direction:column; gap:8px;">
-                        <li><strong>Acta Consolidada de Imprenta:</strong> Al hacer clic en <em>Imprimir / PDF</em>, se genera el documento ejecutivo formal con Folio Único <code>ACTA-2627-NOMBRE</code>.</li>
-                        <li><strong>Motor de Impresión Aislado (&lt;iframe&gt;):</strong> La vista previa de impresión en PDF abre instantáneamente en 0.05s sin congelar la pantalla ni bloquear el navegador.</li>
-                        <li><strong>Certificación y Firmas Digitales:</strong> Incluye los espacios para la firma manuscrita electrónica del docente y de la Dirección, junto con el sello de integridad SHA-256 y timestamp.</li>
+                        <li><strong>Acta Oficial Consolidada:</strong> Al hacer clic en <em>Imprimir / PDF</em>, se genera el documento ejecutivo formal con Folio Único <code>ACTA-2627-NOMBRE</code>.</li>
+                        <li><strong>Motor de Impresión Aislado (&lt;iframe&gt;):</strong> La vista previa de impresión en PDF abre instantáneamente sin interferir con la navegación activa.</li>
+                        <li><strong>Certificación y Firmas:</strong> Incluye los espacios para la firma del docente y de la Dirección, junto con el sello de integridad SHA-256 y marca de tiempo.</li>
                     </ul>
                 </div>
 
                 <!-- Módulo 4 -->
-                <div class="glass-container" style="padding:1.5rem; border-radius:14px; border-left:4px solid #8b5cf6;">
+                <div class="glass-container" style="padding:1.5rem; border-radius:var(--border-radius-md); border-left:4px solid #13315c;">
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
-                        <span style="font-size:1.5rem;">🔥</span>
-                        <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">4. Base de Datos en Nube Híbrida ('HybridDatabase')</h3>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:var(--primary-color); font-family:var(--font-serif);">4. Gestión de Datos y Persistencia</h3>
                     </div>
                     <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; line-height:1.6; margin:0; display:flex; flex-direction:column; gap:8px;">
-                        <li><strong>Tres Modos de Persistencia:</strong> Opera en Google Firebase Firestore (Nube), Servidor REST API o almacenamiento Local (LocalStorage).</li>
-                        <li><strong>Sincronización en Tiempo Real:</strong> Cuando un profesor completa el cuestionario desde su casa o móvil, la pantalla de la Dirección se actualiza automáticamente.</li>
-                        <li><strong>Botonera de Configuración Nube:</strong> En la pestaña <em>Gestión del Claustro</em> se encuentra el botón <code>🔥 Configurar Firebase BBDD</code> para vincular las credenciales web en 1 clic.</li>
+                        <li><strong>Persistencia Segura:</strong> Operación en servidor remoto / base de datos Firestore y sincronización local en el dispositivo.</li>
+                        <li><strong>Sincronización Continua:</strong> Cuando un docente formaliza su cuestionario, el panel de Dirección refleja el cambio inmediatamente.</li>
                     </ul>
                 </div>
 
                 <!-- Módulo 5 -->
-                <div class="glass-container" style="padding:1.5rem; border-radius:14px; border-left:4px solid #ec4899;">
+                <div class="glass-container" style="padding:1.5rem; border-radius:var(--border-radius-md); border-left:4px solid #5b6776;">
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
-                        <span style="font-size:1.5rem;">📥</span>
-                        <h3 style="margin:0; font-size:1.1rem; font-weight:800; color:var(--text-main);">5. Exportación, Copias de Seguridad y Secretos</h3>
+                        <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:var(--primary-color); font-family:var(--font-serif);">5. Exportación y Copias de Seguridad</h3>
                     </div>
                     <ul style="font-size:0.85rem; color:var(--text-secondary); padding-left:1.2rem; line-height:1.6; margin:0; display:flex; flex-direction:column; gap:8px;">
                         <li><strong>Exportación Excel / CSV (UTF-8 BOM):</strong> El botón <em>Exportar CSV</em> genera un archivo 100% compatible con Microsoft Excel manteniendo tildes y caracteres en español.</li>
