@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap');
 
 :root {
     --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -1380,4 +1381,151 @@ main {
 [data-theme="dark"] .dropdown-item:hover {
     background: rgba(255, 255, 255, 0.06) !important;
     color: #60a5fa !important;
+}
+
+/* ===== LOGIN INSTITUCIONAL (lp-*) ===== */
+
+body.is-login::before, body.is-login::after { display: none; }
+body.is-login .app-header { display: none; }
+
+.lp-layout {
+    --lp-navy: #0b2545;
+    --lp-navy-2: #13315c;
+    --lp-gold: #b8892b;
+    --lp-gold-soft: #e9d8a6;
+    --lp-ink: #1b2733;
+    --lp-muted: #5b6776;
+    --lp-line: #d9dde3;
+    --lp-paper: #f6f4ee;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: minmax(420px, 46%) 1fr;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--lp-ink);
+    background: var(--lp-paper);
+}
+
+/* ---- Panel institucional ---- */
+.lp-brand {
+    background:
+        linear-gradient(180deg, rgba(11,37,69,0.0) 0%, rgba(5,20,40,0.55) 100%),
+        var(--lp-navy);
+    color: #fff;
+    position: relative;
+    overflow-y: auto;
+    border-right: 4px solid var(--lp-gold);
+}
+.lp-brand::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+}
+.lp-brand-inner {
+    position: relative;
+    min-height: 100%;
+    padding: 3rem 3.5rem;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem;
+}
+.lp-logo-card {
+    align-self: flex-start;
+    background: #fff;
+    padding: 0.9rem 1.5rem;
+    border-radius: 4px;
+    border-bottom: 3px solid var(--lp-gold);
+}
+.lp-logo-card img { display: block; height: 62px; width: auto; }
+
+.lp-eyebrow {
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--lp-gold-soft); margin-bottom: 1rem;
+}
+.lp-eyebrow-dark { color: var(--lp-gold); margin-bottom: 0.75rem; }
+
+.lp-title {
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-weight: 600; font-size: clamp(1.9rem, 2.6vw, 2.7rem);
+    line-height: 1.18; letter-spacing: -0.01em; color: #fff;
+}
+.lp-lead {
+    margin-top: 1.1rem; max-width: 34rem;
+    font-size: 1rem; line-height: 1.65; color: rgba(255,255,255,0.82);
+}
+.lp-steps { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1.1rem; max-width: 34rem; }
+.lp-steps li { display: flex; gap: 1rem; align-items: flex-start; }
+.lp-steps li > span {
+    flex: 0 0 auto; width: 30px; height: 30px; border: 1px solid var(--lp-gold);
+    color: var(--lp-gold-soft); font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem;
+}
+.lp-steps strong { display: block; font-size: 0.95rem; font-weight: 600; color: #fff; }
+.lp-steps small { display: block; margin-top: 2px; font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.7); }
+
+.lp-quote {
+    border-top: 1px solid rgba(255,255,255,0.18); padding-top: 1.25rem;
+    font-family: 'Source Serif 4', Georgia, serif; font-style: italic;
+    font-size: 1rem; line-height: 1.55; color: rgba(255,255,255,0.88); max-width: 34rem;
+}
+.lp-quote cite {
+    display: block; margin-top: 0.5rem; font-family: 'Inter', sans-serif; font-style: normal;
+    font-size: 0.75rem; letter-spacing: 0.06em; color: var(--lp-gold-soft);
+}
+
+/* ---- Panel de acceso ---- */
+.lp-access {
+    display: flex; align-items: center; justify-content: center;
+    padding: 2.5rem 2rem; overflow-y: auto; background: var(--lp-paper);
+}
+.lp-access-inner {
+    width: 100%; max-width: 440px;
+    background: #fff; border: 1px solid var(--lp-line); border-top: 3px solid var(--lp-navy);
+    border-radius: 4px; padding: 2.5rem 2.25rem 1.75rem;
+    box-shadow: 0 1px 2px rgba(11,37,69,0.06), 0 12px 32px -12px rgba(11,37,69,0.18);
+}
+.lp-access-head h2 {
+    font-family: 'Source Serif 4', Georgia, serif; font-weight: 600;
+    font-size: 1.85rem; color: var(--lp-navy); letter-spacing: -0.01em;
+}
+.lp-access-head p:last-child { margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55; color: var(--lp-muted); }
+
+.lp-form { margin-top: 1.75rem; display: flex; flex-direction: column; gap: 1.1rem; }
+.lp-field { display: flex; flex-direction: column; gap: 6px; }
+.lp-field label { font-size: 0.8rem; font-weight: 600; color: var(--lp-ink); }
+.lp-input {
+    width: 100%; height: 46px; padding: 0 0.9rem;
+    font-family: inherit; font-size: 0.95rem; color: var(--lp-ink);
+    background: #fff; border: 1px solid #b9c0ca; border-radius: 3px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.lp-input::placeholder { color: #98a2b0; }
+.lp-input:hover { border-color: #8b95a3; }
+.lp-input:focus { outline: none; border-color: var(--lp-navy-2); box-shadow: 0 0 0 3px rgba(19,49,92,0.15); }
+
+.lp-submit {
+    margin-top: 0.4rem; height: 48px; border: none; border-radius: 3px; cursor: pointer;
+    background: var(--lp-navy); color: #fff; font-family: inherit; font-size: 0.95rem; font-weight: 600;
+    letter-spacing: 0.02em; border-bottom: 3px solid var(--lp-gold);
+    transition: background .15s ease;
+}
+.lp-submit:hover { background: var(--lp-navy-2); }
+.lp-submit:focus-visible { outline: 3px solid rgba(184,137,43,0.5); outline-offset: 2px; }
+
+.lp-help { margin-top: 1.25rem; font-size: 0.8rem; color: var(--lp-muted); text-align: center; }
+.lp-legal {
+    margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-line);
+    display: flex; flex-direction: column; gap: 4px; font-size: 0.72rem; color: #7b8695; text-align: center;
+}
+
+@media (max-width: 900px) {
+    .lp-layout { position: static; grid-template-columns: 1fr; min-height: 100vh; }
+    .lp-brand { border-right: none; border-bottom: 4px solid var(--lp-gold); }
+    .lp-brand-inner { padding: 2rem 1.5rem; gap: 1.75rem; }
+    .lp-steps, .lp-quote { display: none; }
+    .lp-access { padding: 1.5rem 1rem 2.5rem; }
+    .lp-access-inner { padding: 1.75rem 1.4rem 1.4rem; }
 }

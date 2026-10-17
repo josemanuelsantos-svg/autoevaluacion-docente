@@ -1495,6 +1495,8 @@ function renderApp() {
         headerLogout.style.display = state.currentUser ? 'inline-flex' : 'none';
     }
 
+    document.body.classList.toggle('is-login', !state.currentUser);
+
     if (!state.currentUser) {
         renderLoginView();
     } else if (state.currentUser.role === 'teacher') {
@@ -1505,81 +1507,93 @@ function renderApp() {
 }
 
 function renderLoginView() {
-    // F19: Opciones con ID único y descripción de cargo para evitar ambigüedades
-    let teacherOptions = TEACHERS.map(t => {
-        const cargoDesc = t.cargo && t.cargo !== 'Docente' ? ` - ${t.cargo}` : '';
-        return `<option value="${t.id}">${t.name} (${t.etapa}${cargoDesc})</option>`;
+    // Opciones agrupadas por etapa (valor = id único para evitar ambigüedades)
+    const etapas = ['Infantil', 'Primaria', 'Secundaria'];
+    const optionHtml = t => {
+        const cargoDesc = t.cargo && t.cargo !== 'Docente' ? ` · ${t.cargo}` : '';
+        return `<option value="${t.id}">${t.name}${cargoDesc}</option>`;
+    };
+    const demos = TEACHERS.filter(t => t.id.startsWith('demo-'));
+    let teacherOptions = etapas.map(et => {
+        const list = TEACHERS.filter(t => !t.id.startsWith('demo-') && t.etapa === et);
+        return list.length ? `<optgroup label="${et === 'Secundaria' ? 'Secundaria y Bachillerato' : 'Educación ' + et}">${list.map(optionHtml).join('')}</optgroup>` : '';
     }).join('');
-    
-    dom.app.innerHTML = `
-        <div class="login-split-layout">
-            <!-- Lado Izquierdo: Hero Cover Visual de la Marca -->
-            <div class="login-hero-side">
-                <div style="z-index:2; position:relative; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
-                    <div>
-                        <!-- Logo Oficial Colegio San Buenaventura -->
-                        <div class="login-brand-banner" style="background: rgba(255,255,255,0.98); border-radius: 16px; padding: 1.25rem 2rem; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); margin-bottom: 2rem; max-width: 320px;">
-                            <img src="logo.png" alt="Colegio San Buenaventura" style="max-height: 80px; width: auto; object-fit: contain; display: block;">
-                        </div>
+    if (demos.length) {
+        teacherOptions += `<optgroup label="Cuentas de demostración">${demos.map(optionHtml).join('')}</optgroup>`;
+    }
 
-                        <div style="margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
-                            <span class="badge" style="background: rgba(255,255,255,0.2); color:white; font-size:0.8rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding: 4px 10px; border-radius: 6px;">Plataforma Oficial</span>
-                            <span class="badge" style="background: rgba(217,119,6,0.3); color:#fef08a; font-size:0.8rem; font-weight:700; padding: 4px 10px; border-radius: 6px;">Curso 2026-2027</span>
-                        </div>
-                        <h2 style="font-size:2.6rem; font-weight:900; line-height:1.15; letter-spacing:-0.04em; color:white;">
-                            Autoevaluación<br>y Co-Evaluación
-                        </h2>
-                        <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-top: 12px; line-height: 1.5; max-width: 420px;">
-                            Marco de desarrollo profesional, reflexión pedagógica e identidad compartida para el Claustro.
-                        </p>
-                        <div style="width:50px; height:4px; background:var(--accent-color); margin-top:20px; border-radius:2px;"></div>
+    dom.app.innerHTML = `
+        <div class="lp-layout">
+            <!-- PANEL INSTITUCIONAL -->
+            <section class="lp-brand">
+                <div class="lp-brand-inner">
+                    <div class="lp-logo-card">
+                        <img src="logo.png" alt="Colegio San Buenaventura">
                     </div>
-                    
-                    <div class="login-quote-card">
-                        <p class="login-quote-text">
-                            "No basta la inteligencia sin la humildad, ni la ciencia sin el amor."
+
+                    <div class="lp-brand-copy">
+                        <p class="lp-eyebrow">Evaluación del desempeño docente · Curso 2026-2027</p>
+                        <h1 class="lp-title">Plataforma de Autoevaluación<br>y Coevaluación Docente</h1>
+                        <p class="lp-lead">
+                            Un proceso formal, confidencial y documentado de reflexión profesional, orientado
+                            al crecimiento del claustro y a la misión educativa del centro.
                         </p>
-                        <p class="login-quote-author">
-                            — San Buenaventura, <em>Itinerarium Mentis in Deum (Prologus, 4)</em>
-                        </p>
+
+                        <ol class="lp-steps">
+                            <li><span>1</span><div><strong>Autoevaluación</strong><small>El docente valora su práctica en cinco bloques competenciales.</small></div></li>
+                            <li><span>2</span><div><strong>Coevaluación</strong><small>Dirección contrasta criterios y consensúa la valoración en entrevista.</small></div></li>
+                            <li><span>3</span><div><strong>Acta y plan de mejora</strong><small>Informe final firmado por ambas partes con plan de crecimiento SMART.</small></div></li>
+                        </ol>
                     </div>
+
+                    <blockquote class="lp-quote">
+                        “No basta la inteligencia sin la humildad, ni la ciencia sin el amor.”
+                        <cite>San Buenaventura · Itinerarium Mentis in Deum</cite>
+                    </blockquote>
                 </div>
-            </div>
-            
-            <!-- Lado Derecho: Formulario de Entrada Glassmorphic -->
-            <div class="login-form-side">
-                <div class="auth-wrapper glass-container">
-                    <div class="auth-header" style="text-align:left;">
-                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 1.25rem; flex-wrap:wrap; gap:10px;">
-                            <div style="background: white; border-radius: 10px; padding: 6px 14px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.06);">
-                                <img src="logo.png" alt="Logo Colegio San Buenaventura" style="height: 38px; width: auto; object-fit: contain;">
-                            </div>
-                            <span style="font-size: 0.75rem; font-weight:700; color:var(--primary-color); text-transform:uppercase; letter-spacing:0.1em; background: rgba(37,99,235,0.08); padding: 4px 10px; border-radius: 20px;">Curso 2026-2027</span>
-                        </div>
-                        <span style="font-size: 0.8rem; font-weight:700; color:var(--primary-color); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:6px;">Autoevaluación Docente</span>
-                        <h2>Portal del Claustro</h2>
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">Ingresa para completar tu autoevaluación o visualizar informes.</p>
+            </section>
+
+            <!-- PANEL DE ACCESO -->
+            <section class="lp-access">
+                <div class="lp-access-inner">
+                    <div class="lp-access-head">
+                        <p class="lp-eyebrow lp-eyebrow-dark">Acceso restringido al claustro</p>
+                        <h2>Iniciar sesión</h2>
+                        <p>Identifícate con tu nombre y tu clave personal para acceder a tu espacio de evaluación.</p>
                     </div>
-                    <form class="auth-form" id="login-form" onsubmit="event.preventDefault(); handleLogin(document.getElementById('login-username').value, document.getElementById('login-password').value);">
-                        <div class="form-group">
-                            <label for="login-select">Selecciona tu identidad (Acceso Rápido)</label>
-                            <select class="form-input" id="login-select" style="margin-bottom: 0.75rem; height: 48px;" onchange="handleQuickSelect(this.value)">
-                                <option value="">-- Selecciona tu nombre de la lista --</option>
+
+                    <form class="lp-form" id="login-form" onsubmit="event.preventDefault(); handleLogin(document.getElementById('login-username').value, document.getElementById('login-password').value);">
+                        <div class="lp-field">
+                            <label for="login-select">Selecciona tu nombre</label>
+                            <select class="lp-input" id="login-select" onchange="handleQuickSelect(this.value)">
+                                <option value="">Elegir de la lista del claustro…</option>
                                 ${teacherOptions}
                             </select>
-                            <label for="login-username">Usuario / Nombre</label>
-                            <input type="text" class="form-input" id="login-username" placeholder="Nombre completo o selecciona arriba..." autocomplete="username" required>
                         </div>
-                        <div class="form-group">
-                            <label for="login-password">Contraseña personal</label>
-                            <input type="password" class="form-input" id="login-password" placeholder="Introduce tu clave personal asignada..." autocomplete="current-password" required>
+
+                        <div class="lp-field">
+                            <label for="login-username">Usuario</label>
+                            <input type="text" class="lp-input" id="login-username" placeholder="Nombre y apellidos" autocomplete="username" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; height: 50px; font-size:1.05rem; font-weight:700;">
-                            Iniciar Sesión
-                        </button>
+
+                        <div class="lp-field">
+                            <label for="login-password">Contraseña</label>
+                            <input type="password" class="lp-input" id="login-password" placeholder="Tu clave personal" autocomplete="current-password" required>
+                        </div>
+
+                        <button type="submit" class="lp-submit">Acceder a la plataforma</button>
                     </form>
+
+                    <p class="lp-help">
+                        ¿Problemas de acceso? Contacta con la Dirección del centro para recuperar tu clave.
+                    </p>
+
+                    <div class="lp-legal">
+                        <span>🔒 Datos tratados con confidencialidad y uso exclusivo del equipo directivo.</span>
+                        <span>© Colegio San Buenaventura</span>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     `;
 }
