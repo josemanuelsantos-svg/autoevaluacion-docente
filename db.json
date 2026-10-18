@@ -129,8 +129,8 @@
       "cargo": "Docente",
       "fechaAlta": "2002-09-01",
       "tutoria": "3 años-B",
-      "password": "csb-las-9855",
-      "authHash": "836b1886cb9ff4746ca9789c28364026b159a9285c9d0cd7d274b1edde9bcca6"
+      "password": "csb-nieves-9855",
+      "authHash": "44c3e3cef0d71b2eb44be27a533b11eb132181bf60c34733ff205a0ddf01ba6c"
     },
     {
       "id": "doc-07",
@@ -157,8 +157,8 @@
       "cargo": "Docente",
       "fechaAlta": "2008-09-15",
       "tutoria": "Sin tutoría registrada",
-      "password": "csb-jesus-2503",
-      "authHash": "b12e755d8310236b0031802b59ce93ab33a09d0f1c90f03be264b6d8adfecf9d"
+      "password": "csb-mariajesus-2503",
+      "authHash": "66a86662f39c5ebcb555247e3f356719fc8ea804998d25913a0d00ee84db8bbd"
     },
     {
       "id": "doc-09",
@@ -452,8 +452,8 @@
       "cargo": "Docente",
       "fechaAlta": "2026-09-01",
       "tutoria": "Sin tutoría registrada",
-      "password": "csb-vazquez-5527",
-      "authHash": "7a56d25c3f6f6b6e075e3cf5765924b11204a8adbe3fe7702ce8c60e58d09d12"
+      "password": "csb-maria-5527",
+      "authHash": "b9a2b5ec299bab2a5ee50881a07b1493c554e38d50ad13c982094d660ea28927"
     },
     {
       "id": "doc-30",
@@ -818,8 +818,8 @@
       "cargo": "Docente",
       "fechaAlta": "2026-09-01",
       "tutoria": "2º ESO-B",
-      "password": "csb-la-6603",
-      "authHash": "418f1f026cd283a8d38952001c61200b4ed5f65be2e843fed6f9506bdcdc8c87"
+      "password": "csb-soledad-6603",
+      "authHash": "bb1316930009329ce6adf5ee018cdc44bff89009de72cab020607c210e78fb45"
     },
     {
       "id": "doc-56",
@@ -846,8 +846,8 @@
       "cargo": "Docente",
       "fechaAlta": "2007-09-25",
       "tutoria": "Sin tutoría registrada",
-      "password": "csb-laura-4524",
-      "authHash": "6625f717cbc9b7ab95b301cc50634981dea69f2daebd04b67f30d183916a30a4"
+      "password": "csb-marialaura-4524",
+      "authHash": "4f073aeead8d56e65d8f43bbe8807c4699c01f05266b6e4f54f65edf008f3609"
     },
     {
       "id": "doc-58",
