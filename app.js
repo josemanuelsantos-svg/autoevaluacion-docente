@@ -4,7 +4,7 @@
 // ==========================================================================
 function getTeacherSmartPlan(userData) {
     if (!userData || !userData.answers) {
-        return { goal: '', actions: '', indicator: '', support: '', targetDate: '', reviewer: '' };
+        return { goal: '', actions: '', indicator: '', support: '', targetDate: '', reviewer: '', revision: '' };
     }
     const sp = userData.answers.smart_plan || {};
     return {
@@ -13,7 +13,8 @@ function getTeacherSmartPlan(userData) {
         indicator: sp.indicator || sp.indicador || userData.answers.smart_indicator || '',
         support: sp.support || sp.apoyo || userData.answers.smart_support || '',
         targetDate: sp.targetDate || sp.fecha || userData.answers.smart_target_date || '',
-        reviewer: sp.reviewer || sp.responsable || ''
+        reviewer: sp.reviewer || sp.responsable || '',
+        revision: sp.revision || userData.answers.smart_revision || ''
     };
 }
 
@@ -1061,6 +1062,218 @@ const EVAL_BLOCKS = [
     }
 ];
 
+
+// ==========================================================================
+// RÚBRICAS CONDUCTUALES Y DESCRIPTORES DE DESEMPEÑO POR ÍTEM (28 PREGUNTAS)
+// ==========================================================================
+const QUESTION_DESCRIPTORS = {
+    // BLOQUE 1: IDENTIDAD, BIENESTAR Y SENTIDO DE PERTENENCIA
+    "1.1": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Desmotivación persistente, sensación de desgaste extremo o apatía manifiesta en el desarrollo de la labor docente diaria.", evidence: "Desconexión con la actividad colegial o solicitud de apoyo por sobrecarga emocional." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Motivación baja o muy fluctuante; las cargas y tensiones diarias superan habitualmente la satisfacción laboral.", evidence: "Cansancio recurrente con impacto perceptible en la predisposición diaria." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Cumplimiento profesional correcto con estabilidad emocional habitual y disposición adecuada ante el trabajo cotidiano.", evidence: "Desarrollo ordenado y puntual de las responsabilidades profesionales." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Alto nivel de compromiso, actitud proactiva positiva e implicación entusiasta en las clases y dinámicas colegiales.", evidence: "Ambiente positivo y motivador transmitido activamente en el aula." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Plena alegría vocacional e ilusión que irradia al alumnado e inyecta energía constructiva y serenidad a todo el claustro.", evidence: "Testimonio vocacional visible y alta capacidad de contagio positivo." }
+    },
+    "1.2": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Desconexión manifiesta con el Ideario institucional o distanciamiento activo de la identidad franciscana del centro.", evidence: "Omisión de referencias a los valores del centro en el trato pedagógico." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Conocimiento formal del Ideario sin una integración consciente o sistemática en la práctica educativa diaria.", evidence: "Cumplimiento meramente nominal de actividades institucionales." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Respeto, alineación y reflejo coherente de los valores franciscanos (acogida, sencillez y paz) en la labor docente.", evidence: "Trato respetuoso, cercano y coherente con el estilo educativo franciscano." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Vivencia activa y explícita de los valores franciscanos en la relación educativa, promoviendo la fraternidad y el servicio mutuo.", evidence: "Iniciativas en el aula orientadas a la inclusión, empatía y resolución pacífica." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Referente institucional de carisma franciscano, ejemplar en humildad, servicio incondicional, alegría y fraternidad colegial.", evidence: "Reconocimiento unánime de la comunidad como modelo de testimonio franciscano." }
+    },
+    "1.4": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Percepción de desatención institucional o ausencia total de canales de escucha y acompañamiento profesional.", evidence: "Sensación manifiesta de desprotección ante dificultades profesionales." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Percepción de atención insuficiente o tardía ante necesidades laborales y de bienestar expresadas.", evidence: "Dificultad sentida para canalizar inquietudes hacia los órganos directivos." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Consideración de que el centro responde adecuadamente a las demandas y muestra preocupación profesional correcta.", evidence: "Respuesta efectiva del colegio ante solicitudes o incidencias planteadas." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Valoración muy positiva del acompañamiento, la accesibilidad de la dirección y las medidas de cuidado profesional.", evidence: "Canales de comunicación fluidos y percepción clara de respaldo institucional." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Plena confianza en el centro como un entorno protector, altamente humano y comprometido con el bienestar de cada persona.", evidence: "Participación activa en dinámicas de cuidado mutuo y valoración máxima del clima." }
+    },
+    "1.5": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Vivencia de un ambiente tenso o conflictivo en el colegio con falta de respeto o distanciamiento interpersonal marcado.", evidence: "Conflictos no resueltos o aislamiento en los espacios comunes." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Ambiente correcto en apariencia pero condicionado por desconfianzas puntuales o falta de cercanía cotidiana.", evidence: "Relaciones estrictamente formales sin calidez institucional." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Convivencia diaria basada en el respeto mutuo, la corrección profesional y el trato cordial en el centro.", evidence: "Interacciones armoniosas en reuniones, claustros y pasillos." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Ambiente franciscano cálido, cercano y fraterno que genera confort emocional y facilita la cooperación.", evidence: "Colaboración fluida y clima cotidiano de compañerismo sincero." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Extraordinaria vivencia comunitaria donde prima la fraternidad franciscana, la lealtad mutua y el apoyo incondicional.", evidence: "Generación activa de un entorno de confianza, acogida y bienestar compartido." }
+    },
+    "1.6": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Aislamiento profesional; sensación de que su presencia y criterio son completamente irrelevantes para el centro.", evidence: "Falta total de participación en iniciativas y consultas colegiales." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Participación restringida a órdenes directas sin percibir que se valoren sus aportaciones individuales.", evidence: "Escasa aportación voluntaria por percepción de poca receptividad." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Sensación normal de ser tenido en cuenta en las dinámicas organizativas y pedagógicas ordinarias de su etapa.", evidence: "Participación regular en decisiones de equipo de ciclo y claustro." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Reconocimiento visible de su valía profesional con consulta habitual de su opinión en asuntos de relevancia.", evidence: "Asunción de responsabilidades específicas con autonomía delegada." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Plena integración y corresponsabilidad en el proyecto institucional, sintiéndose pieza clave en el devenir del centro.", evidence: "Liderazgo compartido y participación nuclear en la vida y rumbo del centro." }
+    },
+
+    // BLOQUE 2: CORRESPONSABILIDAD Y CULTURA DE EQUIPO
+    "2.1": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Aislamiento acusado o relaciones conflictivas con los compañeros de ciclo o departamento.", evidence: "Fricciones reiteradas o falta de comunicación básica en el equipo." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Integración superficial limitada a formalidades administrativas sin verdadera sinergia de equipo.", evidence: "Poca participación en intercambios profesionales fuera de lo pautado." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Buena integración profesional, respeto mutuo y comunicación habitual con el equipo de trabajo.", evidence: "Asistencia constructiva y trabajo regular en reuniones de ciclo/etapa." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Fuerte cohesión, confianza recíproca y apoyo mutuo constante ante los retos pedagógicos y tutoriales.", evidence: "Colaboración interprofesional frecuente y respaldo activo al compañero." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Pilar de cohesión del grupo humano, promotor incansable de la fraternidad, mediador natural y generador de sinergias.", evidence: "Reconocimiento como dinamizador y mediador que une al equipo de etapa." }
+    },
+    "2.2": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Hermetismo metodológico; no comparte programaciones ni materiales y no respeta los acuerdos del equipo.", evidence: "Ausencia de aportaciones a carpetas comunes o programaciones de ciclo." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Comparte materiales únicamente bajo requerimiento formal previo, con escasa coordinación real.", evidence: "Aportes mínimos en las reuniones de coordinación pedagógica." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Participa puntualmente en reuniones de coordinación compartiendo recursos y unificando criterios esenciales.", evidence: "Programaciones alineadas y banco de recursos compartido de la materia/nivel." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Aporta activamente propuestas pedagógicas, rúbricas y proyectos innovadores enriqueciendo al grupo.", evidence: "Liderazgo de iniciativas compartidas y optimización de materiales comunes." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Transforma la cultura de equipo: diseña y estructura repositorios de excelencia pedagógica para todo el centro.", evidence: "Creación de bancos de actividades y secuencias didácticas adoptadas por otros." }
+    },
+    "2.3": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Reticencia o rechazo a prestar ayuda a compañeros; se ciñe rígidamente a sus obligaciones estrictas.", evidence: "Falta de disponibilidad ante imprevistos, guardias o sustituciones colegiales." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Ayuda reactiva: colabora únicamente si se le solicita explícita e insistentemente por parte de la jefatura.", evidence: "Disposición condicionada a la reiteración de peticiones." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Disposición favorable y colaboradora para apoyar a compañeros ante situaciones de sobrecarga o imprevistos.", evidence: "Apoyo en guardias, intercambios horarios y tareas compartidas de etapa." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Proactividad demostrable: detecta necesidades ajenas y se ofrece de forma espontánea y generosa.", evidence: "Acompañamiento espontáneo a compañeros con mayor carga o en proyectos complejos." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Servicio incondicional y generoso, acogiendo e impulsando especialmente a docentes de nueva incorporación.", evidence: "Mentoría informal a compañeros nuevos y disponibilidad permanente." }
+    },
+    "2.4": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Sensación de soledad o desamparo ante dificultades; percepción de indiferencia por parte del claustro.", evidence: "Aislamiento percibido ante incidencias graves de aula o gestión." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Recepción de ayuda puntual pero insuficiente para aliviar momentos de alta tensión pedagógica.", evidence: "Sensación de que el apoyo del grupo no llega con la agilidad requerida." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Respaldo y ayuda habitual y efectiva de los compañeros cuando se presentan situaciones complejas.", evidence: "Resolución colaborativa de dudas tutoriales o metodológicas cotidianas." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Sensación patente de red de seguridad fraterna y profesional brindada de forma constante por el equipo.", evidence: "Intercambio fluido de apoyo pedagógico y afectivo en el día a día." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Plena confianza en un equipo humano extraordinario que multiplica el rendimiento y la serenidad profesional.", evidence: "Reconocimiento explícito del valor añadido del claustro como soporte integral." }
+    },
+    "2.5": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Incapacidad o resistencia a solicitar ayuda por temor al juicio profesional, cronificando problemas en el aula.", evidence: "Ocultamiento de dificultades pedagógicas o de conducta hasta fases críticas." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Demora excesiva en pedir apoyo, recurriendo a los compañeros solo ante situaciones de desbordamiento.", evidence: "Petición tardía de asesoramiento en casos de conflicto escolar." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Consulta con normalidad a compañeros y coordinadores ante dudas metodológicas, técnicas o de convivencia.", evidence: "Diálogo habitual y maduro sobre casos de alumnos o grupos con dificultad." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Humildad y transparencia profesional: solicita asesoramiento temprano y comparte abiertamente sus áreas de mejora.", evidence: "Petición proactiva de observación de aula o revisión de instrumentos pedagógicos." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Cultura abierta de co-aprendizaje: promueve la docencia compartida y el feedback entre pares sin reservas.", evidence: "Organización de sesiones de co-observación y mejora mutua entre compañeros." }
+    },
+    "2.6": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Quejas improductivas recurrentes, comentarios despectivos o actitudes que erosionan el clima laboral del centro.", evidence: "Generación o amplificación de quejas desestructuradas en espacios comunes." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Pasividad ante dinámicas negativas o tendencia a sumarse a comentarios de desánimo colectivo.", evidence: "Foco habitual en las dificultades sin proponer alternativas constructivas." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Actitud profesional prudente, respetuosa y equilibrada que no distorsiona el ambiente de trabajo.", evidence: "Intervenciones centradas en soluciones y respeto riguroso en las reuniones." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Optimismo contagioso, enfoque constructivo ante los retos y refuerzo explícito del ánimo de los compañeros.", evidence: "Desactivación positiva de tensiones y propuestas ilusionantes para el equipo." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Motor de paz, serenidad y alegría franciscana que cohesiona al claustro y transforma los problemas en oportunidades.", evidence: "Referente colegial de concordia, mirada positiva y resiliencia institucional." }
+    },
+
+    // BLOQUE 3: ACCIÓN PASTORAL
+    "3.1": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Omisión habitual de la oración de primera hora o degradación a mero trámite burocrático sin clima de silencio.", evidence: "Inicio de clase sin momento de reflexión pastoral o con desorden en el aula." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Realización discontinua o apresurada sin asegurar el ambiente previo de sosiego y recogimiento interior.", evidence: "Lectura rápida del material sin suscitar escucha o diálogo con los alumnos." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Realización diaria, puntual y cuidada de la oración utilizando los materiales facilitados por Pastoral.", evidence: "Clima de respeto, orden y regularidad en el momento matinal de reflexión." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Cuidado esmerado del clima espiritual, introduciendo dinámicas, música y aterrizando el mensaje a la vida de los alumnos.", evidence: "Participación activa y sentida de los alumnos en la oración diaria." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Momento espiritual transformador y referente del día, integrando vivencias de fe, solidaridad y acogida franciscana.", evidence: "Experiencias de profundización interior altamente valoradas por alumnado y familias." }
+    },
+    "3.2": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Desinterés o ausencia ante las celebraciones, campañas (Domund, Navidad, etc.) e iniciativas pastorales.", evidence: "Falta de trabajo de los materiales de campaña pastoral en el aula." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Participación mínima y obligada sin entusiasmo ni dinamización pedagógica previa con el alumnado.", evidence: "Cumplimiento plano de las instrucciones sin motivar la colaboración solidaria." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Colaboración activa y puntual en la preparación y vivencia de campañas y celebraciones litúrgicas colegiales.", evidence: "Realización de actividades de campaña y asistencia comprometida a celebraciones." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Animación entusiasta, sensibilizando profundamente a los alumnos y cooperando activamente con el equipo de Pastoral.", evidence: "Implicación del aula en gestos solidarios creativos y testimonios concretos." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Impulso motor de la pastoral del centro: diseño de celebraciones, voluntariado y testimonio misionero contagioso.", evidence: "Liderazgo de iniciativas pastorales que movilizan a toda la comunidad escolar." }
+    },
+    "3.3": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Incoherencia perceptible entre el discurso institucional franciscano y las actitudes mostradas ante los alumnos.", evidence: "Quejas de autoritarismo desmedido o falta de misericordia pedagógica." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Trato correcto en lo académico pero sin reflejo testimonial de sencillez, perdón, cercanía o empatía.", evidence: "Relación distante centrada exclusivamente en la instrucción académica." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Ejemplo coherente de honestidad, justicia y respeto en la relación diaria con cada uno de los estudiantes.", evidence: "Reconocimiento por parte de los alumnos de un trato equilibrado y justo." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Testimonio constante de misericordia, humildad, paciencia pedagógica y escucha incondicional a los alumnos.", evidence: "Acompañamiento cercano a estudiantes en situación de vulnerabilidad o conflicto." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Referente moral y vocacional: modelo de bondad, entrega franciscana, perfecta alegría y reconciliación.", evidence: "Vínculo de confianza y gratitud imborrable manifestado por alumnos y familias." }
+    },
+
+    // BLOQUE 4: PRÁCTICA DOCENTE, EVALUACIÓN Y ACOMPAÑAMIENTO
+    "4.1": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Improvisación frecuente de las clases; programaciones didácticas inexistentes, desfasadas o desatendidas.", evidence: "Falta de coherencia curricular o ausencia de registros de planificación previa." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Programación didáctica básica pero rígida y desactualizada, con escasa previsión de adaptaciones.", evidence: "Dificultad para coordinar las unidades con la temporización y el currículo oficial." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Programación sistemática, actualizada y coordinada conforme al currículo y normativas vigentes.", evidence: "Unidades didácticas disponibles, estructuradas y coordinadas en plazo." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Planificación didáctica rigurosa, enriquecida con proyectos motivadores, DUA y atención continua a la diversidad.", evidence: "Programaciones con adaptaciones preventivas y actividades competenciales variadas." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Excelencia en diseño curricular: unidades interdisciplinares ejemplares, recursos propios de alto valor e impacto medible.", evidence: "Publicación o difusión de proyectos educativos adoptados por otros departamentos." }
+    },
+    "4.2": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Uso monótono y exclusivo de la clase magistral tradicional sin atención a los ritmos diversos de aprendizaje.", evidence: "Quejas por monotonía en las clases o falta de recursos didácticos activos." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Uso ocasional de alguna dinámica alternativa, pero predominio de métodos pasivos y uniformes.", evidence: "Escasa diversificación de materiales para atender a alumnos con necesidades." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Combinación regular de explicaciones, actividades prácticas grupales y recursos variados para mantener la atención.", evidence: "Uso coordinado de libros, soporte digital y actividades cooperativas básicas." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Aplicación sistemática de metodologías activas (ABP, cooperativo, rincones, DUA) que motivan y atienden a todos.", evidence: "Alumnos motivados con evidencias de aprendizaje práctico y multinivel." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Maestría metodológica innovadora: entorno de aprendizaje altamente estimulante, inclusivo y personalizado.", evidence: "Prácticas pedagógicas innovadoras compartidas y reconocidas en el claustro." }
+    },
+    "4.3": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Clima de aula desordenado o conflictivo; dificultades graves y recurrentes para impartir clase con serenidad.", evidence: "Pérdida habitual de tiempo pedagógico por incidencias disciplinarias continuas." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Mantenimiento del orden frágil y dependiente de medidas punitivas o intervención de la jefatura.", evidence: "Clima irregular con altibajos en función de los grupos de alumnos." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Clima de aula ordenado, respetuoso y favorable al trabajo académico y la concentración.", evidence: "Rutinas de trabajo consolidadas y gestión adecuada de la convivencia diaria." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Ambiente sereno, participativo y de alta implicación fundamentado en el refuerzo positivo y la empatía.", evidence: "Alumnado enfocado, motivado y con normas de respeto interiorizadas." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Clima de aula modélico: autorregulación del alumnado, entusiasmo mutuo, diálogo pacífico y calidez afectiva.", evidence: "Aula como comunidad de aprendizaje fraterna donde el conflicto se previene." }
+    },
+    "4.4": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Inseguridad acusada o rechazo al empleo de las plataformas digitales del centro (Google Classroom, Educamos, etc.).", evidence: "Desactualización de contenidos digitales o uso inexistente de recursos del centro." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Manejo instrumental básico limitado a proyectar contenidos o subir calificaciones al sistema.", evidence: "Uso elemental sin aprovechamiento didáctico de las herramientas disponibles." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Uso fluido, regular y seguro de las plataformas institucionales y recursos digitales de la asignatura.", evidence: "Aulas virtuales actualizadas y comunicación telemática fluida con el alumnado." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Integración didáctica creativa de herramientas digitales interactivas que enriquecen el proceso formativo.", evidence: "Diseño de actividades digitales colaborativas, portfolios y recursos multimedia." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Competencia digital sobresaliente: investiga, prueba herramientas pioneras y asesora al claustro con generosidad.", evidence: "Liderazgo en formación de herramientas tecnológicas para el claustro." }
+    },
+    "4.5": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Evaluación reducida a exámenes tradicionales únicos, sin criterios conocidos previamente por los alumnos.", evidence: "Falta de rúbricas o desinformación en los criterios de corrección aplicados." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Criterios conocidos pero escasa variedad de instrumentos de evaluación más allá de las pruebas escritas.", evidence: "Predominio casi exclusivo de exámenes sumativos convencionales." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Criterios e instrumentos de evaluación claros, ponderados, variados y conocidos desde el inicio de curso.", evidence: "Rúbricas informadas, listas de cotejo y ponderaciones accesibles a las familias." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Evaluación formativa rica: dianas de evaluación, autoevaluación guiada y evaluación entre pares con rúbricas precisas.", evidence: "Alumnado consciente de sus metas de aprendizaje y evolución competencial." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Cultura de evaluación integral y autorreguladora: la evaluación guía y empodera al alumno en su propio progreso.", evidence: "Portfolios de evaluación y matrices de progresión competencial ejemplares." }
+    },
+    "4.6": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Retrasos excesivos en la corrección o devolución de trabajos y exámenes sin observaciones orientativas.", evidence: "Quejas por demoras en notas o entregas devueltas sin anotación explicativa." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Devolución a tiempo pero limitada a una calificación numérica sin orientación sobre cómo subsanar los fallos.", evidence: "Falta de comentarios constructivos en las pruebas y proyectos corregidos." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Corrección y entrega puntual en plazos razonables con comentarios claros que explican los errores detectados.", evidence: "Devolución regular en 1-2 semanas con orientaciones formativas básicas." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Devolución ágil con feedback constructivo detallado, señalando fortalezas y pautas concretas de mejora.", evidence: "Anotaciones cualitativas en cada trabajo fomentando la reflexión del alumno." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Retroalimentación inmediata y personalizada que convierte cada acto de corrección en una lección de superación.", evidence: "Sesiones individuales breves de feedback y seguimiento tras cada evaluación." }
+    },
+    "4.7": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Ausencia de alternativas o segundas oportunidades reales de recuperación para alumnos que no superan los objetivos.", evidence: "Calificaciones negativas sin plan de rescate pedagógico articulado." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Recuperación limitada a un examen idéntico extraordinario sin un plan de refuerzo previo guiado.", evidence: "Falta de seguimiento específico a los alumnos con asignaturas pendientes." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Aplicación sistemática de planes de refuerzo y pruebas de recuperación conforme a la programación del centro.", evidence: "Tareas de recuperación pautadas y registradas para alumnos con suspensos." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Itinerarios de refuerzo personalizados y segundas oportunidades orientadas a garantizar el aprendizaje efectivo.", evidence: "Planes de trabajo individualizados que rescatan con éxito al alumnado con dificultades." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Ningún alumno queda atrás: estrategias proactivas de acompañamiento y reevaluación que garantizan el éxito.", evidence: "Tasa de recuperación sobresaliente basada en el acompañamiento tutorial estrecho." }
+    },
+    "4.8": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Información a familias y alumnos restringida exclusivamente al boletín trimestral de notas numéricas.", evidence: "Ausencia de comentarios cualitativos en la plataforma de comunicación familiar." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Comunicación reactiva, informando a las familias únicamente cuando se producen situaciones de sanción o suspenso.", evidence: "Mensajes familiares centrados solo en avisos de carácter negativo." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Comunicación periódica y estructurada con alumnos y familias sobre progresos y aspectos de mejora.", evidence: "Uso regular de informes tutoriales y mensajes informativos en la plataforma." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Feedback proactivo y constructivo continuo: pone en valor el esfuerzo y orienta con claridad a familias y alumnos.", evidence: "Entrevistas periódicas de seguimiento y refuerzo positivo documentado." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Alianza pedagógica excepcional con las familias, generando corresponsabilidad y confianza recíproca plena.", evidence: "Reconocimiento y gratitud de las familias por el acompañamiento vocacional." }
+    },
+    "4.9": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Distancia afectiva notable o respuestas desproporcionadas ante dificultades o inquietudes de los alumnos.", evidence: "Percepción de lejanía o dificultad de los estudiantes para acercarse al docente." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Trato correcto pero excesivamente aséptico sin espacio para la contención o empatía con el mundo emocional del alumno.", evidence: "Poca sensibilidad percibida ante problemas personales que afectan al rendimiento." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Trato cordial, cercano y empático con todo el alumnado, escuchando sus dudas con respeto y paciencia.", evidence: "Accesibilidad reconocida por los estudiantes al finalizar las clases." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Gran capacidad de escucha activa, intuición pedagógica y acogida incondicional a las realidades de cada joven.", evidence: "Alumnos que acuden voluntariamente en busca de orientación y consejo personal." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Docente de referencia afectiva y vital para el alumnado, modelo de ternura y firmeza pedagógica franciscana.", evidence: "Impacto formativo imborrable y testimonio de vida que marca positivamente a los jóvenes." }
+    },
+    "4.12": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Desatención o demoras graves (más de 5-7 días) en contestar correos y mensajes de las familias.", evidence: "Reclamaciones en secretaría o dirección por falta de respuesta del docente." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Respuestas tardías (más de 3 días) o mensajes excesivamente telegráficos que generan confusión en la familia.", evidence: "Comunicación poco clarificadora que obliga a reiterar consultas." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Comunicación fluida y profesional contestando correos en el plazo reglamentario de 24 a 48 horas laborables.", evidence: "Respuestas puntuales, respetuosas y protocolarias en Educamos/correo." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Atención ágil, cuidada y resolutiva, convocando reuniones preventivas y facilitando la colaboración escolar.", evidence: "Familias informadas con antelación ante cualquier incidencia relevante." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Excelencia comunicativa: trato empático, preventivo y exquisito que consolida la fidelidad y orgullo de las familias.", evidence: "Felicitaciones de familias a dirección por la atención y profesionalidad recibidas." }
+    },
+
+    // BLOQUE 5: COMPROMISO CON EL BIEN COMÚN Y LA VIDA DEL CENTRO
+    "5.1": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Ausencia reiterada y no justificada a eventos, actos institucionales o celebraciones comunes del colegio.", evidence: "Falta de asistencia sin justificar a graduaciones, Día de las Familias o claustros." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Asistencia esporádica o forzada, buscando excusas habituales para ausentarse de las convocatorias generales.", evidence: "Participación mínima e indiferente en los actos comunitarios del centro." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Asistencia habitual, puntual y comprometida a todos los actos colegiales incluidos en el calendario oficial.", evidence: "Presencia activa en graduaciones, jornadas de puertas abiertas y celebraciones." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Participación entusiasta en los eventos colegiales colaborando activamente en la acogida y organización.", evidence: "Apoyo voluntario en montaje, protocolo y atención a familias durante los actos." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Presencia modélica y dinamizadora en todos los actos comunitarios, haciendo colegio y reforzando la identidad.", evidence: "Liderazgo en la dinamización de eventos institucionales de gran impacto." }
+    },
+    "5.2": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Rechazo sistemático o reticencia manifiesta a acompañar salidas extraescolares, viajes de estudios o convivencias.", evidence: "Negativa reiterada a participar en actividades programadas fuera del recinto escolar." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Disposición mínima, acompañando salidas escolares únicamente bajo designación directa y obligatoria.", evidence: "Poca iniciativa para organizar o acompañar experiencias fuera del aula." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Disponibilidad favorable y responsable para acompañar las salidas y excursiones de su nivel o departamento.", evidence: "Acompañamiento comprometido en salidas culturales y convivencias de su etapa." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Voluntariedad proactiva para viajes de estudios, convivencias de varios días y actividades pastorales complejas.", evidence: "Disponibilidad generosa de fines de semana o noches para acompañar al alumnado." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Máxima entrega vocacional: lidera viajes, campamentos y experiencias de voluntariado con entrega franciscana.", evidence: "Reconocimiento como docente voluntario imprescindible en las grandes experiencias colegiales." }
+    },
+    "5.3": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Inactividad total o rechazo explícito a colaborar en comisiones de trabajo voluntarias o comités colegiales.", evidence: "Falta de participación en cualquier grupo de mejora institucional." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Pertenencia nominal a comisiones de trabajo con escasa implicación horaria o aportación efectiva.", evidence: "Asistencia pasiva a reuniones de comisión sin asumir tareas asignadas." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Participación responsable y constructiva en las comisiones asignadas, cumpliendo los compromisos acordados.", evidence: "Aportaciones registradas en actas de comisión (convivencia, festejos, calidad...)." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Iniciativa constante en comisiones, proponiendo soluciones prácticas e impulsando proyectos de mejora colegial.", evidence: "Coordinación efectiva de subproyectos en comisiones institucionales." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Impulsor clave de proyectos estratégicos de centro con visión global, generosidad de tiempo y rigor ejecutivo.", evidence: "Liderazgo y ejecución de proyectos de transformación adoptados por el colegio." }
+    },
+    "5.4": {
+        1: { title: "Nivel 1: Inicial / Crítico", desc: "Nivel de compromiso insuficiente que genera desequilibrios o sobrecarga hacia el resto de los compañeros.", evidence: "Percepción justificada en el claustro de desafección con las tareas colegiales." },
+        2: { title: "Nivel 2: En Desarrollo", desc: "Cumplimiento ajustado estrictamente a lo mínimo exigible reglamentario, con margen claro de mayor corresponsabilidad.", evidence: "Poca disposición a aportar valor más allá del horario lectivo básico." },
+        3: { title: "Nivel 3: Competente / Estándar", desc: "Nivel de implicación y compromiso acorde con el estándar profesional y la expectativa del centro educativo.", evidence: "Cumplimiento fiel, responsable y honesto de la misión encomendada." },
+        4: { title: "Nivel 4: Avanzado / Destacado", desc: "Alto nivel de implicación y lealtad institucional, superando con creces los deberes contractuales básicos.", evidence: "Disponibilidad frecuente y compromiso palpable con el prestigio y misión del colegio." },
+        5: { title: "Nivel 5: Excelente / Referente", desc: "Entrega vocacional ejemplar y sentido de misión plena: orgullo de pertenencia franciscano que prestigia a toda la institución.", evidence: "Referente indiscutible de generosidad, entrega y amor a la comunidad escolar." }
+    }
+};
+
 // 4. ALMACENAMIENTO LIMPIO DE EVALUACIONES (SIN DATOS SIMULADOS)
 const INITIAL_EVALUATIONS_DATA = {};
 // 5. CLASE BASE DE DATOS HYBRID CLOUD (FIREBASE FIRESTORE + REST API + LOCALSTORAGE)
@@ -1187,7 +1400,11 @@ class HybridDatabase {
                 if (parsed && parsed.evaluations) {
                     initialDB.evaluations = parsed.evaluations;
                 }
+                if (parsed && parsed.auditLogs) {
+                    initialDB.auditLogs = parsed.auditLogs;
+                }
             }
+            if (!initialDB.auditLogs) initialDB.auditLogs = [];
 
             TEACHERS.forEach(t => {
                 if (!initialDB.evaluations[t.name]) {
@@ -1291,6 +1508,34 @@ class HybridDatabase {
         if (typeof showSaveIndicator === 'function') {
             showSaveIndicator();
         }
+    }
+
+    logEvent(actor, action, details = {}) {
+        try {
+            const currentDb = this.get() || { evaluations: {}, auditLogs: [] };
+            if (!currentDb.auditLogs) currentDb.auditLogs = [];
+            const event = {
+                id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                timestamp: new Date().toISOString(),
+                actor: actor || (state.currentUser ? state.currentUser.name : 'Sistema'),
+                role: (state.currentUser ? state.currentUser.role : 'sistema'),
+                action: action,
+                details: details
+            };
+            currentDb.auditLogs.unshift(event);
+            if (currentDb.auditLogs.length > 500) {
+                currentDb.auditLogs = currentDb.auditLogs.slice(0, 500);
+            }
+            this.save(currentDb);
+            return event;
+        } catch(e) {
+            console.warn('Log event error', e);
+        }
+    }
+
+    getAuditLogs() {
+        const currentDb = this.get();
+        return (currentDb && Array.isArray(currentDb.auditLogs)) ? currentDb.auditLogs : [];
     }
 }
 
@@ -1433,6 +1678,9 @@ async function handleLogin(username, password) {
                     db.getUserData(matchedTeacher.name);
                 }
                 
+                if (db && typeof db.logEvent === 'function') {
+                    db.logEvent(matchedTeacher.name, 'ACCESO_SISTEMA', { rol: matchedTeacher.role, etapa: matchedTeacher.etapa });
+                }
                 renderApp();
                 showToast(`Bienvenido/a, ${matchedTeacher.name}`);
                 return;
@@ -1450,6 +1698,9 @@ async function handleLogin(username, password) {
 }
 
 function handleLogout() {
+    if (state.currentUser && db && typeof db.logEvent === 'function') {
+        db.logEvent(state.currentUser.name, 'CIERRE_SESION', { rol: state.currentUser.role });
+    }
     state.currentUser = null;
     state.currentBlockIndex = 0;
     state.selectedTeacherForDetail = null;
@@ -1942,14 +2193,14 @@ function renderTeacherView() {
                     <div style="margin-top: 1.5rem;">
                         <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px; color:var(--text-muted);">
                             <span>Progreso autoevaluación</span>
-                            <span style="font-weight:700; color:var(--primary-color);">${percentComplete}%</span>
+                            <span id="teacher-sidebar-percent" style="font-weight:700; color:var(--primary-color);">${percentComplete}%</span>
                         </div>
                         <div style="width:100%; height:6px; background:var(--card-border); border-radius:3px; overflow:hidden; margin-bottom:6px;">
-                            <div style="width:${percentComplete}%; height:100%; background:var(--primary-color); transition: var(--transition);"></div>
+                            <div id="teacher-sidebar-bar" style="width:${percentComplete}%; height:100%; background:var(--primary-color); transition: var(--transition);"></div>
                         </div>
                         <div style="font-size:0.72rem; color:var(--text-muted); display:flex; align-items:center; justify-content:space-between; background:rgba(37,99,235,0.04); padding:4px 8px; border-radius:4px; border:1px solid rgba(37,99,235,0.08);">
                             <span>⏱️ Tiempo est. restante:</span>
-                            <strong style="color:var(--text-main);">${Math.max(0, Math.ceil((100 - percentComplete) * 0.2))} min</strong>
+                            <strong id="teacher-sidebar-time" style="color:var(--text-main);">${Math.max(0, Math.ceil((100 - percentComplete) * 0.2))} min</strong>
                         </div>
                     </div>
                 </div>
@@ -2014,7 +2265,7 @@ function renderActiveBlockContent(teacherName, block, isLastBlock) {
                         <span>Totalmente de acuerdo</span>
                     </div>
                     <div class="score-legend-container" id="legend-${q.id}">
-                        ${answer.score > 0 ? getScoreLegendHtml(answer.score) : ''}
+                        ${answer.score > 0 ? getScoreLegendHtml(answer.score, q.id) : ''}
                     </div>
                     <div>
                         <button class="evidence-toggle-btn" type="button" onclick="toggleEvidence('${q.id}')">
@@ -2137,6 +2388,15 @@ function renderActiveBlockContent(teacherName, block, isLastBlock) {
                                    placeholder="Ejemplo: Licencias del software, tutoría de acompañamiento..." 
                                    value="${smartAns.apoyo || ''}" 
                                    onchange="saveSmartPlan('${teacherName}', 'apoyo', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight:600; font-size:0.85rem;">5. Hito de Revisión y Seguimiento Institucional</label>
+                            <select class="form-input" onchange="saveSmartPlan('${teacherName}', 'revision', this.value)">
+                                <option value="">-- Seleccionar periodo de seguimiento --</option>
+                                <option value="1T-DIC" ${smartAns.revision === '1T-DIC' ? 'selected' : ''}>Primer Trimestre (Noviembre - Diciembre 2026)</option>
+                                <option value="2T-FEB" ${smartAns.revision === '2T-FEB' ? 'selected' : ''}>Segundo Trimestre (Febrero - Marzo 2027)</option>
+                                <option value="3T-MAY" ${smartAns.revision === '3T-MAY' ? 'selected' : ''}>Final de Curso (Mayo - Junio 2027)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -2354,7 +2614,7 @@ function renderActiveBlockContent(teacherName, block, isLastBlock) {
 window.saveSmartPlan = function(teacherName, field, value) {
     const userData = db.getUserData(teacherName);
     if (!userData.answers['smart_plan']) {
-        userData.answers['smart_plan'] = { meta: '', acciones: '', indicador: '', apoyo: '' };
+        userData.answers['smart_plan'] = { meta: '', acciones: '', indicador: '', apoyo: '', revision: '' };
     }
     userData.answers['smart_plan'][field] = value;
     db.saveUserData(teacherName, userData);
@@ -2397,8 +2657,61 @@ window.saveScore = function(teacherName, qId, score) {
     }
     userData.answers[qId].score = score;
     db.saveUserData(teacherName, userData);
+
+    // Actualización in-place sin salto de scroll ni parpadeos
+    const container = document.getElementById(`legend-${qId}`);
+    if (container) {
+        container.innerHTML = getScoreLegendHtml(score, qId);
+        const card = container.closest('.question-card');
+        if (card) {
+            card.classList.add('card-answered');
+            const btns = card.querySelectorAll('.rating-btn');
+            btns.forEach((btn, idx) => {
+                const val = idx + 1;
+                btn.className = `rating-btn ${val === score ? 'selected val-' + val : ''}`;
+                btn.onmouseout = function() { restoreScoreLegend(qId, score); };
+            });
+            const qHeader = card.querySelector('.question-header');
+            if (qHeader && !qHeader.querySelector('.check-indicator')) {
+                const checkSpan = document.createElement('span');
+                checkSpan.className = 'check-indicator';
+                checkSpan.style.cssText = 'color:var(--success); margin-left:auto; display:flex; align-items:center;';
+                checkSpan.innerHTML = ICONS.check;
+                qHeader.appendChild(checkSpan);
+            }
+        }
+        updateTeacherSidebarProgress(teacherName);
+        if (typeof showSaveIndicator === 'function') {
+            showSaveIndicator();
+        }
+        return;
+    }
+
     renderTeacherView();
 };
+
+function updateTeacherSidebarProgress(teacherName) {
+    const percent = calculateCompletionPercent(teacherName);
+    const percentSpan = document.getElementById('teacher-sidebar-percent');
+    const barEl = document.getElementById('teacher-sidebar-bar');
+    const timeEl = document.getElementById('teacher-sidebar-time');
+    if (percentSpan) percentSpan.textContent = `${percent}%`;
+    if (barEl) barEl.style.width = `${percent}%`;
+    if (timeEl) timeEl.textContent = `${Math.max(0, Math.ceil((100 - percent) * 0.2))} min`;
+    
+    const navItems = document.querySelectorAll('.block-nav .nav-item');
+    if (navItems && navItems.length === EVAL_BLOCKS.length) {
+        EVAL_BLOCKS.forEach((b, idx) => {
+            const isCompleted = isBlockCompleted(teacherName, idx);
+            if (isCompleted) {
+                navItems[idx].classList.add('completed');
+            } else {
+                navItems[idx].classList.remove('completed');
+            }
+        });
+    }
+}
+window.updateTeacherSidebarProgress = updateTeacherSidebarProgress;
 
 window.saveEvidence = function(teacherName, qId, text) {
     const userData = db.getUserData(teacherName);
@@ -2480,59 +2793,240 @@ window.saveClosingField = function(teacherName, qId, value) {
 };
 
 window.finishEvaluation = function(teacherName) {
+    openSubmissionReviewModal(teacherName);
+};
+
+window.openSubmissionReviewModal = function(teacherName) {
     const userData = db.getUserData(teacherName);
     const answers = userData.answers || {};
     
-    // Contar respuestas con puntuación válida (1-5)
     let answeredScaleCount = 0;
+    let totalScoreSum = 0;
     EVAL_BLOCKS.slice(0, 5).forEach(b => {
         b.questions.forEach(q => {
             if (q.type === 'scale' && q.id !== 'cdd') {
                 const a = answers[q.id];
                 const sc = a ? (typeof a === 'object' ? a.score : a) : 0;
-                if (sc >= 1 && sc <= 5) answeredScaleCount++;
+                if (sc >= 1 && sc <= 5) {
+                    answeredScaleCount++;
+                    totalScoreSum += sc;
+                }
             }
         });
     });
 
-    // F17: Bloquear entrega completamente vacía
-    if (answeredScaleCount === 0) {
-        alert('⚠️ No es posible entregar un cuestionario completamente vacío.\n\nDebe responder a las preguntas de autoevaluación antes de realizar el envío oficial.');
-        return;
-    }
-
+    const avgScore = answeredScaleCount > 0 ? (totalScoreSum / answeredScaleCount).toFixed(2) : '0.00';
     const missing = getMissingQuestions(teacherName);
-
-    // Si tiene menos del 50% de preguntas (menos de 14), exigir entrega parcial justificada
-    if (answeredScaleCount < 14) {
-        const just = prompt(`⚠️ ENTREGA PARCIAL JUSTIFICADA\n\nHa respondido a ${answeredScaleCount} de 28 preguntas de escala (menos del 50%).\n\nSi desea realizar una entrega parcial justificada (por baja médica, incorporación reciente o causa justificada), indique el motivo:\n(Deje en blanco para cancelar y seguir respondiendo):`);
-        if (!just || !just.trim()) {
-            showToast('Entrega cancelada.');
-            return;
+    const hasSmart = !!(userData.answers['smart_plan'] && (userData.answers['smart_plan'].meta || userData.answers['smart_plan'].goal));
+    let refCount = 0;
+    EVAL_BLOCKS.slice(0, 5).forEach(b => {
+        if (userData.reflections && userData.reflections[b.id] && userData.reflections[b.id].trim().length > 0) {
+            refCount++;
         }
-        userData.status = 'completed_partial';
-        userData.partialReason = just.trim();
-        userData.submittedAt = new Date().toISOString();
-        db.saveUserData(teacherName, userData);
-        state.showingSuccessScreen = true;
-        renderTeacherView();
-        showToast('Entrega parcial justificada registrada.');
+    });
+
+    let modalEl = document.getElementById('submission-review-modal-root');
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'submission-review-modal-root';
+        document.body.appendChild(modalEl);
+    }
+
+    if (answeredScaleCount === 0) {
+        modalEl.innerHTML = `
+            <div class="inst-modal-overlay" onclick="closeSubmissionReviewModal()">
+                <div class="inst-modal-card" onclick="event.stopPropagation()" style="max-width:520px;">
+                    <div class="inst-modal-header">
+                        <h3>Cuestionario Vacío</h3>
+                        <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeSubmissionReviewModal()">✕</button>
+                    </div>
+                    <div class="inst-modal-body">
+                        <div style="background:rgba(184, 137, 43, 0.08); border-left:4px solid var(--accent-color); padding:1rem; border-radius:4px;">
+                            <strong style="color:var(--accent-color);">Atención requerida:</strong>
+                            <p style="margin:0.5rem 0 0; font-size:0.9rem; color:var(--text-main); line-height:1.45;">
+                                No es posible entregar una autoevaluación completamente vacía. Debe responder a las preguntas de los bloques competenciales antes de formalizar el envío institucional.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="inst-modal-footer">
+                        <button class="btn btn-primary" onclick="closeSubmissionReviewModal()">Entendido, continuar autoevaluación</button>
+                    </div>
+                </div>
+            </div>
+        `;
         return;
     }
 
-    // Si faltan algunas preguntas pero supera el 50%
-    if (missing.length > 0) {
-        const confirmDelivery = confirm(`Tiene ${missing.length} preguntas sin puntuar: (${missing.slice(0, 5).join(', ')}${missing.length > 5 ? '...' : ''}).\n\n¿Desea entregar la autoevaluación con las preguntas pendientes no contestadas?`);
-        if (!confirmDelivery) return;
+    if (answeredScaleCount < 14) {
+        modalEl.innerHTML = `
+            <div class="inst-modal-overlay" onclick="closeSubmissionReviewModal()">
+                <div class="inst-modal-card" onclick="event.stopPropagation()" style="max-width:580px;">
+                    <div class="inst-modal-header">
+                        <h3>Entrega Parcial Justificada</h3>
+                        <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeSubmissionReviewModal()">✕</button>
+                    </div>
+                    <div class="inst-modal-body">
+                        <div style="background:rgba(184, 137, 43, 0.08); border-left:4px solid var(--accent-color); padding:0.85rem 1rem; border-radius:4px; font-size:0.88rem;">
+                            <strong>Aviso Institucional:</strong>
+                            <p style="margin:0.35rem 0 0; line-height:1.45;">
+                                Ha respondido a <strong>${answeredScaleCount} de 28 preguntas</strong> (menos del 50%). Para registrar el cuestionario en este estado es obligatorio consignar el motivo institucional que justifique la entrega parcial (baja médica prolongada, incorporación sobrevenida, etc.).
+                            </p>
+                        </div>
+                        <div class="form-group" style="margin-top:0.5rem;">
+                            <label style="font-weight:700; font-size:0.85rem; margin-bottom:4px; display:block;">Motivo Justificativo de la Entrega Parcial:</label>
+                            <textarea id="partial-reason-input" class="form-input" style="height:80px; resize:vertical;" placeholder="Indique la causa justificada..."></textarea>
+                        </div>
+                        <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.82rem; cursor:pointer; color:var(--text-main); margin-top:0.5rem;">
+                            <input type="checkbox" id="partial-veracity-check" style="margin-top:3px;">
+                            <span>Declaro formalmente la veracidad del motivo expuesto y la conformidad con los datos aportados.</span>
+                        </label>
+                    </div>
+                    <div class="inst-modal-footer">
+                        <button class="btn btn-secondary" onclick="closeSubmissionReviewModal()">Seguir Respondiendo</button>
+                        <button class="btn btn-primary" style="background:#b8601f;" onclick="submitPartialEvaluation('${teacherName}')">Confirmar Entrega Parcial</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
     }
 
+    let missingAlertHtml = '';
+    if (missing.length > 0) {
+        missingAlertHtml = `
+            <div style="background:rgba(184, 137, 43, 0.06); border:1px solid rgba(184, 137, 43, 0.3); border-radius:6px; padding:0.85rem 1rem;">
+                <div style="font-weight:700; font-size:0.85rem; color:#875c13; margin-bottom:6px;">
+                    ⚠️ Preguntas pendientes no calificadas (${missing.length}):
+                </div>
+                <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4;">
+                    Los siguientes ítems quedarán registrados como no calificados: <strong>${missing.join(', ')}</strong>.
+                </div>
+            </div>
+        `;
+    }
+
+    modalEl.innerHTML = `
+        <div class="inst-modal-overlay" onclick="closeSubmissionReviewModal()">
+            <div class="inst-modal-card" onclick="event.stopPropagation()">
+                <div class="inst-modal-header">
+                    <h3>Revisión Previa al Envío Institucional</h3>
+                    <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeSubmissionReviewModal()">✕</button>
+                </div>
+                <div class="inst-modal-body">
+                    <p style="font-size:0.88rem; color:var(--text-secondary); margin:0; line-height:1.45;">
+                        Revise el balance general de su autoevaluación antes de realizar la entrega definitiva. Una vez confirmada, sus respuestas quedarán custodiadas para la entrevista colegiada con la Dirección.
+                    </p>
+
+                    <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;">
+                        <div class="review-checklist-item">
+                            <span>Preguntas puntuadas:</span>
+                            <strong>${answeredScaleCount} / 28</strong>
+                        </div>
+                        <div class="review-checklist-item">
+                            <span>Promedio autoevaluado:</span>
+                            <strong style="color:var(--primary-color);">${avgScore} / 5.0</strong>
+                        </div>
+                        <div class="review-checklist-item">
+                            <span>Plan de Mejora SMART:</span>
+                            <strong style="color:${hasSmart ? 'var(--success)' : '#d97706'};">${hasSmart ? 'Completado' : 'Incompleto'}</strong>
+                        </div>
+                        <div class="review-checklist-item">
+                            <span>Reflexiones de bloque:</span>
+                            <strong>${refCount} / 5</strong>
+                        </div>
+                    </div>
+
+                    ${missingAlertHtml}
+
+                    <div style="background:rgba(11, 37, 69, 0.03); border:1px solid var(--card-border); border-radius:6px; padding:1rem;">
+                        <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:0.84rem; color:var(--text-main); line-height:1.45;">
+                            <input type="checkbox" id="submission-veracity-check" onchange="window.toggleSubmissionConfirmBtn()" style="margin-top:3px; transform:scale(1.15);">
+                            <span><strong>Declaración de Veracidad y Compromiso:</strong> Declaro formalmente la veracidad y honestidad de las valoraciones y evidencias aportadas en este proceso, asumiendo su contenido como base oficial para la entrevista colegiada con el Equipo Directivo.</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="inst-modal-footer">
+                    <button class="btn btn-secondary" onclick="closeSubmissionReviewModal()">Volver y Revisar</button>
+                    <button class="btn btn-primary" id="submission-confirm-btn" disabled style="opacity:0.5; cursor:not-allowed;" onclick="confirmOfficialSubmission('${teacherName}')">
+                        Confirmar y Cerrar Autoevaluación
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.toggleSubmissionConfirmBtn = function() {
+    const check = document.getElementById('submission-veracity-check');
+    const btn = document.getElementById('submission-confirm-btn');
+    if (check && btn) {
+        btn.disabled = !check.checked;
+        btn.style.opacity = check.checked ? '1' : '0.5';
+        btn.style.cursor = check.checked ? 'pointer' : 'not-allowed';
+    }
+};
+
+window.closeSubmissionReviewModal = function() {
+    const modalEl = document.getElementById('submission-review-modal-root');
+    if (modalEl) modalEl.innerHTML = '';
+};
+
+window.submitPartialEvaluation = function(teacherName) {
+    const reasonInput = document.getElementById('partial-reason-input');
+    const check = document.getElementById('partial-veracity-check');
+    const reason = reasonInput ? reasonInput.value.trim() : '';
+    
+    if (!reason) {
+        showToast('Debe indicar el motivo justificado de la entrega parcial.');
+        return;
+    }
+    if (!check || !check.checked) {
+        showToast('Debe marcar la declaración de veracidad institucional.');
+        return;
+    }
+
+    const userData = db.getUserData(teacherName);
+    userData.status = 'completed_partial';
+    userData.partialReason = reason;
+    userData.submittedAt = new Date().toISOString();
+    db.saveUserData(teacherName, userData);
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(teacherName, 'ENTREGA_PARCIAL_JUSTIFICADA', { motivo: reason });
+    }
+
+    closeSubmissionReviewModal();
+    state.showingSuccessScreen = true;
+    renderTeacherView();
+    showToast('Entrega parcial registrada correctamente.');
+};
+
+window.confirmOfficialSubmission = function(teacherName) {
+    const userData = db.getUserData(teacherName);
     userData.status = 'completed';
     userData.submittedAt = new Date().toISOString();
     db.saveUserData(teacherName, userData);
-    
+
+    let answeredScaleCount = 0;
+    let sum = 0;
+    EVAL_BLOCKS.slice(0, 5).forEach(b => {
+        b.questions.forEach(q => {
+            if (q.type === 'scale' && q.id !== 'cdd') {
+                const a = userData.answers[q.id];
+                const sc = a ? (typeof a === 'object' ? a.score : a) : 0;
+                if (sc >= 1 && sc <= 5) { answeredScaleCount++; sum += sc; }
+            }
+        });
+    });
+    const avg = answeredScaleCount > 0 ? (sum / answeredScaleCount).toFixed(2) : 0;
+
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(teacherName, 'ENTREGA_AUTOEVALUACION', { respondidas: answeredScaleCount, promedio: avg });
+    }
+
+    closeSubmissionReviewModal();
     state.showingSuccessScreen = true;
     renderTeacherView();
-    showToast('Autoevaluación entregada con éxito.');
+    showToast('Autoevaluación formalmente entregada.');
 };
 
 
@@ -2658,7 +3152,11 @@ function renderDirectorView() {
                                 Exportar Matriz de Evaluación (JSON)
                             </button>
                             <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
-                            <button class="dropdown-item" onclick="resetDatabase(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--danger); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
+                            <button class="dropdown-item" onclick="openAuditLogModal(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                                Registro de Auditoría Institucional
+                            </button>
+                            <div style="height: 1px; background: var(--card-border); margin: 6px 0;"></div>
+                            <button class="dropdown-item" onclick="openResetDatabaseModal(); toggleDirectorToolsMenu();" style="width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--danger); border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 600;">
                                 Restablecer Datos del Centro
                             </button>
                         </div>
@@ -3643,7 +4141,7 @@ function renderTeacherDetailCard(name, teachersData) {
         `;
     }
     const tData = teachersData[name];
-    const teacherInfo = TEACHERS.find(t=>t.name===name);
+    const teacherInfo = TEACHERS.find(t=>t.name===name) || { etapa: 'General', tutor: 'No' };
     
     const teacherBlockAverages = calculateBlockAverages(name);
     const directorBlockAverages = calculateDirectorBlockAverages(name);
@@ -3759,7 +4257,7 @@ function renderTeacherDetailCard(name, teachersData) {
                                 ${dirButtons}
                             </div>
                             <div class="score-legend-container" id="legend-dir-${q.id}" style="margin-top: 4px;">
-                                ${dirScore > 0 ? getScoreLegendHtml(dirScore) : ''}
+                                ${dirScore > 0 ? getScoreLegendHtml(dirScore, q.id) : ''}
                             </div>
                         </div>
                     `;
@@ -3777,6 +4275,16 @@ function renderTeacherDetailCard(name, teachersData) {
                     `;
                 }
 
+                let discrepancyBadge = '';
+                if (score !== null && dirScore !== null) {
+                    const diff = Math.abs(score - dirScore);
+                    if (diff >= 2.0) {
+                        discrepancyBadge = `<span class="badge badge-danger" style="font-size:0.75rem;" title="Discrepancia alta (≥ 2.0)">Δ Discrepancia Alta: ${diff.toFixed(1)} pts</span>`;
+                    } else if (diff >= 1.0) {
+                        discrepancyBadge = `<span class="badge" style="background:rgba(184, 137, 43, 0.15); color:#875c13; border:1px solid rgba(184, 137, 43, 0.4); font-size:0.75rem;" title="Discrepancia moderada (≥ 1.0)">Δ Discrepancia: ${diff.toFixed(1)} pts</span>`;
+                    }
+                }
+
                 return `
                     <div class="detail-question-row">
                         <div class="detail-question-header">
@@ -3784,6 +4292,7 @@ function renderTeacherDetailCard(name, teachersData) {
                             <div style="display:flex; gap:8px; align-items:center;">
                                 <span style="font-size:0.75rem; color:var(--text-muted);">Docente:</span>
                                 <span class="detail-score-pill">${score || '-'}</span>
+                                ${discrepancyBadge}
                             </div>
                         </div>
                         ${answer && answer.evidence ? `<div class="detail-evidence-text"><strong>Evidencia/Ejemplo:</strong> ${answer.evidence}</div>` : ''}
@@ -3835,7 +4344,8 @@ function renderTeacherDetailCard(name, teachersData) {
                     </div>
                 `;
             } else if (q.type === 'smart_plan') {
-                const val = answer || { meta: '', acciones: '', indicador: '', apoyo: '' };
+                const val = answer || { meta: '', acciones: '', indicador: '', apoyo: '', revision: '' };
+                const smartValidation = tData.smartValidation || { status: 'pending', notes: '' };
                 return `
                     <div class="detail-question-row">
                         <div style="font-size: 0.95rem; font-weight: 700; margin-bottom:0.75rem; color:var(--primary-color);">6.2. Plan de Crecimiento SMART Pactado:</div>
@@ -3851,6 +4361,24 @@ function renderTeacherDetailCard(name, teachersData) {
                             </div>
                             <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
                                 <strong>Apoyo del Colegio:</strong> ${val.apoyo || '-'}
+                            </div>
+                            <div style="background:rgba(0,0,0,0.01); padding:0.5rem; border-radius:4px;">
+                                <strong>Hito de Seguimiento:</strong> ${val.revision || 'No consignado'}
+                            </div>
+                        </div>
+
+                        <!-- Validación del Plan SMART por Dirección -->
+                        <div class="no-print" style="margin-top:1rem; padding:0.85rem; background:rgba(11, 37, 69, 0.03); border:1px solid var(--card-border); border-radius:6px;">
+                            <div style="font-size:0.85rem; font-weight:700; color:var(--primary-color); margin-bottom:6px;">
+                                Validación del Plan SMART por Dirección:
+                            </div>
+                            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                                <select class="form-input" style="max-width:220px;" onchange="saveSmartValidation('${name}', this.value, document.getElementById('smart-val-notes-${name}').value)">
+                                    <option value="pending" ${smartValidation.status === 'pending' ? 'selected' : ''}>⏳ Pendiente de validación</option>
+                                    <option value="approved" ${smartValidation.status === 'approved' ? 'selected' : ''}>✓ Validado por Dirección</option>
+                                    <option value="needs_review" ${smartValidation.status === 'needs_review' ? 'selected' : ''}>⚠️ Requiere ajustes en entrevista</option>
+                                </select>
+                                <input type="text" id="smart-val-notes-${name}" class="form-input" style="flex:1; min-width:200px;" placeholder="Notas u orientaciones para el plan..." value="${smartValidation.notes || ''}" onchange="saveSmartValidation('${name}', '${smartValidation.status || 'pending'}', this.value)">
                             </div>
                         </div>
                     </div>
@@ -4081,11 +4609,14 @@ window.saveDirectorScore = function(teacherName, qId, score) {
     }
     userData.directorAnswers[qId] = score;
     db.saveUserData(teacherName, userData);
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(state.currentUser ? state.currentUser.name : 'Dirección', 'CALIFICACION_COEVALUACION', { docente: teacherName, item: qId, score: score });
+    }
 
     // Actualización directa del DOM sin salto de scroll ni parpadeos
     const legendEl = document.getElementById(`legend-dir-${qId}`);
     if (legendEl) {
-        legendEl.innerHTML = getScoreLegendHtml(score);
+        legendEl.innerHTML = getScoreLegendHtml(score, qId);
         const parentRating = legendEl.closest('.no-print');
         if (parentRating) {
             const btns = parentRating.querySelectorAll('.rating-btn');
@@ -4192,37 +4723,74 @@ window.saveDirectorNotes = function(teacherName, notes) {
     const userData = db.getUserData(teacherName);
     userData.directorNotes = notes;
     db.saveUserData(teacherName, userData);
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(state.currentUser ? state.currentUser.name : 'Dirección', 'GUARDAR_ACUERDOS', { docente: teacherName });
+    }
     showToast(`Nota guardada para ${teacherName}`);
     if (typeof showSaveIndicator === 'function') {
         showSaveIndicator();
     }
 };
 
-function getScoreLegendHtml(score) {
-    return '';
+window.saveSmartValidation = function(teacherName, status, notes) {
+    const userData = db.getUserData(teacherName);
+    userData.smartValidation = {
+        status: status,
+        notes: notes,
+        validatedAt: new Date().toISOString(),
+        validatedBy: state.currentUser ? state.currentUser.name : 'Dirección'
+    };
+    db.saveUserData(teacherName, userData);
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(state.currentUser ? state.currentUser.name : 'Dirección', 'VALIDACION_PLAN_SMART', { docente: teacherName, estado: status });
+    }
+    showToast('Validación del Plan SMART guardada.');
+};
+
+function getScoreLegendHtml(score, qId) {
+    if (!score || score < 1 || score > 5) return '';
+    const qRubric = (qId && QUESTION_DESCRIPTORS[qId]) ? QUESTION_DESCRIPTORS[qId][score] : null;
+    const defaultLevels = {
+        1: { title: 'Nivel 1: Inicial / Crítico', desc: 'No se cumple el estándar profesional mínimo o requiere intervención urgente.', evidence: 'Falta de evidencias sistemáticas o dificultades recurrentes.' },
+        2: { title: 'Nivel 2: En Desarrollo', desc: 'Se cumple de forma irregular o incipiente; necesita consolidación y apoyo continuado.', evidence: 'Prácticas aisladas sin seguimiento pedagógico continuado.' },
+        3: { title: 'Nivel 3: Competente / Estándar', desc: 'Cumplimiento adecuado y constante del estándar profesional esperado por el centro.', evidence: 'Programaciones, dinámicas regulares de aula y coordinación habitual.' },
+        4: { title: 'Nivel 4: Avanzado / Destacado', desc: 'Supera el estándar con proactividad, rigor pedagógico e impacto positivo demostrable.', evidence: 'Materiales propios innovadores, evaluación formativa y colaboración activa.' },
+        5: { title: 'Nivel 5: Excelente / Referente', desc: 'Desempeño ejemplar y modelador que enriquece al claustro y a la comunidad franciscana.', evidence: 'Liderazgo pedagógico, mentoría a compañeros y testimonio vocacional pleno.' }
+    };
+    const level = qRubric || defaultLevels[score];
+    return `
+        <div class="score-legend-card legend-val-${score}">
+            <div class="legend-head">
+                <span class="legend-level-title">${level.title}</span>
+                <span class="legend-score-pill">Puntuación: ${score} / 5</span>
+            </div>
+            <p class="legend-desc">${level.desc}</p>
+            ${level.evidence ? `<div class="legend-evidence-callout"><strong>Evidencia observable:</strong> ${level.evidence}</div>` : ''}
+        </div>
+    `;
 }
 
 window.updateScoreLegend = function(qId, score) {
     const container = document.getElementById(`legend-${qId}`);
-    if (container) container.innerHTML = getScoreLegendHtml(score);
+    if (container) container.innerHTML = getScoreLegendHtml(score, qId);
 };
 
 window.restoreScoreLegend = function(qId, selectedScore) {
     const container = document.getElementById(`legend-${qId}`);
     if (container) {
-        container.innerHTML = selectedScore > 0 ? getScoreLegendHtml(selectedScore) : '';
+        container.innerHTML = selectedScore > 0 ? getScoreLegendHtml(selectedScore, qId) : '';
     }
 };
 
 window.updateScoreLegendDir = function(qId, score) {
     const container = document.getElementById(`legend-dir-${qId}`);
-    if (container) container.innerHTML = getScoreLegendHtml(score);
+    if (container) container.innerHTML = getScoreLegendHtml(score, qId);
 };
 
 window.restoreScoreLegendDir = function(qId, selectedScore) {
     const container = document.getElementById(`legend-dir-${qId}`);
     if (container) {
-        container.innerHTML = selectedScore > 0 ? getScoreLegendHtml(selectedScore) : '';
+        container.innerHTML = selectedScore > 0 ? getScoreLegendHtml(selectedScore, qId) : '';
     }
 };
 
@@ -5645,203 +6213,190 @@ window.exportAllTeacherReports = function() {
     }, 400);
 };
 
-function generateTeacherReportInnerHtml(teacherName) {
-    const tData = db.getUserData(teacherName) || {};
-    const teacherInfo = TEACHERS.find(t => t.name === teacherName) || { etapa: 'General', tutor: 'No' };
-    const isFullySigned = tData.signedTeacher && tData.signedDirector;
-    const signedAtDate = tData.signedAt ? new Date(tData.signedAt).toLocaleString() : new Date().toLocaleString();
-    const hashControl = `SHA256-${teacherName.charCodeAt(0)}${tData.signedAt ? Date.parse(tData.signedAt) : Date.now()}`;
+// ==========================================================================
+// MODALES INSTITUCIONALES DE AUDITORÍA Y RESTABLECIMIENTO SEGURO
+// ==========================================================================
+window.openResetDatabaseModal = function() {
+    let modalEl = document.getElementById('audit-reset-modal-root');
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'audit-reset-modal-root';
+        document.body.appendChild(modalEl);
+    }
 
-    let teacherBlockAverages = calculateBlockAverages(teacherName, 'teacher');
-    let directorBlockAverages = calculateDirectorBlockAverages(teacherName);
-    const sintoniaObj = calculateSintonia(teacherName);
+    modalEl.innerHTML = `
+        <div class="inst-modal-overlay" onclick="closeResetDatabaseModal()">
+            <div class="inst-modal-card" onclick="event.stopPropagation()" style="max-width:540px;">
+                <div class="inst-modal-header" style="border-bottom:2px solid var(--danger);">
+                    <h3 style="color:var(--danger);">⚠️ Restablecer Datos del Centro</h3>
+                    <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeResetDatabaseModal()">✕</button>
+                </div>
+                <div class="inst-modal-body">
+                    <p style="font-size:0.9rem; color:var(--text-main); margin:0; line-height:1.45;">
+                        Esta operación <strong>eliminará todas las autoevaluaciones, co-evaluaciones de dirección, actas y notas registradas</strong> en el sistema, devolviendo el claustro a su estado inicial.
+                    </p>
+                    <div style="background:rgba(186, 26, 26, 0.08); border-left:4px solid var(--danger); padding:0.75rem 1rem; border-radius:4px; font-size:0.84rem; color:#841818; line-height:1.4;">
+                        <strong>ACCIÓN IRREVERSIBLE:</strong> Se registrará una entrada en la auditoría con la identificación de la Dirección y la marca de tiempo de este restablecimiento.
+                    </div>
+                    <div class="form-group" style="margin-top:0.5rem;">
+                        <label style="font-weight:700; font-size:0.82rem; margin-bottom:4px; display:block;">
+                            Para confirmar, escriba exactamente: <code style="background:#e2e8f0; padding:2px 6px; border-radius:3px;">REINICIAR-2627</code>
+                        </label>
+                        <input type="text" id="reset-confirm-code-input" class="form-input" placeholder="REINICIAR-2627" autocomplete="off" oninput="toggleResetConfirmBtn()">
+                    </div>
+                </div>
+                <div class="inst-modal-footer">
+                    <button class="btn btn-secondary" onclick="closeResetDatabaseModal()">Cancelar</button>
+                    <button class="btn btn-primary" id="reset-confirm-btn" disabled style="background:var(--danger); opacity:0.5; cursor:not-allowed;" onclick="confirmResetDatabase()">
+                        Restablecer y Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+};
 
-    let totalTeacherScore = 0;
-    let totalDirectorScore = 0;
-    let blockCount = 0;
+window.toggleResetConfirmBtn = function() {
+    const input = document.getElementById('reset-confirm-code-input');
+    const btn = document.getElementById('reset-confirm-btn');
+    if (input && btn) {
+        const matches = input.value.trim() === 'REINICIAR-2627';
+        btn.disabled = !matches;
+        btn.style.opacity = matches ? '1' : '0.5';
+        btn.style.cursor = matches ? 'pointer' : 'not-allowed';
+    }
+};
 
-    let blockRowsHtml = EVAL_BLOCKS.filter(b => b.id !== 'b6').map((block, idx) => {
-        const tAvg = parseFloat(teacherBlockAverages[block.id] || teacherBlockAverages[idx]) || 0;
-        const dAvgRaw = directorBlockAverages[block.id] || directorBlockAverages[idx] || 0;
-        const dAvg = dAvgRaw > 0 ? parseFloat(dAvgRaw) : null;
-        const gap = dAvg !== null ? (dAvg - tAvg).toFixed(1) : '-';
-        totalTeacherScore += tAvg;
-        if (dAvg !== null) totalDirectorScore += dAvg;
-        blockCount++;
+window.closeResetDatabaseModal = function() {
+    const modalEl = document.getElementById('audit-reset-modal-root');
+    if (modalEl) modalEl.innerHTML = '';
+};
 
-        const cleanedTitle = cleanBlockTitle(block.title, block.id);
+window.confirmResetDatabase = function() {
+    const input = document.getElementById('reset-confirm-code-input');
+    if (!input || input.value.trim() !== 'REINICIAR-2627') {
+        showToast('Código de confirmación incorrecto.');
+        return;
+    }
+
+    const resetDb = {
+        teachers: [...TEACHERS],
+        evaluations: {},
+        auditLogs: db.getAuditLogs()
+    };
+    TEACHERS.forEach(t => {
+        resetDb.evaluations[t.name] = {
+            status: 'not_started',
+            updatedAt: null,
+            answers: {},
+            directorAnswers: {},
+            reflections: {},
+            directorNotes: '',
+            directorAgreements: '',
+            smart_plan: { goal: '', actions: '', indicator: '', support: '', targetDate: '', reviewer: '', revision: '' }
+        };
+    });
+
+    db.save(resetDb);
+    if (db && typeof db.logEvent === 'function') {
+        db.logEvent(state.currentUser ? state.currentUser.name : 'Dirección', 'RESTABLECIMIENTO_TOTAL_BASE_DATOS', { timestamp: new Date().toISOString() });
+    }
+
+    closeResetDatabaseModal();
+    showToast('Base de datos restablecida correctamente.');
+    setTimeout(() => {
+        if (state.currentUser && state.currentUser.role === 'director') {
+            renderDirectorView();
+        } else {
+            location.reload();
+        }
+    }, 600);
+};
+
+window.resetDatabase = window.openResetDatabaseModal;
+
+window.openAuditLogModal = function() {
+    let modalEl = document.getElementById('audit-reset-modal-root');
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'audit-reset-modal-root';
+        document.body.appendChild(modalEl);
+    }
+
+    const logs = db.getAuditLogs();
+    let rowsHtml = logs.slice(0, 100).map(l => {
+        const dateStr = new Date(l.timestamp).toLocaleString();
+        let detailsStr = '';
+        if (typeof l.details === 'object' && l.details !== null) {
+            detailsStr = Object.entries(l.details).map(([k, v]) => `<strong>${k}:</strong> ${typeof v === 'object' ? JSON.stringify(v) : v}`).join(' | ');
+        } else {
+            detailsStr = String(l.details || '-');
+        }
 
         return `
-            <tr style="border-bottom:1px solid #e2e8f0;">
-                <td style="padding:10px 12px; font-weight:700; color:#1e293b;">${cleanedTitle}</td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700;">${tAvg.toFixed(1)} / 5.0</td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700; color:${dAvg !== null ? '#2563eb' : '#64748b'};">
-                    ${dAvg !== null ? dAvg.toFixed(1) + ' / 5.0' : '<span style="font-style:italic; font-weight:400; color:#94a3b8;">Sin co-evaluación</span>'}
-                </td>
-                <td style="padding:10px 12px; text-align:center; font-weight:700; color:${gap !== '-' && Math.abs(parseFloat(gap)) >= 1.0 ? '#ef4444' : '#10b981'};">
-                    ${gap !== '-' ? (parseFloat(gap) > 0 ? '+' + gap : gap) : '-'}
-                </td>
+            <tr>
+                <td style="white-space:nowrap; font-family:monospace; font-size:0.75rem;">${dateStr}</td>
+                <td><strong>${l.actor || 'Sistema'}</strong></td>
+                <td><span class="badge" style="background:#f1f5f9; color:#0b2545; font-size:0.75rem; border:1px solid #cbd5e1;">${l.action}</span></td>
+                <td style="font-size:0.75rem; color:var(--text-secondary); max-width:320px; overflow-wrap:break-word;">${detailsStr}</td>
             </tr>
         `;
     }).join('');
 
-    const globalTAvg = blockCount > 0 ? (totalTeacherScore / blockCount).toFixed(2) : '0.00';
+    if (logs.length === 0) {
+        rowsHtml = `<tr><td colspan="4" style="text-align:center; padding:1.5rem; color:var(--text-muted); font-style:italic;">No hay eventos registrados en la auditoría todavía.</td></tr>`;
+    }
 
-    let detailedQuestionsHtml = EVAL_BLOCKS.filter(b => b.id !== 'b6').map((b, bIdx) => {
-        const cleanedBlockTitle = cleanBlockTitle(b.title, b.id);
-        let qRows = b.questions.map(q => {
-            const tVal = (tData.answers && tData.answers[q.id]) ? tData.answers[q.id].score || tData.answers[q.id] : '-';
-            const dVal = (tData.directorAnswers && tData.directorAnswers[q.id]) || null;
-            const evidence = (tData.answers && tData.answers[q.id + '_ev']) || (tData.answers && tData.answers[q.id] && tData.answers[q.id].evidence) || '';
-
-            return `
-                <div style="margin-bottom:12px; padding-bottom:8px; border-bottom:1px dashed #cbd5e1; page-break-inside:avoid;">
-                    <div style="font-weight:700; font-size:0.85rem; color:#1e293b; margin-bottom:4px;">
-                        ${q.id.toUpperCase()} • ${q.text}
-                    </div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#475569; background:#f8fafc; padding:6px 12px; border-radius:4px;">
-                        <span>Autoevaluación Docente: <strong>${tVal} ${q.type === 'scale' ? '/ 5' : ''}</strong></span>
-                        <span>Co-Evaluación Dirección: <strong style="color:${dVal !== null ? '#2563eb' : '#64748b'};">${dVal !== null ? dVal + ' / 5' : 'Conforme (Sin cambio)'}</strong></span>
-                    </div>
-                    ${evidence ? `<div style="font-size:0.78rem; color:#334155; margin-top:4px; font-style:italic; padding-left:8px; border-left:3px solid #3b82f6;">Evidencia aportada: "${evidence}"</div>` : ''}
+    modalEl.innerHTML = `
+        <div class="inst-modal-overlay" onclick="closeAuditLogModal()">
+            <div class="inst-modal-card" onclick="event.stopPropagation()" style="max-width:850px; max-height:85vh;">
+                <div class="inst-modal-header">
+                    <h3>Registro de Auditoría y Trazabilidad Institucional</h3>
+                    <button class="btn btn-secondary" style="padding:4px 8px;" onclick="closeAuditLogModal()">✕</button>
                 </div>
-            `;
-        }).join('');
-
-        const reflectionText = (tData.reflections && tData.reflections[b.id]) || '';
-
-        return `
-            <div style="margin-bottom:22px; page-break-inside:avoid;">
-                <h4 style="margin:0 0 10px 0; font-size:0.92rem; color:#1e3a8a; border-bottom:2px solid #2563eb; padding-bottom:4px; text-transform:uppercase; letter-spacing:0.03em;">
-                    ${cleanedBlockTitle}
-                </h4>
-                ${qRows}
-                ${reflectionText ? `<div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; font-size:0.8rem; color:#1e293b; margin-top:8px;"><strong>Reflexión Cualitativa Docente:</strong> "${reflectionText}"</div>` : ''}
-            </div>
-        `;
-    }).join('');
-
-    const smartGoal = (tData.answers && tData.answers['smart_goal']) || 'Pendiente de definir';
-    const smartActions = (tData.answers && tData.answers['smart_actions']) || 'Pendiente de definir';
-    const smartSupport = (tData.answers && tData.answers['smart_support']) || 'Pendiente de definir';
-
-    return `
-        <div style="font-family:'Inter', system-ui, -apple-system, sans-serif; color:#0f172a; max-width:850px; margin:0 auto; background:#ffffff; padding:40px; box-sizing:border-box;">
-            
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #1e3a8a; padding-bottom:15px; margin-bottom:25px;">
-                <div>
-                    <div style="font-size:0.75rem; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.12em;">Documento Oficial de Imprenta</div>
-                    <h1 style="margin:4px 0 0 0; font-size:1.5rem; font-weight:900; color:#1e3a8a; text-transform:uppercase; letter-spacing:-0.02em;">
-                        Colegio San Buenaventura
-                    </h1>
-                    <div style="font-size:0.92rem; font-weight:700; color:#475569; margin-top:2px;">
-                        Acta Consolidada de Autoevaluación y Co-Evaluación Docente (Curso 2026-2027)
+                <div class="inst-modal-body" style="padding:1rem 1.75rem; overflow-y:auto;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                        <span style="font-size:0.85rem; color:var(--text-muted);">Eventos custodiados: <strong>${logs.length}</strong></span>
+                        <button class="btn btn-secondary" style="font-size:0.78rem; padding:4px 10px;" onclick="exportAuditLogs()">Descargar Registro (.JSON)</button>
+                    </div>
+                    <div style="border:1px solid var(--card-border); border-radius:6px; overflow:hidden;">
+                        <table class="audit-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha / Hora</th>
+                                    <th>Actor</th>
+                                    <th>Acción</th>
+                                    <th>Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div style="text-align:right;">
-                    <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">FOLIO OFICIAL</div>
-                    <div style="font-size:0.85rem; font-weight:800; color:#1e3a8a; background:#eff6ff; border:1px solid #bfdbfe; padding:6px 12px; border-radius:6px; margin-top:4px;">
-                        ACTA-2627-${teacherName.split(' ')[0].toUpperCase()}
-                    </div>
+                <div class="inst-modal-footer">
+                    <button class="btn btn-primary" onclick="closeAuditLogModal()">Cerrar</button>
                 </div>
             </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:16px; margin-bottom:25px; font-size:0.85rem;">
-                <div>
-                    <div><strong>Docente Evaluado/a:</strong> ${teacherName}</div>
-                    <div style="margin-top:6px;"><strong>Etapa Educativa:</strong> ${teacherInfo.etapa}</div>
-                    <div style="margin-top:6px;"><strong>Tutoría Asignada:</strong> ${teacherInfo.tutor}</div>
-                </div>
-                <div>
-                    <div><strong>Estado del Documento:</strong> ${isFullySigned ? '🔒 Acta Cerrada y Firmada' : '🟡 En Proceso de Evaluación'}</div>
-                    <div style="margin-top:6px;"><strong>Fecha de Certificación:</strong> ${signedAtDate}</div>
-                    <div style="margin-top:6px;"><strong>Grado de Sintonía:</strong> <span style="color:${sintoniaObj.hasCoEval ? '#2563eb' : '#64748b'}; font-weight:800;">${sintoniaObj.text}</span></div>
-                </div>
-            </div>
-
-            <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                1. Resumen de Puntuaciones Consolidadas por Bloque
-            </h3>
-            <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:25px;">
-                <thead>
-                    <tr style="background:#f1f5f9; text-align:left; border-bottom:2px solid #cbd5e1;">
-                        <th style="padding:10px 12px; font-weight:800;">Bloque Competencial</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Autoevaluación Docente</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Co-Evaluación Dirección</th>
-                        <th style="padding:10px 12px; text-align:center; font-weight:800;">Desviación (Gap)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${blockRowsHtml}
-                    <tr style="background:#f8fafc; font-weight:800; border-top:2px solid #cbd5e1;">
-                        <td style="padding:12px;">PROMEDIO GLOBAL DEL DOCENTE</td>
-                        <td style="padding:12px; text-align:center;">${globalTAvg} / 5.0</td>
-                        <td style="padding:12px; text-align:center; color:#2563eb;" colspan="2">
-                            ${sintoniaObj.hasCoEval ? sintoniaObj.text : 'Co-Evaluación de Dirección Pendiente'}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:15px; text-transform:uppercase; letter-spacing:0.05em;">
-                2. Evaluación Detallada e Ítems Cualitativos
-            </h3>
-            ${detailedQuestionsHtml}
-
-            <div style="page-break-inside:avoid; margin-bottom:25px;">
-                <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                    3. Plan de Crecimiento Profesional SMART
-                </h3>
-                <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:15px; font-size:0.82rem; display:flex; flex-direction:column; gap:8px;">
-                    <div><strong>Objetivo SMART Acordado:</strong> "${smartGoal}"</div>
-                    <div><strong>Acciones Concretas de Desarrollo:</strong> "${smartActions}"</div>
-                    <div><strong>Necesidades de Apoyo Institucional:</strong> "${smartSupport}"</div>
-                </div>
-            </div>
-
-            ${tData.directorNotes ? `
-            <div style="page-break-inside:avoid; margin-bottom:25px;">
-                <h3 style="font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:1.5px solid #cbd5e1; padding-bottom:6px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
-                    4. Acuerdos y Orientaciones de la Dirección
-                </h3>
-                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:15px; font-size:0.82rem; color:#1e3a8a; font-style:italic;">
-                    "${tData.directorNotes}"
-                </div>
-            </div>
-            ` : ''}
-
-            <div style="page-break-inside:avoid; margin-top:35px; border-top:2px solid #cbd5e1; padding-top:20px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:25px;">
-                    <div style="width:45%; text-align:center; border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#f8fafc;">
-                        <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">El Docente Evaluado</div>
-                        <div style="font-family:'Brush Script MT', cursive, 'Georgia', sans-serif; font-size:1.8rem; color:#1e3a8a; min-height:42px;">
-                            ${tData.signedTeacher ? teacherName : '<span style="font-size:0.8rem; font-style:italic; color:#94a3b8;">Pendiente de firma</span>'}
-                        </div>
-                        <div style="font-size:0.7rem; color:#10b981; font-weight:700; margin-top:4px;">
-                            ${tData.signedTeacher ? 'Firmado Electrónicamente' : ''}
-                        </div>
-                    </div>
-
-                    <div style="width:45%; text-align:center; border:1px solid #cbd5e1; border-radius:8px; padding:15px; background:#f8fafc;">
-                        <div style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">La Dirección del Centro</div>
-                        <div style="font-family:'Brush Script MT', cursive, 'Georgia', sans-serif; font-size:1.8rem; color:#1e3a8a; min-height:42px;">
-                            ${tData.signedDirector ? 'Colegio San Buenaventura' : '<span style="font-size:0.8rem; font-style:italic; color:#94a3b8;">Pendiente de firma</span>'}
-                        </div>
-                        <div style="font-size:0.7rem; color:#10b981; font-weight:700; margin-top:4px;">
-                            ${tData.signedDirector ? 'Firmado Electrónicamente' : ''}
-                        </div>
-                    </div>
-                </div>
-
-                <div style="text-align:center; font-size:0.72rem; color:#64748b; border-top:1px solid #e2e8f0; padding-top:12px;">
-                    <div><strong>Colegio San Buenaventura</strong> • Sello Digital de Conformidad e Integridad de Acta</div>
-                    <div style="margin-top:3px;">Control Hash: ${hashControl} | Certificación Timestamp: ${signedAtDate}</div>
-                </div>
-            </div>
-
         </div>
     `;
-}
+};
+
+window.closeAuditLogModal = function() {
+    const modalEl = document.getElementById('audit-reset-modal-root');
+    if (modalEl) modalEl.innerHTML = '';
+};
+
+window.exportAuditLogs = function() {
+    const logs = db.getAuditLogs();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
+    const dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", `auditoria_evaluaciones_${new Date().toISOString().slice(0, 10)}.json`);
+    dlAnchorElem.click();
+    showToast('Registro de auditoría descargado.');
+};
 
 
 // ==========================================================================
