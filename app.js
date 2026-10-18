@@ -1813,9 +1813,6 @@ function renderLoginView() {
             <!-- PANEL DE ACCESO -->
             <section class="lp-access">
                 <div class="lp-access-inner">
-                    <div class="lp-form-logo">
-                        <img src="${window.SCHOOL_LOGO_DATA_URI}" alt="Colegio San Buenaventura">
-                    </div>
                     <div class="lp-access-head">
                         <p class="lp-eyebrow lp-eyebrow-dark">Acceso restringido al claustro</p>
                         <h2>Iniciar sesión</h2>
