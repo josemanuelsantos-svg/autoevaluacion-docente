@@ -1576,10 +1576,155 @@ main { padding-top: 1.75rem; }
 .stat-card { border-radius: var(--border-radius-md); }
 .stat-val { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0; color: var(--primary-color); }
 .stat-lbl { font-size: 0.75rem; letter-spacing: 0.08em; }
-.stage-filter-segmented { border-radius: var(--border-radius-sm); }
-.stage-filter-btn { border-radius: 3px; font-weight: 600; }
-.stage-filter-btn.active { background: var(--primary-color) !important; color: #fff !important; box-shadow: none; }
-[data-theme="dark"] .stage-filter-btn.active { color: #0a1626 !important; }
+/* Selector de Etapas de Dirección (Segmented Control Premium) */
+.stage-filter-segmented {
+    display: inline-flex;
+    align-items: center;
+    background: #edf1f7;
+    border: 1px solid #d0d7e2;
+    padding: 3px;
+    border-radius: 8px;
+    gap: 3px;
+    box-shadow: inset 0 1px 2px rgba(11, 37, 69, 0.04);
+}
+[data-theme="dark"] .stage-filter-segmented {
+    background: #0f1c2e;
+    border-color: #243653;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+@media (max-width: 1024px) {
+    .stage-filter-segmented {
+        overflow-x: auto;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .stage-filter-segmented::-webkit-scrollbar { display: none; }
+}
+
+.stage-filter-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    outline: none;
+    background: transparent;
+    color: #475569;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    line-height: 1.2;
+}
+.stage-filter-btn:hover {
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.7);
+}
+[data-theme="dark"] .stage-filter-btn {
+    color: #94a3b8;
+}
+[data-theme="dark"] .stage-filter-btn:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.08);
+}
+.stage-filter-btn.active {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 2px 6px rgba(11, 37, 69, 0.22), 0 1px 2px rgba(11, 37, 69, 0.12);
+}
+[data-theme="dark"] .stage-filter-btn.active {
+    background: #1b3a61 !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+.stage-filter-btn .stage-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+.stage-filter-btn.active .stage-icon {
+    opacity: 1;
+    color: #fbbf24;
+}
+.stage-filter-btn .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: rgba(11, 37, 69, 0.08);
+    color: #64748b;
+    transition: all 0.18s ease;
+}
+[data-theme="dark"] .stage-filter-btn .stage-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+.stage-filter-btn.active .stage-badge {
+    background: rgba(255, 255, 255, 0.24);
+    color: #ffffff;
+}
+
+/* Filtros rápidos por estado (en el panel lateral de docentes) */
+.status-filter-segmented {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="dark"] .status-filter-segmented {
+    background: #0f1c2e;
+    border-color: #243653;
+}
+.status-filter-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.status-filter-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.6);
+}
+[data-theme="dark"] .status-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.status-filter-btn.active {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+[data-theme="dark"] .status-filter-btn.active {
+    background: #1b3a61 !important;
+    color: #ffffff !important;
+}
 .teacher-list-panel, .director-content-panel { border-radius: var(--border-radius-md); }
 .teacher-item { border-radius: var(--border-radius-sm); }
 .teacher-item:hover { transform: none; }
@@ -5104,26 +5249,54 @@ function renderDirectorView() {
 
                 <!-- Filtro de Etapas y Menú de Herramientas -->
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <div class="stage-filter-segmented">
+                    <div class="stage-filter-segmented" role="tablist" aria-label="Filtrar por etapa educativa">
                         ${(function() {
                             const sRole = state.currentUser.subrole || 'general';
+                            const countInfantil = allowedList.filter(t => t.role === 'teacher' && t.etapa === 'Infantil').length;
+                            const countPrimaria = allowedList.filter(t => t.role === 'teacher' && t.etapa === 'Primaria').length;
+                            const countSecundaria = allowedList.filter(t => t.role === 'teacher' && t.etapa === 'Secundaria').length;
+                            const countTotal = allowedList.filter(t => t.role === 'teacher').length;
+
+                            const iconAll = `<svg class="stage-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`;
+                            const iconInfantil = `<svg class="stage-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+                            const iconPrimaria = `<svg class="stage-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>`;
+                            const iconSecundaria = `<svg class="stage-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
+
                             if (sRole === 'ei_ep') {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas (EI + EP)</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">Educación Infantil</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">Educación Primaria</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')" title="Ver todas las etapas asignadas (Infantil y Primaria)">
+                                        ${iconAll}<span>Todas (EI + EP)</span><span class="stage-badge">${countTotal}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')" title="Filtrar por Educación Infantil">
+                                        ${iconInfantil}<span>Educación Infantil</span><span class="stage-badge">${countInfantil}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')" title="Filtrar por Educación Primaria">
+                                        ${iconPrimaria}<span>Educación Primaria</span><span class="stage-badge">${countPrimaria}</span>
+                                    </button>
                                 `;
                             } else if (sRole === 'eso_bto') {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas (ESO + BTO)</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">Secundaria y Bachillerato</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')" title="Ver todas las etapas asignadas (ESO y Bachillerato)">
+                                        ${iconAll}<span>Todas (ESO + BTO)</span><span class="stage-badge">${countTotal}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')" title="Filtrar por Secundaria y Bachillerato">
+                                        ${iconSecundaria}<span>Secundaria y Bachillerato</span><span class="stage-badge">${countSecundaria}</span>
+                                    </button>
                                 `;
                             } else {
                                 return `
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')">Todas las etapas</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')">Educación Infantil</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')">Educación Primaria</button>
-                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')">Secundaria y Bachillerato</button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Todas' ? 'active' : ''}" onclick="filterByEtapa('Todas')" title="Ver todas las etapas del centro">
+                                        ${iconAll}<span>Todas las etapas</span><span class="stage-badge">${countTotal}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Infantil' ? 'active' : ''}" onclick="filterByEtapa('Infantil')" title="Filtrar por Educación Infantil">
+                                        ${iconInfantil}<span>Educación Infantil</span><span class="stage-badge">${countInfantil}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Primaria' ? 'active' : ''}" onclick="filterByEtapa('Primaria')" title="Filtrar por Educación Primaria">
+                                        ${iconPrimaria}<span>Educación Primaria</span><span class="stage-badge">${countPrimaria}</span>
+                                    </button>
+                                    <button class="stage-filter-btn ${state.selectedEtapa === 'Secundaria' ? 'active' : ''}" onclick="filterByEtapa('Secundaria')" title="Filtrar por Secundaria y Bachillerato">
+                                        ${iconSecundaria}<span>Secundaria y Bachillerato</span><span class="stage-badge">${countSecundaria}</span>
+                                    </button>
                                 `;
                             }
                         })()}
@@ -5633,24 +5806,20 @@ function renderDirectorTeachersTab(teachersData) {
                 </div>
 
                 <!-- Filtros rápidos por estado -->
-                <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                    <button class="stage-filter-btn ${activeFilter === 'all' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
+                <div class="status-filter-segmented">
+                    <button class="status-filter-btn ${activeFilter === 'all' ? 'active' : ''}" 
                             onclick="setTeacherStatusFilter('all')">
                         Todos (${filteredTeachersList.length})
                     </button>
-                    <button class="stage-filter-btn ${activeFilter === 'completed' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
+                    <button class="status-filter-btn ${activeFilter === 'completed' ? 'active' : ''}" 
                             onclick="setTeacherStatusFilter('completed')">
                         Entregados (${completedCount})
                     </button>
-                    <button class="stage-filter-btn ${activeFilter === 'in_progress' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
+                    <button class="status-filter-btn ${activeFilter === 'in_progress' ? 'active' : ''}" 
                             onclick="setTeacherStatusFilter('in_progress')">
                         En proceso (${inProgressCount})
                     </button>
-                    <button class="stage-filter-btn ${activeFilter === 'not_started' ? 'active' : ''}" 
-                            style="font-size:0.72rem; padding:3px 8px; border-radius:3px;" 
+                    <button class="status-filter-btn ${activeFilter === 'not_started' ? 'active' : ''}" 
                             onclick="setTeacherStatusFilter('not_started')">
                         Pendientes (${notStartedCount})
                     </button>

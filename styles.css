@@ -1560,10 +1560,155 @@ main { padding-top: 1.75rem; }
 .stat-card { border-radius: var(--border-radius-md); }
 .stat-val { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0; color: var(--primary-color); }
 .stat-lbl { font-size: 0.75rem; letter-spacing: 0.08em; }
-.stage-filter-segmented { border-radius: var(--border-radius-sm); }
-.stage-filter-btn { border-radius: 3px; font-weight: 600; }
-.stage-filter-btn.active { background: var(--primary-color) !important; color: #fff !important; box-shadow: none; }
-[data-theme="dark"] .stage-filter-btn.active { color: #0a1626 !important; }
+/* Selector de Etapas de Dirección (Segmented Control Premium) */
+.stage-filter-segmented {
+    display: inline-flex;
+    align-items: center;
+    background: #edf1f7;
+    border: 1px solid #d0d7e2;
+    padding: 3px;
+    border-radius: 8px;
+    gap: 3px;
+    box-shadow: inset 0 1px 2px rgba(11, 37, 69, 0.04);
+}
+[data-theme="dark"] .stage-filter-segmented {
+    background: #0f1c2e;
+    border-color: #243653;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+@media (max-width: 1024px) {
+    .stage-filter-segmented {
+        overflow-x: auto;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .stage-filter-segmented::-webkit-scrollbar { display: none; }
+}
+
+.stage-filter-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    outline: none;
+    background: transparent;
+    color: #475569;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    line-height: 1.2;
+}
+.stage-filter-btn:hover {
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.7);
+}
+[data-theme="dark"] .stage-filter-btn {
+    color: #94a3b8;
+}
+[data-theme="dark"] .stage-filter-btn:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.08);
+}
+.stage-filter-btn.active {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 2px 6px rgba(11, 37, 69, 0.22), 0 1px 2px rgba(11, 37, 69, 0.12);
+}
+[data-theme="dark"] .stage-filter-btn.active {
+    background: #1b3a61 !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+.stage-filter-btn .stage-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+.stage-filter-btn.active .stage-icon {
+    opacity: 1;
+    color: #fbbf24;
+}
+.stage-filter-btn .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: rgba(11, 37, 69, 0.08);
+    color: #64748b;
+    transition: all 0.18s ease;
+}
+[data-theme="dark"] .stage-filter-btn .stage-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+.stage-filter-btn.active .stage-badge {
+    background: rgba(255, 255, 255, 0.24);
+    color: #ffffff;
+}
+
+/* Filtros rápidos por estado (en el panel lateral de docentes) */
+.status-filter-segmented {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="dark"] .status-filter-segmented {
+    background: #0f1c2e;
+    border-color: #243653;
+}
+.status-filter-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.status-filter-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.6);
+}
+[data-theme="dark"] .status-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.status-filter-btn.active {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+[data-theme="dark"] .status-filter-btn.active {
+    background: #1b3a61 !important;
+    color: #ffffff !important;
+}
 .teacher-list-panel, .director-content-panel { border-radius: var(--border-radius-md); }
 .teacher-item { border-radius: var(--border-radius-sm); }
 .teacher-item:hover { transform: none; }
