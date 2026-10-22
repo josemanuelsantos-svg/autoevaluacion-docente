@@ -2070,3 +2070,209 @@ body.is-login .app-header { display: none; }
     object-fit: contain;
     display: block;
 }
+
+
+/* ==========================================================================
+   ADAPTACIÓN RESPONSIVE: SOLUCIÓN DE SOLAPAMIENTO DE ÍNDICE Y PREGUNTAS EN MÓVIL
+   ========================================================================== */
+
+/* 1. Tablets y pantallas medianas (<= 1024px) */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Anular sticky en móvil/tablet para evitar que el índice flote sobre las preguntas al hacer scroll */
+    .sidebar {
+        position: static !important;
+        top: auto !important;
+        align-self: stretch !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .director-main {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .teacher-list-panel {
+        position: static !important;
+        top: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* 2. Dispositivos móviles (smartphones <= 768px) */
+@media (max-width: 768px) {
+    main {
+        padding: 0.5rem 0.75rem 2rem 0.75rem !important;
+    }
+
+    .dashboard-grid {
+        gap: 1rem !important;
+        margin-top: 0.25rem !important;
+    }
+
+    /* Índice lateral adaptado a flujo vertical limpio */
+    .sidebar {
+        position: static !important;
+        top: auto !important;
+        padding: 1.15rem 1rem !important;
+        gap: 1rem !important;
+        border-radius: var(--border-radius-md) !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .user-profile-widget {
+        padding-bottom: 0.85rem !important;
+    }
+
+    /* Perfil de usuario compacto en pantalla móvil */
+    .profile-avatar {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.2rem !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    .profile-info h3 {
+        font-size: 1.05rem !important;
+    }
+
+    .profile-info p {
+        font-size: 0.78rem !important;
+    }
+
+    /* Navegación por bloques / Índice en móvil */
+    .block-nav {
+        gap: 0.45rem !important;
+    }
+
+    .nav-item {
+        padding: 0.65rem 0.85rem !important;
+        font-size: 0.82rem !important;
+        gap: 10px !important;
+        border-radius: var(--border-radius-sm) !important;
+    }
+
+    .nav-item svg {
+        width: 16px !important;
+        height: 16px !important;
+        flex-shrink: 0;
+    }
+
+    /* Panel de contenido y preguntas en móvil */
+    .content-panel {
+        position: relative !important;
+        padding: 1.25rem 0.9rem !important;
+        gap: 1.25rem !important;
+        border-radius: var(--border-radius-md) !important;
+    }
+
+    .block-header {
+        padding-bottom: 0.85rem !important;
+    }
+
+    .block-header h2 {
+        font-size: 1.2rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 0.35rem !important;
+    }
+
+    .block-desc {
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .question-list {
+        gap: 1.15rem !important;
+    }
+
+    .question-card {
+        padding: 1.1rem 0.85rem !important;
+        border-radius: var(--border-radius-sm) !important;
+    }
+
+    .question-header {
+        gap: 10px !important;
+        margin-bottom: 0.85rem !important;
+    }
+
+    .question-num {
+        font-size: 0.8rem !important;
+        padding: 2px 6px !important;
+    }
+
+    .question-text {
+        font-size: 0.9rem !important;
+        line-height: 1.42 !important;
+    }
+
+    /* Escala de botones de valoración (1 a 5) táctiles y fluidos */
+    .rating-scale {
+        gap: 5px !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    .rating-btn {
+        height: 42px !important;
+        font-size: 1rem !important;
+        min-width: 0 !important;
+    }
+
+    .rating-labels {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.85rem !important;
+        padding: 0 2px !important;
+    }
+
+    /* Textareas de evidencias y reflexión */
+    .evidence-textarea, .reflection-textarea {
+        font-size: 0.85rem !important;
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    .reflection-section {
+        margin-top: 1.25rem !important;
+        padding: 1.2rem 1rem !important;
+    }
+
+    .reflection-title {
+        font-size: 1rem !important;
+    }
+
+    /* Botones de navegación inferior en móvil */
+    .action-bar {
+        flex-direction: column-reverse !important;
+        gap: 0.65rem !important;
+        padding-top: 1.1rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .action-bar .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.92rem !important;
+    }
+
+    /* Portal de Dirección en móvil */
+    .teacher-list-panel {
+        padding: 1.1rem 1rem !important;
+    }
+
+    .director-content-panel {
+        padding: 1.25rem 0.9rem !important;
+    }
+
+    .status-filter-segmented {
+        overflow-x: auto !important;
+        width: 100% !important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
